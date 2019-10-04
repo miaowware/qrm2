@@ -9,7 +9,7 @@ qrm, a bot for Discord
 from types import SimpleNamespace
 
 import discord
-import discord.ext.commands as commands
+from discord.ext import commands, tasks
 
 import info
 
@@ -48,13 +48,27 @@ bot = commands.Bot(command_prefix=opt.prefix, description=info.description, help
 async def on_ready():
     print(f"Logged in as: {bot.user} - {bot.user.id}")
     print("------")
+
+
+# --- Tasks ---
+
+@tasks.loop(minutes=5)
+async def _ensure_activity():
     await bot.change_presence(activity=discord.Game(name="with lids on 7.200"))
+
+
+@_ensure_activity.before_loop
+async def _before_ensure_activity():
+    await bot.wait_until_ready()
 
 
 # --- Run ---
 
 bot.add_cog(GlobalSettings(bot))
 bot.load_extension("cogs.infocog")
+
+_ensure_activity.start()
+
 
 try:
     bot.run(keys.discord_token)
