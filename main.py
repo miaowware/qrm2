@@ -80,7 +80,7 @@ async def _before_ensure_activity():
 # --- Run ---
 
 bot.add_cog(GlobalSettings(bot))
-bot.load_extension("cogs.infocog")
+bot.load_extension("cogs.basecog")
 
 _ensure_activity.start()
 

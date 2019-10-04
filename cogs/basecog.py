@@ -25,7 +25,7 @@ import discord
 import discord.ext.commands as commands
 
 
-class InfoCog(commands.Cog):
+class BaseCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.gs = bot.get_cog("GlobalSettings")
@@ -53,4 +53,4 @@ class InfoCog(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(InfoCog(bot))
+    bot.add_cog(BaseCog(bot))
