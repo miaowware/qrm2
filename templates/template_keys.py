@@ -7,6 +7,9 @@
 #        without the 'template_' part of the name        #
 #                                                        #
 ##########################################################
-"""API keys and tokens for the bot."""
+"""
+API keys and tokens for the bot.
+---
+"""
 
 discord_token = ""

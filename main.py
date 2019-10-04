@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Qrm, a bot for Discord
+qrm, a bot for Discord
 ---
 
 [copyright here]

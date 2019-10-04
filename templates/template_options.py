@@ -7,7 +7,10 @@
 #        without the 'template_' part of the name        #
 #                                                        #
 ##########################################################
-"""Settings and options for the bot."""
+"""
+Settings and options for the bot.
+---
+"""
 
 prefix = "?"
 debug = False
