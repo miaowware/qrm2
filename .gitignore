@@ -1,8 +1,13 @@
 # Custom
-secrets.json
+options.py
+keys.py
+
 cty.dat
 cty.json
 cty.zip
+
+botenv/
+
 
 #########################################################
 # Byte-compiled / optimized / DLL files
