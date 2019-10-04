@@ -64,7 +64,7 @@ class BaseCog(commands.Cog):
             except:
                 return
 
-    @bot.command(name="ping")
+    @commands.command(name="ping")
     async def _ping(self, ctx):
         await ctx.send(f'**Pong!** Current ping is {self.bot.latency*1000:.1f} ms')
 
