@@ -10,4 +10,5 @@
 """Settings and options for the bot."""
 
 prefix = "?"
+debug = False
 owners_uids = ()
