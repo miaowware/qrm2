@@ -1,5 +1,5 @@
 """
-Info cog for qrm
+Base cog for qrm
 ---
 
 Copyright (C) 2019  Abigail Gold, 0x5c
@@ -63,6 +63,11 @@ class BaseCog(commands.Cog):
                 await ctx.message.add_reaction("❌")
             except:
                 return
+
+    @bot.command(name="ping")
+    async def _ping(self, ctx):
+        await ctx.send(f'**Pong!** Current ping is {self.bot.latency*1000:.1f} ms')
+
 
 def setup(bot):
     bot.add_cog(BaseCog(bot))
