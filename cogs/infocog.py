@@ -21,6 +21,18 @@ class InfoCog(commands.Cog):
         embed = embed.add_field(name="License", value=self.gs.info.license)
         await ctx.send(embed=embed)
 
+    @commands.command(name="restart")
+    async def _restart_bot(self, ctx):
+        """Restarts the bot."""
+        if ctx.author.id in self.gs.opt.owners_uids:
+            await ctx.message.add_reaction("✅")
+            await self.bot.logout()
+        else:
+            try:
+                await ctx.message.add_reaction("❌")
+            except:
+                return
+
 
 def setup(bot):
     bot.add_cog(InfoCog(bot))
