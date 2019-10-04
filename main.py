@@ -22,7 +22,16 @@ import keys
 debug_mode = opt.debug  # Separate assignement in-case we define an override (ternary operator goes here)
 
 
-bot_colours = SimpleNamespace(good=0x2dc614, neutral=0x2044f7, bad=0xc91628)
+class GlobalSettings(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+        self.opt = opt
+        self.keys = keys
+        self.info = info
+
+        self.colours = SimpleNamespace(good=0x2dc614, neutral=0x2044f7, bad=0xc91628)
+        self.debug = debug_mode
 
 
 # --- Bot setup ---
@@ -32,14 +41,20 @@ bot = commands.Bot(command_prefix=opt.prefix, description=info.description, help
 
 # --- Commands ---
 
-@bot.command(name="info", aliases=["about"])
-async def _info(ctx):
-    """Shows info about qrm."""
-    embed = discord.Embed(title="About qrm", description=info.description, colour=bot_colours.neutral)
-    embed = embed.add_field(name="Authors", value=", ".join(info.authors))
-    embed = embed.add_field(name="Contributing", value=info.contributing)
-    embed = embed.add_field(name="License", value=info.license)
-    await ctx.send(embed=embed)
+
+# --- Events ---
+
+@bot.event
+async def on_ready():
+    print(f"Logged in as: {bot.user} - {bot.user.id}")
+    print("------")
+    await bot.change_presence(activity=discord.Game(name="with lids on 7.200"))
+
+
+# --- Run ---
+
+bot.add_cog(GlobalSettings(bot))
+bot.load_extension("cogs.infocog")
 
 try:
     bot.run(keys.discord_token)
