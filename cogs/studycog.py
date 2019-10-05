@@ -12,7 +12,7 @@ import discord.ext.commands as commands
 
 import random
 import json
-import urllib
+import aiohttp
 
 class StudyCog(commands.Cog):
     def __init__(self, bot):
@@ -51,8 +51,11 @@ class StudyCog(commands.Cog):
                               '(Note that only the US question pools are available).')
                 return
 
-            with urllib.request.urlopen(f'https://hamstudy.org/pools/{selected_pool}') as url:
-                pool = json.loads(url.read().decode())['pool']
+            async with aiohttp.ClientSession() as session:
+                async with session.get(f'https://hamstudy.org/pools/{selected_pool}') as resp:
+                    if resp.status != 200:
+                        return await ctx.send('Could not load questions...')
+                    pool = json.loads(await resp.read())['pool']
 
             # Select a question
             pool_section = random.choice(pool)['sections']
