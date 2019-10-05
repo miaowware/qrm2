@@ -1,3 +1,11 @@
+# A quick installation script for discord bots.
+#
+# Copyright (c) 2019 0x5c
+# Released under the terms of the MIT license.
+#
+# https://github.com/0x5c/discord.py-quickinstall
+
+
 #### Setup ####
 .DEFAULT_GOAL := help
 
