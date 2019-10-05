@@ -81,6 +81,7 @@ async def _before_ensure_activity():
 
 bot.add_cog(GlobalSettings(bot))
 bot.load_extension("cogs.basecog")
+bot.load_extension("cogs.morsecog")
 
 _ensure_activity.start()
 
