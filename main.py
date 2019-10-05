@@ -70,6 +70,7 @@ bot.add_cog(GlobalSettings(bot))
 bot.load_extension("cogs.basecog")
 bot.load_extension("cogs.morsecog")
 bot.load_extension("cogs.funcog")
+bot.load_extension("cogs.gridcog")
 
 _ensure_activity.start()
 
