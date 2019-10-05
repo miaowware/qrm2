@@ -1,5 +1,5 @@
 """
-Info cog for qrm
+Base cog for qrm
 ---
 
 Copyright (C) 2019  Abigail Gold, 0x5c
@@ -24,6 +24,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 import discord
 import discord.ext.commands as commands
 
+import os
 
 class BaseCog(commands.Cog):
     def __init__(self, bot):
@@ -50,6 +51,22 @@ class BaseCog(commands.Cog):
                 await ctx.message.add_reaction("❌")
             except:
                 return
+
+    @commands.command(name="shutdown")
+    async def _shutdown_bot(self, ctx):
+        """Shuts down the bot."""
+        if ctx.author.id in self.gs.opt.owners_uids:
+            await ctx.message.add_reaction("✅")
+            os._exit(42)
+        else:
+            try:
+                await ctx.message.add_reaction("❌")
+            except:
+                return
+
+    @commands.command(name="ping")
+    async def _ping(self, ctx):
+        await ctx.send(f'**Pong!** Current ping is {self.bot.latency*1000:.1f} ms')
 
 
 def setup(bot):
