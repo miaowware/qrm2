@@ -32,14 +32,19 @@ class GlobalSettings(commands.Cog):
         self.keys = keys
         self.info = info
 
-        self.colours = SimpleNamespace(good=0x2dc614, neutral=0x2044f7, bad=0xc91628)
+        self.colours = SimpleNamespace(good=0x43B581,
+                                       neutral=0x7289DA,
+                                       bad=0xF04747)
         self.debug = debug_mode
 
 
 # --- Bot setup ---
 
-bot = commands.Bot(command_prefix=opt.prefix, description=info.description, help_command=commands.MinimalHelpCommand())
-
+bot = commands.Bot(
+          command_prefix=opt.prefix,
+          description=info.description,
+          help_command=commands.MinimalHelpCommand()
+      )
 
 # --- Commands ---
 
@@ -79,17 +84,24 @@ _ensure_activity.start()
 try:
     bot.run(keys.discord_token)
 
-except discord.LoginFailure as ex:  # Miscellaneous authentications errors: borked token and co
+# Miscellaneous authentications errors: borked token and co
+except discord.LoginFailure as ex:
     if debug_mode:
         raise
     raise SystemExit("Error: Failed to authenticate: {}".format(ex))
 
-except discord.ConnectionClosed as ex:  # When the connection the the gateway (websocket) is closed
+# When the connection the the gateway (websocket) is closed
+except discord.ConnectionClosed as ex:
     if debug_mode:
         raise
-    raise SystemExit("Error: Discord gateway connection closed: [Code {}] {}".format(ex.code, ex.reason))
+    raise SystemExit(
+              "Error: Discord gateway connection closed: [Code {}] {}"
+              .format(ex.code, ex.reason)
+          )
 
-except ConnectionResetError as ex:  # More generic connection reset error
+# More generic connection reset error
+except ConnectionResetError as ex:
     if debug_mode:
         raise
     raise SystemExit("ConnectionResetError: {}".format(ex))
+
