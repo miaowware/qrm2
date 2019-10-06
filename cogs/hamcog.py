@@ -20,7 +20,8 @@ class HamCog(commands.Cog):
         self.gs = bot.get_cog("GlobalSettings")
         with open('resources/qcodes.json') as qcode_file:
             self.qcodes = json.load(qcode_file)
-        self.WORDS = open('resources/words').read().lower().splitlines()
+        with open('resources/words') as words_file:
+            self.WORDS = words_file.read().lower().splitlines()
 
     @commands.command(name="qcode", aliases=['q'])
     async def _qcode_lookup(self, ctx, q : str):
