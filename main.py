@@ -32,9 +32,11 @@ class GlobalSettings(commands.Cog):
         self.keys = keys
         self.info = info
 
-        self.colours = SimpleNamespace(good=0x43B581,
-                                       neutral=0x7289DA,
-                                       bad=0xF04747)
+        self.colours = SimpleNamespace(
+                           good=0x43B581,
+                           neutral=0x7289DA,
+                           bad=0xF04747
+                       )
         self.debug = debug_mode
 
 
@@ -84,23 +86,20 @@ _ensure_activity.start()
 try:
     bot.run(keys.discord_token)
 
-# Miscellaneous authentications errors: borked token and co
 except discord.LoginFailure as ex:
+    # Miscellaneous authentications errors: borked token and co
     if debug_mode:
         raise
     raise SystemExit("Error: Failed to authenticate: {}".format(ex))
 
-# When the connection the the gateway (websocket) is closed
 except discord.ConnectionClosed as ex:
+    # When the connection to the gateway (websocket) is closed
     if debug_mode:
         raise
-    raise SystemExit(
-              "Error: Discord gateway connection closed: [Code {}] {}"
-              .format(ex.code, ex.reason)
-          )
+    raise SystemExit( "Error: Discord gateway connection closed: [Code {}] {}" .format(ex.code, ex.reason))
 
-# More generic connection reset error
 except ConnectionResetError as ex:
+    # More generic connection reset error
     if debug_mode:
         raise
     raise SystemExit("ConnectionResetError: {}".format(ex))
