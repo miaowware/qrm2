@@ -1,0 +1,132 @@
+"""
+Grid cog for qrm
+---
+Copyright (C) 2019 Abigail Gold, 0x5c
+
+This file is part of discord-qrmbot and is released under the terms of the GNU
+General Public License, version 2.
+"""
+
+import discord
+import discord.ext.commands as commands
+
+import math
+
+class GridCog(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        self.gs = bot.get_cog("GlobalSettings")
+
+    @commands.command(name="grid")
+    async def _grid_sq_lookup(self, ctx, lat : str, lon : str):
+        '''Calculates the grid square for latitude and longitude coordinates.
+    Usage: `?grid <lat> <lon>`
+    `lat` and `lon` are decimal coordinates, with negative being latitude South and longitude West.'''
+        with ctx.typing():
+            grid = "**"
+            try:
+                latf = float(lat) + 90
+                lonf = float(lon) + 180
+                if 0 <= latf <= 180 and 0 <= lonf <= 360:
+                    grid += chr(ord('A') + int(lonf / 20))
+                    grid += chr(ord('A') + int(latf / 10))
+                    grid += chr(ord('0') + int((lonf % 20)/2))
+                    grid += chr(ord('0') + int((latf % 10)/1))
+                    grid += chr(ord('a') + int((lonf - (int(lonf/2)*2)) / (5/60)))
+                    grid += chr(ord('a') + int((latf - (int(latf/1)*1)) / (2.5/60)))
+                    grid += "**"
+                    embed = discord.Embed(title=f'Maidenhead Grid Locator for {float(lat):.6f}, {float(lon):.6f}',
+                            description=grid, colour=self.gs.colours.good)
+                else:
+                    raise ValueError('Out of range.')
+            except Exception as e:
+                msg = f'Error generating grid square for {lat}, {lon}.'
+                embed = discord.Embed(title=msg, description=str(e), colour=self.gs.colours.bad)
+        await ctx.send(embed=embed)
+
+    @commands.command(name="ungrid", aliases=['loc'])
+    async def _location_lookup(self, ctx, grid : str, grid2 : str = None):
+        '''Calculates the latitude and longitude for the center of a grid square.
+    If two grid squares are given, the distance and azimuth between them is calculated.'''
+        with ctx.typing():
+            if grid2 is None or grid2 == '':
+                try:
+                    grid = grid.upper()
+                    loc = self.getCoords(grid)
+
+                    if len(grid) >= 6:
+                        embed = discord.Embed(title=f'Latitude and Longitude for {grid}',
+                                description=f'**{loc[0]:.5f}, {loc[1]:.5f}**', colour=self.gs.colours.good,
+                                url=f'https://www.openstreetmap.org/#map=13/{loc[0]:.5f}/{loc[1]:.5f}')
+
+                    else:
+                        embed = discord.Embed(title=f'Latitude and Longitude for {grid}',
+                                description=f'**{loc[0]:.1f}, {loc[1]:.1f}**', colour=self.gs.colours.good,
+                                url=f'https://www.openstreetmap.org/#map=10/{loc[0]:.1f}/{loc[1]:.1f}')
+                except Exception as e:
+                    msg = f'Error generating latitude and longitude for grid {grid}.'
+                    embed = discord.Embed(title=msg, description=str(e), colour=self.gs.colours.bad)
+            else:
+                R = 6371
+                try:
+                    grid = grid.upper()
+                    grid2 = grid2.upper()
+                    loc = self.getCoords(grid)
+                    loc2 = self.getCoords(grid2)
+                    # Haversine formula
+                    dLat = math.radians(loc2[0] - loc[0])
+                    dLon = math.radians(loc2[1] - loc[1])
+                    a = math.sin(dLat/2) ** 2 +\
+                        math.cos(math.radians(loc[0])) * math.cos(math.radians(loc2[0])) *\
+                        math.sin(dLon/2) ** 2
+                    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+                    d = R * c
+                    d_mi = 0.6213712 * d
+
+                    # Bearing
+                    y = math.sin(math.radians(loc2[1]-loc[1])) * math.cos(math.radians(loc2[0]))
+                    x = math.cos(math.radians(loc[0])) * math.sin(math.radians(loc2[0])) -\
+                        math.sin(math.radians(loc[0])) * math.cos(math.radians(loc2[0])) *\
+                        math.cos(math.radians(loc2[1] - loc[1]))
+                    bearing = ( math.degrees(math.atan2(y, x)) + 360 ) % 360
+
+                    des = f'**Distance:** {d:.1f} km ({d_mi:.1f} mi)\n**Bearing:** {bearing:.1f}°'
+                    embed = discord.Embed(title=f'Great Circle Distance and Bearing from {grid} to {grid2}',
+                            description=des, colour=self.gs.colours.good)
+                except Exception as e:
+                    msg = f'Error generating great circle distance and bearing from {grid} and {grid2}.'
+                    embed = discord.Embed(title=msg, description=str(e), colour=self.gs.colours.bad)
+        await ctx.send(embed=embed)
+
+    def getCoords(self, grid: str):
+        if len(grid) < 3:
+            raise ValueError('The grid locator must be at least 4 characters long.')
+
+        if not grid[0:2].isalpha() or not grid[2:4].isdigit():
+            if len(grid) <= 4:
+                raise ValueError('The grid locator must be of the form AA##.')
+            elif len(grid) >= 6 and not grid[5:7].isalpha():
+                raise ValueError('The grid locator must be of the form AA##AA.')
+
+        lon = ((ord(grid[0]) - ord('A')) * 20) - 180;
+        lat = ((ord(grid[1]) - ord('A')) * 10) - 90;
+        lon += ((ord(grid[2]) - ord('0')) * 2);
+        lat += ((ord(grid[3]) - ord('0')) * 1);
+
+        if len(grid) >= 6:
+            # have subsquares
+            lon += ((ord(grid[4])) - ord('A')) * (5/60);
+            lat += ((ord(grid[5])) - ord('A')) * (2.5/60);
+            # move to center of subsquare
+            lon += (2.5/60);
+            lat += (1.25/60);
+            return (lat, lon)
+        else:
+            # move to center of square
+            lon += 1;
+            lat += 0.5;
+            return (lat, lon)
+
+
+def setup(bot):
+    bot.add_cog(GridCog(bot))
