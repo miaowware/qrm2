@@ -43,35 +43,45 @@ class GlobalSettings(commands.Cog):
 bot = commands.Bot(command_prefix=opt.prefix, description=info.description, help_command=commands.MinimalHelpCommand())
 
 
+# --- Helper functions ---
+
+async def add_react(msg: discord.Message, react: str):
+    try:
+        await msg.add_reaction(react)
+    except discord.Forbidden:
+        print(f"!! Missing permissions to add reaction in '{msg.guild.id}/{msg.channel.id}'!")
+
+
+# --- Checks ---
+
+async def check_if_owner(ctx: commands.Context):
+    if ctx.author.id in opt.owners_uids:
+        return True
+    else:
+        await add_react(ctx.message, "❌")
+        return False
+
+
 # --- Commands ---
 
 @bot.command(name="restart")
+@commands.check(check_if_owner)
 async def _restart_bot(ctx):
     """Restarts the bot."""
     global exit_code
-    if ctx.author.id in opt.owners_uids:
-        await ctx.message.add_reaction("✅")
-        exit_code = 42  # Signals to the wrapper script that the bot needs to be restarted.
-        await bot.logout()
-    else:
-        try:
-            await ctx.message.add_reaction("❌")
-        except:
-            return
+    await add_react(ctx.message, "✅")
+    exit_code = 42  # Signals to the wrapper script that the bot needs to be restarted.
+    await bot.logout()
+
 
 @bot.command(name="shutdown")
+@commands.check(check_if_owner)
 async def _shutdown_bot(ctx):
     """Shuts down the bot."""
     global exit_code
-    if ctx.author.id in opt.owners_uids:
-        await ctx.message.add_reaction("✅")
-        exit_code = 0  # Signals to the wrapper script that the bot should not be restarted.
-        await bot.logout()
-    else:
-        try:
-            await ctx.message.add_reaction("❌")
-        except:
-            return
+    await add_react(ctx.message, "✅")
+    exit_code = 0  # Signals to the wrapper script that the bot should not be restarted.
+    await bot.logout()
 
 
 # --- Events ---
