@@ -14,6 +14,7 @@ import json
 from datetime import datetime
 from util import cty_json
 
+
 class LookupCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -23,9 +24,9 @@ class LookupCog(commands.Cog):
         self.up_cty_first_run = True
 
     @commands.command(name="ae7q", aliases=['ae'])
-    async def _ae7q_lookup(self, ctx, call: str):
+    async def _ae7q_lookup(self, ctx, c: str):
         '''Links to info about a callsign from AE7Q.'''
-        await ctx.send(f'http://ae7q.com/query/data/CallHistory.php?CALL={call}')
+        await ctx.send(f'http://ae7q.com/query/data/CallHistory.php?CALL={c}')
 
     @commands.command(name="qrz")
     async def _qrz_lookup(self, ctx, call: str):
@@ -38,9 +39,15 @@ class LookupCog(commands.Cog):
     Usage: `?sat sat_name grid1 grid2`'''
         now = datetime.utcnow().strftime('%Y-%m-%d%%20%H:%M')
         if grid2 is None or grid2 == '':
-            await ctx.send(f'http://www.satmatch.com/satellite/{sat}/obs1/{grid1}?search_start_time={now}&duration_hrs=24')
+            await ctx.send(
+                      f'http://www.satmatch.com/satellite/{sat}/obs1/{grid1}' +
+                      f'?search_start_time={now}&duration_hrs=24'
+                  )
         else:
-            await ctx.send(f'http://www.satmatch.com/satellite/{sat}/obs1/{grid1}/obs2/{grid2}?search_start_time={now}&duration_hrs=24')
+            await ctx.send(
+                      f'http://www.satmatch.com/satellite/{sat}/obs1/{grid1}' +
+                      f'/obs2/{grid2}?search_start_time={now}&duration_hrs=24'
+                  )
 
     @commands.command(name="dxcc", aliases=['dx'])
     async def _dxcc_lookup(self, ctx, q: str):
@@ -64,11 +71,14 @@ class LookupCog(commands.Cog):
                             noMatch = False
                     if qMatch is not None:
                         d = self.CTY[qMatch]
-                        prefix = qMatch
-                        embed = embed.add_field(name="Entity", value=d['entity'])
-                        embed = embed.add_field(name="CQ Zone", value=d['cq'])
-                        embed = embed.add_field(name="ITU Zone", value=d['itu'])
-                        embed = embed.add_field(name="Continent", value=d['continent'])
+                        embed = embed.add_field(name="Entity",
+                                                value=d['entity'])
+                        embed = embed.add_field(name="CQ Zone",
+                                                value=d['cq'])
+                        embed = embed.add_field(name="ITU Zone",
+                                                value=d['itu'])
+                        embed = embed.add_field(name="Continent",
+                                                value=d['continent'])
                         tz = d['tz']
                         if tz > 0:
                             tz = '+' + str(tz)
@@ -76,11 +86,11 @@ class LookupCog(commands.Cog):
                         embed.description = ''
                         embed.colour = self.gs.colours.good
             else:
-                updatedDate =  self.CTY['last_updated'][0:4] + '-'
+                updatedDate = self.CTY['last_updated'][0:4] + '-'
                 updatedDate += self.CTY['last_updated'][4:6] + '-'
                 updatedDate += self.CTY['last_updated'][6:8]
-                res = f'CTY.DAT last updated on {updatedDate}'
-                embed = discord.Embed(title=res, colour=self.gs.colours.neutral)
+                r = f'CTY.DAT last updated on {updatedDate}'
+                embed = discord.Embed(title=r, colour=self.gs.colours.neutral)
         await ctx.send(embed=embed)
 
     @tasks.loop(hours=24)
@@ -94,9 +104,10 @@ class LookupCog(commands.Cog):
                 self.CTY_list = list(self.CTY.keys())
                 self.CTY_list.sort()
                 self.CTY_list.sort(key=len, reverse=True)
-            up_cty_first_run = False
+            self.up_cty_first_run = False
 
 
 def setup(bot):
-    bot.add_cog(LookupCog(bot))
-    bot.get_cog("LookupCog")._update_cty.start()
+    lookupcog = LookupCog(bot)
+    bot.add_cog(lookupcog)
+    lookupcog._update_cty.start()
