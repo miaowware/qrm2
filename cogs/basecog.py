@@ -10,7 +10,6 @@ General Public License, version 2.
 import discord
 import discord.ext.commands as commands
 
-import os
 
 class BaseCog(commands.Cog):
     def __init__(self, bot):
@@ -25,30 +24,6 @@ class BaseCog(commands.Cog):
         embed = embed.add_field(name="Contributing", value=self.gs.info.contributing)
         embed = embed.add_field(name="License", value=self.gs.info.license)
         await ctx.send(embed=embed)
-
-    @commands.command(name="restart")
-    async def _restart_bot(self, ctx):
-        """Restarts the bot."""
-        if ctx.author.id in self.gs.opt.owners_uids:
-            await ctx.message.add_reaction("✅")
-            await self.bot.logout()
-        else:
-            try:
-                await ctx.message.add_reaction("❌")
-            except:
-                return
-
-    @commands.command(name="shutdown")
-    async def _shutdown_bot(self, ctx):
-        """Shuts down the bot."""
-        if ctx.author.id in self.gs.opt.owners_uids:
-            await ctx.message.add_reaction("✅")
-            os._exit(42)
-        else:
-            try:
-                await ctx.message.add_reaction("❌")
-            except:
-                return
 
     @commands.command(name="ping")
     async def _ping(self, ctx):
