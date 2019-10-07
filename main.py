@@ -32,21 +32,17 @@ class GlobalSettings(commands.Cog):
         self.keys = keys
         self.info = info
 
-        self.colours = SimpleNamespace(
-                           good=0x43B581,
-                           neutral=0x7289DA,
-                           bad=0xF04747
-                       )
+        self.colours = SimpleNamespace(good=0x43B581,
+                                       neutral=0x7289DA,
+                                       bad=0xF04747)
         self.debug = debug_mode
 
 
 # --- Bot setup ---
 
-bot = commands.Bot(
-          command_prefix=opt.prefix,
-          description=info.description,
-          help_command=commands.MinimalHelpCommand()
-      )
+bot = commands.Bot(command_prefix=opt.prefix,
+                   description=info.description,
+                   help_command=commands.MinimalHelpCommand())
 
 # --- Commands ---
 
