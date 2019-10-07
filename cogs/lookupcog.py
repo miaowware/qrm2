@@ -23,11 +23,6 @@ class LookupCog(commands.Cog):
         self.CTY_list = None
         self.up_cty_first_run = True
 
-    @commands.command(name="ae7q", aliases=['ae'])
-    async def _ae7q_lookup(self, ctx, c: str):
-        '''Links to info about a callsign from AE7Q.'''
-        await ctx.send(f'http://ae7q.com/query/data/CallHistory.php?CALL={c}')
-
     @commands.command(name="qrz")
     async def _qrz_lookup(self, ctx, call: str):
         '''Links to info about a callsign from QRZ.'''
