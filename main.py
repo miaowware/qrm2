@@ -114,6 +114,7 @@ bot.load_extension("cogs.gridcog")
 bot.load_extension("cogs.hamcog")
 bot.load_extension("cogs.imagecog")
 bot.load_extension("cogs.studycog")
+bot.load_extension("cogs.ae7qcog")
 
 _ensure_activity.start()
 
