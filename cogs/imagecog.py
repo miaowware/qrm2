@@ -12,6 +12,8 @@ import discord.ext.commands as commands
 
 import aiohttp
 import io
+from datetime import datetime
+
 
 class ImageCog(commands.Cog):
     def __init__(self, bot):
@@ -22,29 +24,29 @@ class ImageCog(commands.Cog):
     async def _bandplan(self, ctx, msg: str = ''):
         '''Posts an image of Frequency Allocations.
     Optional argument: `cn`, `ca`, `nl`, `us`, `mx`.'''
-        urls = {'cn': 'https://cdn.discordapp.com/attachments/364489754839875586/468770333223157791/Chinese_Amateur_Radio_Bands.png',
-                'ca': 'https://cdn.discordapp.com/attachments/448839119934717953/469972377778782208/RAC_Bandplan_December_1_2015-1.png',
-                'nl': 'http://www.pd3jdm.com/wp-content/uploads/2015/09/bandplan.jpg',
-                'us': 'https://cdn.discordapp.com/attachments/377206780700393473/466729318945652737/band-chart.png',
-                'mx': 'https://cdn.discordapp.com/attachments/443246106416119810/553771222421209090/mx_chart.png'}
-        names = {'cn': 'Chinese',
-                 'ca': 'Canadian',
-                 'nl': 'Dutch',
-                 'us': 'US',
-                 'mx': 'Mexican'}
+        name = {'cn': 'Chinese',
+                'ca': 'Canadian',
+                'nl': 'Dutch',
+                'us': 'US',
+                'mx': 'Mexican'}
         arg = msg.lower()
 
         with ctx.typing():
-            try:
-                embed = discord.Embed(title=f'{names[arg]} Amateur Radio Bands', colour=self.gs.colours.good)
-                embed.set_image(url=urls[arg])
-            except:
-                embed = discord.Embed(title=f'{names["us"]} Amateur Radio Bands', colour=self.gs.colours.good)
-                embed.set_image(url=urls['us'])
-        await ctx.send(embed=embed)
+            if arg not in name:
+                arg = 'us'
+            img = discord.File(f"resources/images/{arg}bandchart.png",
+                               filename=f'{arg}bandchart.png')
+            embed = discord.Embed(title=f'{name[arg]} Amateur Radio Bands',
+                                  colour=self.gs.colours.good,
+                                  timestamp=datetime.utcnow())
+            embed.set_image(url=f'attachment://{arg}bandchart.png')
+            embed.set_footer(text=ctx.author.name,
+                             icon_url=str(ctx.author.avatar_url))
+
+        await ctx.send(embed=embed, file=img)
 
     @commands.command(name="cond", aliases=['condx'])
-    async def _band_conditions(self, ctx, msg : str = ''):
+    async def _band_conditions(self, ctx, msg: str = ''):
         '''Posts an image of HF Band Conditions.'''
         with ctx.typing():
             async with aiohttp.ClientSession() as session:
@@ -52,10 +54,16 @@ class ImageCog(commands.Cog):
                     if resp.status != 200:
                         return await ctx.send('Could not download file...')
                     data = io.BytesIO(await resp.read())
-        await ctx.send(file=discord.File(data, 'condx.png'))
+            embed = discord.Embed(title='Current Solar Conditions',
+                                  colour=self.gs.colours.good,
+                                  timestamp=datetime.utcnow())
+            embed.set_image(url=f'attachment://condx.png')
+            embed.set_footer(text=ctx.author.name,
+                             icon_url=str(ctx.author.avatar_url))
+        await ctx.send(embed=embed, file=discord.File(data, 'condx.png'))
 
     @commands.command(name="grayline", aliases=['greyline', 'grey', 'gray', 'gl'])
-    async def _grayline(self, ctx, msg : str = ''):
+    async def _grayline(self, ctx, msg: str = ''):
         '''Posts a map of the current greyline, where HF propagation is the best.'''
         with ctx.typing():
             async with aiohttp.ClientSession() as session:
@@ -63,37 +71,40 @@ class ImageCog(commands.Cog):
                     if resp.status != 200:
                         return await ctx.send('Could not download file...')
                     data = io.BytesIO(await resp.read())
-        await ctx.send(file=discord.File(data, 'greyline.jpg'))
+            embed = discord.Embed(title='Current Greyline Conditions',
+                                  colour=self.gs.colours.good,
+                                  timestamp=datetime.utcnow())
+            embed.set_image(url=f'attachment://greyline.jpg')
+            embed.set_footer(text=ctx.author.name,
+                             icon_url=str(ctx.author.avatar_url))
+        await ctx.send(embed=embed, file=discord.File(data, 'greyline.jpg'))
 
     @commands.command(name="map")
     async def _map(self, ctx, msg: str = ''):
         '''Posts an image of Frequency Allocations.
     Optional argument:`cq` = CQ Zones, `itu` = ITU Zones, `arrl` or `rac` =
     ARRL/RAC sections, `cn` = Chinese Callsign Areas, `us` = US Callsign Areas.'''
-        map_urls = {"cq": 'https://cdn.discordapp.com/attachments/427925486908473344/472856720142761985/cq-zone.png',
-                    "itu": 'https://cdn.discordapp.com/attachments/427925486908473344/472856796235563018/itu-zone.png',
-                    "arrl": 'https://cdn.discordapp.com/attachments/427925486908473344/472856898220064778/sections.png',
-                    "rac": 'https://cdn.discordapp.com/attachments/427925486908473344/472856898220064778/sections.png',
-                    "cn": 'https://cdn.discordapp.com/attachments/443246106416119810/492846548242137091/2011-0802-E4B8ADE59BBDE4B89AE4BD99E58886E58CBAE59CB0E59BBEE88BB1E696871800x1344.png',
-                    "us": 'https://cdn.discordapp.com/attachments/427925486908473344/472856506476265497/WASmap_Color.png'
-                }
         map_titles = {"cq": 'Worldwide CQ Zones Map',
                       "itu": 'Worldwide ITU Zones Map',
                       "arrl": 'ARRL/RAC Section Map',
                       "rac":  'ARRL/RAC Section Map',
                       "cn": 'Chinese Callsign Areas',
-                      "us": 'US Callsign Areas'
-                  }
+                      "us": 'US Callsign Areas'}
 
         arg = msg.lower()
         with ctx.typing():
-            try:
-                embed = discord.Embed(title=map_titles[arg], colour=self.gs.colours.good)
-                embed.set_image(url=map_urls[arg])
-            except:
-                embed = discord.Embed(title=map_titles["us"], colour=self.gs.colours.good)
-                embed.set_image(url=map_urls["us"])
-        await ctx.send(embed=embed)
+            if arg not in map_titles:
+                arg = 'us'
+            img = discord.File(f"resources/images/{arg}map.png",
+                               filename=f'{arg}map.png')
+            embed = discord.Embed(title=f'{map_titles[arg]} Map',
+                                  colour=self.gs.colours.good,
+                                  timestamp=datetime.utcnow())
+            embed.set_image(url=f'attachment://{arg}map.png')
+            embed.set_footer(text=ctx.author.name,
+                             icon_url=str(ctx.author.avatar_url))
+
+        await ctx.send(embed=embed, file=img)
 
 
 def setup(bot):
