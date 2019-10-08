@@ -110,13 +110,8 @@ async def _before_ensure_activity():
 # --- Run ---
 
 bot.add_cog(GlobalSettings(bot))
-bot.load_extension("cogs.basecog")
-bot.load_extension("cogs.morsecog")
-bot.load_extension("cogs.funcog")
-bot.load_extension("cogs.gridcog")
-bot.load_extension("cogs.hamcog")
-bot.load_extension("cogs.imagecog")
-bot.load_extension("cogs.studycog")
+for cog in opt.cogs:
+    bot.load_extension(f"cogs.{cog}")
 
 _ensure_activity.start()
 

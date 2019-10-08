@@ -24,3 +24,6 @@ debug = False
 # * Those users will have full control over the bot.
 # ! This MUST be a tuple of integers. Single element tuple: `(123,)`
 owners_uids = (200102491231092736,)
+
+# The cogs to load when running the bot.
+cogs = ['basecog']
