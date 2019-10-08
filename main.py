@@ -92,7 +92,7 @@ except discord.ConnectionClosed as ex:
     # When the connection to the gateway (websocket) is closed
     if debug_mode:
         raise
-    raise SystemExit( "Error: Discord gateway connection closed: [Code {}] {}" .format(ex.code, ex.reason))
+    raise SystemExit("Error: Discord gateway connection closed: [Code {}] {}".format(ex.code, ex.reason))
 
 except ConnectionResetError as ex:
     # More generic connection reset error
