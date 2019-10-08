@@ -19,7 +19,9 @@ import options as opt
 import keys
 
 
-# --- Global settings ---
+# --- Settings ---
+
+exit_code = 1  # The default exit code. ?shutdown and ?restart will change it accordingly (fail-safe)
 
 debug_mode = opt.debug  # Separate assignement in-case we define an override (ternary operator goes here)
 
@@ -44,7 +46,45 @@ bot = commands.Bot(command_prefix=opt.prefix,
                    description=info.description,
                    help_command=commands.MinimalHelpCommand())
 
+# --- Helper functions ---
+
+async def add_react(msg: discord.Message, react: str):
+    try:
+        await msg.add_reaction(react)
+    except discord.Forbidden:
+        print(f"!! Missing permissions to add reaction in '{msg.guild.id}/{msg.channel.id}'!")
+
+
+# --- Checks ---
+
+async def check_if_owner(ctx: commands.Context):
+    if ctx.author.id in opt.owners_uids:
+        return True
+    else:
+        await add_react(ctx.message, "❌")
+        return False
+
+
 # --- Commands ---
+
+@bot.command(name="restart")
+@commands.check(check_if_owner)
+async def _restart_bot(ctx):
+    """Restarts the bot."""
+    global exit_code
+    await add_react(ctx.message, "✅")
+    exit_code = 42  # Signals to the wrapper script that the bot needs to be restarted.
+    await bot.logout()
+
+
+@bot.command(name="shutdown")
+@commands.check(check_if_owner)
+async def _shutdown_bot(ctx):
+    """Shuts down the bot."""
+    global exit_code
+    await add_react(ctx.message, "✅")
+    exit_code = 0  # Signals to the wrapper script that the bot should not be restarted.
+    await bot.logout()
 
 
 # --- Events ---
@@ -73,6 +113,8 @@ bot.add_cog(GlobalSettings(bot))
 bot.load_extension("cogs.basecog")
 bot.load_extension("cogs.morsecog")
 bot.load_extension("cogs.funcog")
+bot.load_extension("cogs.gridcog")
+bot.load_extension("cogs.hamcog")
 bot.load_extension("cogs.imagecog")
 bot.load_extension("cogs.studycog")
 
@@ -100,3 +142,10 @@ except ConnectionResetError as ex:
         raise
     raise SystemExit("ConnectionResetError: {}".format(ex))
 
+# --- Exit ---
+# Codes for the wrapper shell script:
+# 0 - Clean exit, don't restart
+# 1 - Error exit, [restarting is up to the shell script]
+# 42 - Clean exit, do restart
+
+raise SystemExit(exit_code)

@@ -12,6 +12,15 @@ Settings and options for the bot.
 ---
 """
 
+# The prefix for the bot (str). Define a list of stings for multiple prefixes.
+# ie: `["?", "!", "pls "]`
 prefix = "?"
+
+# Whether the bot should print full stacktraces for normal exceptions: `True`,
+# or be nice and only print small messages: `False` (the default).
 debug = False
-owners_uids = ()
+
+# A tuple of user IDs that should be considered "bot owners".
+# * Those users will have full control over the bot.
+# ! This MUST be a tuple of integers. Single element tuple: `(123,)`
+owners_uids = (200102491231092736,)
