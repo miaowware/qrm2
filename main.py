@@ -99,7 +99,7 @@ async def on_ready():
 
 @tasks.loop(minutes=5)
 async def _ensure_activity():
-    await bot.change_presence(activity=discord.Game(name="with lids on 7.200"))
+    await bot.change_presence(activity=discord.Game(name=opt.game))
 
 
 @_ensure_activity.before_loop
