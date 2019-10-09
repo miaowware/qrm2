@@ -11,6 +11,8 @@ import discord
 import discord.ext.commands as commands
 
 import math
+from datetime import datetime
+
 
 class GridCog(commands.Cog):
     def __init__(self, bot):
@@ -36,12 +38,20 @@ class GridCog(commands.Cog):
                     grid += chr(ord('a') + int((latf - (int(latf/1)*1)) / (2.5/60)))
                     grid += "**"
                     embed = discord.Embed(title=f'Maidenhead Grid Locator for {float(lat):.6f}, {float(lon):.6f}',
-                            description=grid, colour=self.gs.colours.good)
+                                          description=grid,
+                                          colour=self.gs.colours.good,
+                                          timestamp=datetime.utcnow())
+                    embed.set_footer(text=ctx.author.name,
+                                     icon_url=str(ctx.author.avatar_url))
                 else:
                     raise ValueError('Out of range.')
             except Exception as e:
                 msg = f'Error generating grid square for {lat}, {lon}.'
-                embed = discord.Embed(title=msg, description=str(e), colour=self.gs.colours.bad)
+                embed = discord.Embed(title=msg, description=str(e),
+                                      colour=self.gs.colours.bad,
+                                      timestamp=datetime.utcnow())
+                embed.set_footer(text=ctx.author.name,
+                                 icon_url=str(ctx.author.avatar_url))
         await ctx.send(embed=embed)
 
     @commands.command(name="ungrid", aliases=['loc'])
@@ -56,16 +66,24 @@ class GridCog(commands.Cog):
 
                     if len(grid) >= 6:
                         embed = discord.Embed(title=f'Latitude and Longitude for {grid}',
-                                description=f'**{loc[0]:.5f}, {loc[1]:.5f}**', colour=self.gs.colours.good,
-                                url=f'https://www.openstreetmap.org/#map=13/{loc[0]:.5f}/{loc[1]:.5f}')
+                                              description=f'**{loc[0]:.5f}, {loc[1]:.5f}**', colour=self.gs.colours.good,
+                                              url=f'https://www.openstreetmap.org/#map=13/{loc[0]:.5f}/{loc[1]:.5f}',
+                                              timestamp=datetime.utcnow())
 
                     else:
                         embed = discord.Embed(title=f'Latitude and Longitude for {grid}',
-                                description=f'**{loc[0]:.1f}, {loc[1]:.1f}**', colour=self.gs.colours.good,
-                                url=f'https://www.openstreetmap.org/#map=10/{loc[0]:.1f}/{loc[1]:.1f}')
+                                              description=f'**{loc[0]:.1f}, {loc[1]:.1f}**', colour=self.gs.colours.good,
+                                              url=f'https://www.openstreetmap.org/#map=10/{loc[0]:.1f}/{loc[1]:.1f}',
+                                              timestamp=datetime.utcnow())
+                    embed.set_footer(text=ctx.author.name,
+                                     icon_url=str(ctx.author.avatar_url))
                 except Exception as e:
                     msg = f'Error generating latitude and longitude for grid {grid}.'
-                    embed = discord.Embed(title=msg, description=str(e), colour=self.gs.colours.bad)
+                    embed = discord.Embed(title=msg, description=str(e),
+                                          colour=self.gs.colours.bad,
+                                          timestamp=datetime.utcnow())
+                    embed.set_footer(text=ctx.author.name,
+                                     icon_url=str(ctx.author.avatar_url))
             else:
                 R = 6371
                 try:
@@ -92,10 +110,18 @@ class GridCog(commands.Cog):
 
                     des = f'**Distance:** {d:.1f} km ({d_mi:.1f} mi)\n**Bearing:** {bearing:.1f}°'
                     embed = discord.Embed(title=f'Great Circle Distance and Bearing from {grid} to {grid2}',
-                            description=des, colour=self.gs.colours.good)
+                                          description=des,
+                                          colour=self.gs.colours.good,
+                                          timestamp=datetime.utcnow())
+                    embed.set_footer(text=ctx.author.name,
+                                     icon_url=str(ctx.author.avatar_url))
                 except Exception as e:
                     msg = f'Error generating great circle distance and bearing from {grid} and {grid2}.'
-                    embed = discord.Embed(title=msg, description=str(e), colour=self.gs.colours.bad)
+                    embed = discord.Embed(title=msg, description=str(e),
+                                          colour=self.gs.colours.bad,
+                                          timestamp=datetime.utcnow())
+                    embed.set_footer(text=ctx.author.name,
+                                     icon_url=str(ctx.author.avatar_url))
         await ctx.send(embed=embed)
 
     def getCoords(self, grid: str):
