@@ -10,6 +10,8 @@ General Public License, version 2.
 import discord
 import discord.ext.commands as commands
 
+from datetime import datetime
+
 
 class BaseCog(commands.Cog):
     def __init__(self, bot):
@@ -19,7 +21,12 @@ class BaseCog(commands.Cog):
     @commands.command(name="info", aliases=["about"])
     async def _info(self, ctx):
         """Shows info about qrm."""
-        embed = discord.Embed(title="About qrm", description=self.gs.info.description, colour=self.gs.colours.neutral)
+        embed = discord.Embed(title="About qrm",
+                              description=self.gs.info.description,
+                              colour=self.gs.colours.neutral,
+                              timestamp=datetime.utcnow())
+        embed.set_footer(text=ctx.author.name,
+                         icon_url=str(ctx.author.avatar_url))
         embed = embed.add_field(name="Authors", value=", ".join(self.gs.info.authors))
         embed = embed.add_field(name="Contributing", value=self.gs.info.contributing)
         embed = embed.add_field(name="License", value=self.gs.info.license)
@@ -27,7 +34,13 @@ class BaseCog(commands.Cog):
 
     @commands.command(name="ping")
     async def _ping(self, ctx):
-        await ctx.send(f'**Pong!** Current ping is {self.bot.latency*1000:.1f} ms')
+        embed = discord.Embed(title="**Pong!**",
+                              description=f'Current ping is {self.bot.latency*1000:.1f} ms',
+                              colour=self.gs.colours.neutral,
+                              timestamp=datetime.utcnow())
+        embed.set_footer(text=ctx.author.name,
+                         icon_url=str(ctx.author.avatar_url))
+        await ctx.send(embed=embed)
 
 
 def setup(bot):
