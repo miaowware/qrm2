@@ -28,9 +28,9 @@ class MorseCog(commands.Cog):
         with ctx.typing():
             result = ''
             for char in msg.upper():
-                if char in self.ascii2morse:
+                try:
                     result += self.ascii2morse[char]
-                else:
+                except KeyError:
                     result += '<?>'
                 result += ' '
             embed = discord.Embed(title=f'Morse Code for {msg}',
@@ -51,9 +51,9 @@ class MorseCog(commands.Cog):
             msg = [m.split() for m in msg]
             for word in msg:
                 for char in word:
-                    if char in self.morse2ascii:
+                    try:
                         result += self.morse2ascii[char]
-                    else:
+                    except KeyError:
                         result += '<?>'
                 result += ' '
             embed = discord.Embed(title=f'ASCII for {msg0}',
@@ -71,10 +71,10 @@ class MorseCog(commands.Cog):
             msg = msg.upper()
             weight = 0
             for char in msg:
-                if char in self.ascii2morse:
+                try:
                     cwChar = self.ascii2morse[char].replace('-', '==')
                     weight += len(cwChar) * 2 + 2
-                else:
+                except KeyError:
                     res = f'Unknown character {char} in callsign'
                     await ctx.send(res)
                     return
