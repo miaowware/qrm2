@@ -17,12 +17,12 @@ import aiohttp
 
 
 class ImageCog(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.gs = bot.get_cog("GlobalSettings")
 
     @commands.command(name="plan", aliases=['bands'])
-    async def _bandplan(self, ctx, msg: str = ''):
+    async def _bandplan(self, ctx: commands.Context, msg: str = ''):
         '''Posts an image of Frequency Allocations.
     Optional argument: `cn`, `ca`, `nl`, `us`, `mx`.'''
         name = {'cn': 'Chinese',
@@ -47,7 +47,7 @@ class ImageCog(commands.Cog):
         await ctx.send(embed=embed, file=img)
 
     @commands.command(name="cond", aliases=['condx'])
-    async def _band_conditions(self, ctx):
+    async def _band_conditions(self, ctx: commands.Context):
         '''Posts an image of HF Band Conditions.'''
         with ctx.typing():
             embed = discord.Embed(title='Current Solar Conditions',
@@ -66,7 +66,7 @@ class ImageCog(commands.Cog):
         await ctx.send(embed=embed, file=discord.File(data, 'condx.png'))
 
     @commands.command(name="grayline", aliases=['greyline', 'grey', 'gray', 'gl'])
-    async def _grayline(self, ctx):
+    async def _grayline(self, ctx: commands.Context):
         '''Posts a map of the current greyline, where HF propagation is the best.'''
         gl_url = ('http://www.fourmilab.ch/cgi-bin/uncgi/Earth?img=NOAAtopo.evif'
                   '&imgsize=320&dynimg=y&opt=-p&lat=&lon=&alt=&tle=&date=0&utc=&jd=')
@@ -87,7 +87,7 @@ class ImageCog(commands.Cog):
         await ctx.send(embed=embed, file=discord.File(data, 'greyline.jpg'))
 
     @commands.command(name="map")
-    async def _map(self, ctx, msg: str = ''):
+    async def _map(self, ctx: commands.Context, msg: str = ''):
         '''Posts an image of Frequency Allocations.
     Optional argument:`cq` = CQ Zones, `itu` = ITU Zones, `arrl` or `rac` =
     ARRL/RAC sections, `cn` = Chinese Callsign Areas, `us` = US Callsign Areas.'''
@@ -114,5 +114,6 @@ class ImageCog(commands.Cog):
         await ctx.send(embed=embed, file=img)
 
 
-def setup(bot):
+def setup(bot: commands.Bot):
+    '''Set up the cog.'''
     bot.add_cog(ImageCog(bot))

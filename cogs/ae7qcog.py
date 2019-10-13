@@ -23,19 +23,19 @@ import aiohttp
 
 
 class AE7QCog(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.gs = bot.get_cog("GlobalSettings")
 
     @commands.group(name="ae7q", aliases=["ae"])
-    async def _ae7q_lookup(self, ctx):
+    async def _ae7q_lookup(self, ctx: commands.Context):
         '''Look up a callsign, FRN, or Licensee ID on ae7q.com'''
         if ctx.invoked_subcommand is None:
             await ctx.send('Invalid ae7q command passed\nPossible commands:' +
                            '`call`, `frn`, `lic` or `licensee`.')
 
     @_ae7q_lookup.command(name="call")
-    async def _ae7q_call(self, ctx, callsign: str):
+    async def _ae7q_call(self, ctx: commands.Context, callsign: str):
         callsign = callsign.upper()
         desc = ''
         base_url = "http://ae7q.com/query/data/CallHistory.php?CALL="
@@ -138,5 +138,6 @@ class AE7QCog(commands.Cog):
     #     pass
 
 
-def setup(bot):
+def setup(bot: commands.Bot):
+    '''Set up the cog.'''
     bot.add_cog(AE7QCog(bot))

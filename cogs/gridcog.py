@@ -15,12 +15,12 @@ import discord.ext.commands as commands
 
 
 class GridCog(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.gs = bot.get_cog("GlobalSettings")
 
     @commands.command(name="grid")
-    async def _grid_sq_lookup(self, ctx, lat: str, lon: str):
+    async def _grid_sq_lookup(self, ctx: commands.Context, lat: str, lon: str):
         '''Calculates the grid square for latitude and longitude coordinates.
     Usage: `?grid <lat> <lon>`
     `lat` and `lon` are decimal coordinates, with negative being latitude South and longitude West.'''
@@ -55,7 +55,7 @@ class GridCog(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="ungrid", aliases=['loc'])
-    async def _location_lookup(self, ctx, grid: str, grid2: str = None):
+    async def _location_lookup(self, ctx: commands.Context, grid: str, grid2: str = None):
         '''Calculates the latitude and longitude for the center of a grid square.
     If two grid squares are given, the distance and azimuth between them is calculated.'''
         with ctx.typing():
@@ -157,5 +157,6 @@ def get_coords(grid: str):
     return (lat, lon)
 
 
-def setup(bot):
+def setup(bot: commands.Bot):
+    '''Set up the cog.'''
     bot.add_cog(GridCog(bot))

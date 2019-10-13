@@ -15,7 +15,7 @@ import discord.ext.commands as commands
 
 
 class HamCog(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.gs = bot.get_cog("GlobalSettings")
         with open('resources/qcodes.json') as qcode_file:
@@ -24,7 +24,7 @@ class HamCog(commands.Cog):
             self.words = words_file.read().lower().splitlines()
 
     @commands.command(name="qcode", aliases=['q'])
-    async def _qcode_lookup(self, ctx, qcode: str):
+    async def _qcode_lookup(self, ctx: commands.Context, qcode: str):
         '''Look up a Q Code.'''
         with ctx.typing():
             qcode = qcode.upper()
@@ -41,7 +41,7 @@ class HamCog(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="phonetics", aliases=['ph', 'phoneticize', 'phoneticise', 'phone'])
-    async def _phonetics_lookup(self, ctx, *, msg: str):
+    async def _phonetics_lookup(self, ctx: commands.Context, *, msg: str):
         '''Get phonetics for a word or phrase.'''
         with ctx.typing():
             result = ''
@@ -60,7 +60,7 @@ class HamCog(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="utc", aliases=['z'])
-    async def _utc_lookup(self, ctx):
+    async def _utc_lookup(self, ctx: commands.Context):
         '''Gets the current time in UTC.'''
         with ctx.typing():
             now = datetime.utcnow()
@@ -74,5 +74,6 @@ class HamCog(commands.Cog):
         await ctx.send(embed=embed)
 
 
-def setup(bot):
+def setup(bot: commands.Bot):
+    '''Set up the cog.'''
     bot.add_cog(HamCog(bot))

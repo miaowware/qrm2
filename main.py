@@ -27,7 +27,7 @@ debug_mode = opt.debug  # Separate assignement in-case we define an override (te
 
 
 class GlobalSettings(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
         self.opt = opt
@@ -50,6 +50,7 @@ bot = commands.Bot(command_prefix=opt.prefix,
 # --- Helper functions ---
 
 async def add_react(msg: discord.Message, react: str):
+    '''Adds a react to a message.'''
     try:
         await msg.add_reaction(react)
     except discord.Forbidden:
@@ -59,6 +60,7 @@ async def add_react(msg: discord.Message, react: str):
 # --- Checks ---
 
 async def check_if_owner(ctx: commands.Context):
+    '''Checks if the user running the command is a bot owner.'''
     if ctx.author.id in opt.owners_uids:
         return True
     await add_react(ctx.message, "❌")
@@ -69,7 +71,7 @@ async def check_if_owner(ctx: commands.Context):
 
 @bot.command(name="restart")
 @commands.check(check_if_owner)
-async def _restart_bot(ctx):
+async def _restart_bot(ctx: commands.Context):
     """Restarts the bot."""
     global exit_code
     await add_react(ctx.message, "✅")
@@ -79,7 +81,7 @@ async def _restart_bot(ctx):
 
 @bot.command(name="shutdown")
 @commands.check(check_if_owner)
-async def _shutdown_bot(ctx):
+async def _shutdown_bot(ctx: commands.Context):
     """Shuts down the bot."""
     global exit_code
     await add_react(ctx.message, "✅")
@@ -91,6 +93,7 @@ async def _shutdown_bot(ctx):
 
 @bot.event
 async def on_ready():
+    '''Print when the bot is ready to use.'''
     print(f"Logged in as: {bot.user} - {bot.user.id}")
     print("------")
 

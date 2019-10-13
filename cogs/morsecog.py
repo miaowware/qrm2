@@ -15,7 +15,7 @@ import discord.ext.commands as commands
 
 
 class MorseCog(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.gs = bot.get_cog("GlobalSettings")
         with open('resources/morse.json') as morse_file:
@@ -23,7 +23,7 @@ class MorseCog(commands.Cog):
             self.morse2ascii = {v: k for k, v in self.ascii2morse.items()}
 
     @commands.command(name="morse", aliases=['cw'])
-    async def _morse(self, ctx, *, msg: str):
+    async def _morse(self, ctx: commands.Context, *, msg: str):
         """Converts ASCII to international morse code."""
         with ctx.typing():
             result = ''
@@ -42,7 +42,7 @@ class MorseCog(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="unmorse", aliases=['demorse', 'uncw', 'decw'])
-    async def _unmorse(self, ctx, *, msg: str):
+    async def _unmorse(self, ctx: commands.Context, *, msg: str):
         '''Converts international morse code to ASCII.'''
         with ctx.typing():
             result = ''
@@ -65,7 +65,7 @@ class MorseCog(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="weight", aliases=["cwweight", 'cww'])
-    async def _weight(self, ctx, msg: str):
+    async def _weight(self, ctx: commands.Context, msg: str):
         '''Calculates the CW Weight of a callsign.'''
         with ctx.typing():
             msg = msg.upper()
@@ -88,5 +88,6 @@ class MorseCog(commands.Cog):
         await ctx.send(embed=embed)
 
 
-def setup(bot):
+def setup(bot: commands.Bot):
+    '''Set up the cog.'''
     bot.add_cog(MorseCog(bot))

@@ -18,13 +18,13 @@ import aiohttp
 
 
 class StudyCog(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.gs = bot.get_cog("GlobalSettings")
         self.lastq = dict()
 
     @commands.command(name="rq", aliases=['randomq'])
-    async def _random_question(self, ctx, level: str = None):
+    async def _random_question(self, ctx: commands.Context, level: str = None):
         '''Gets a random question from the Technician, General, and/or Extra question pools.'''
         tech_pool = 'E2_2018'
         gen_pool = 'E3_2019'
@@ -84,7 +84,7 @@ class StudyCog(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="rqa")
-    async def _q_answer(self, ctx, ans: str = None):
+    async def _q_answer(self, ctx: commands.Context, ans: str = None):
         '''Returns the answer to question last asked (Optional argument: your answer).'''
         with ctx.typing():
             correct_ans = self.lastq[ctx.message.channel.id][1]
@@ -115,5 +115,6 @@ class StudyCog(commands.Cog):
         await ctx.send(embed=embed)
 
 
-def setup(bot):
+def setup(bot: commands.Bot):
+    '''Set up the cog.'''
     bot.add_cog(StudyCog(bot))
