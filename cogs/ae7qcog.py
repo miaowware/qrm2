@@ -53,7 +53,7 @@ class AE7QCog(commands.Cog):
             rows = table.find_all("tr")
             if len(rows) > 1 and len(rows[0]) > 1:
                 break
-            elif desc == '':
+            if desc == '':
                 for row in rows:
                     desc += " ".join(row.getText().split())
                     desc += '\n'
@@ -76,19 +76,18 @@ class AE7QCog(commands.Cog):
         for tr in rows:
             if rows.index(tr) == 0:
                 continue
-            else:
-                row_cells = []
-                for td in tr.find_all('td'):
-                    if td.getText().strip() != '':
-                        row_cells.append(td.getText().strip())
-                    else:
-                        row_cells.append('-')
-                    if 'colspan' in td.attrs and int(td.attrs['colspan']) > 1:
-                        for i in range(int(td.attrs['colspan']) - 1):
-                            row_cells.append(row_cells[-1])
-                for i, cell in enumerate(row_cells):
-                    if cell == '"':
-                        cell = table_contents[-1][i]
+            row_cells = []
+            for td in tr.find_all('td'):
+                if td.getText().strip() != '':
+                    row_cells.append(td.getText().strip())
+                else:
+                    row_cells.append('-')
+                if 'colspan' in td.attrs and int(td.attrs['colspan']) > 1:
+                    for i in range(int(td.attrs['colspan']) - 1):
+                        row_cells.append(row_cells[-1])
+            for i, cell in enumerate(row_cells):
+                if cell == '"':
+                    cell = table_contents[-1][i]
             if len(row_cells) > 1:
                 table_contents += [row_cells]
 

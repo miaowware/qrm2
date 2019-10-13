@@ -23,7 +23,7 @@ import keys
 
 exit_code = 1  # The default exit code. ?shutdown and ?restart will change it accordingly (fail-safe)
 
-debug_mode = opt.debug  # Separate assignement in-case we define an override (ternary operator goes here)
+DEBUG_MODE = opt.DEBUG  # Separate assignement in-case we define an override (ternary operator goes here)
 
 
 class GlobalSettings(commands.Cog):
@@ -42,8 +42,8 @@ class GlobalSettings(commands.Cog):
 
 # --- Bot setup ---
 
-bot = commands.Bot(command_prefix=opt.prefix,
-                   description=info.description,
+bot = commands.Bot(command_prefix=opt.PREFIX,
+                   description=info.DESCRIPTION,
                    help_command=commands.MinimalHelpCommand())
 
 
@@ -61,7 +61,7 @@ async def add_react(msg: discord.Message, react: str):
 
 async def check_if_owner(ctx: commands.Context):
     '''Checks if the user running the command is a bot owner.'''
-    if ctx.author.id in opt.owners_uids:
+    if ctx.author.id in opt.OWNERS_UIDS:
         return True
     await add_react(ctx.message, "❌")
     return False
@@ -102,7 +102,7 @@ async def on_ready():
 
 @tasks.loop(minutes=5)
 async def _ensure_activity():
-    await bot.change_presence(activity=discord.Game(name=opt.game))
+    await bot.change_presence(activity=discord.Game(name=opt.GAME))
 
 
 @_ensure_activity.before_loop
@@ -113,14 +113,14 @@ async def _before_ensure_activity():
 # --- Run ---
 
 bot.add_cog(GlobalSettings(bot))
-for cog in opt.cogs:
+for cog in opt.COGS:
     bot.load_extension(f"cogs.{cog}")
 
 _ensure_activity.start()
 
 
 try:
-    bot.run(keys.discord_token)
+    bot.run(keys.DISCORD_TOKEN)
 
 except discord.LoginFailure as ex:
     # Miscellaneous authentications errors: borked token and co

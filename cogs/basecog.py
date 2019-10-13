@@ -22,14 +22,14 @@ class BaseCog(commands.Cog):
     async def _info(self, ctx):
         """Shows info about qrm."""
         embed = discord.Embed(title="About qrm",
-                              description=self.gs.info.description,
+                              description=self.gs.info.DESCRIPTION,
                               colour=self.gs.colours.neutral,
                               timestamp=datetime.utcnow())
         embed.set_footer(text=ctx.author.name,
                          icon_url=str(ctx.author.avatar_url))
-        embed = embed.add_field(name="Authors", value=", ".join(self.gs.info.authors))
-        embed = embed.add_field(name="Contributing", value=self.gs.info.contributing)
-        embed = embed.add_field(name="License", value=self.gs.info.license)
+        embed = embed.add_field(name="Authors", value=", ".join(self.gs.info.AUTHORS))
+        embed = embed.add_field(name="Contributing", value=self.gs.info.CONTRIBUTING)
+        embed = embed.add_field(name="License", value=self.gs.info.LICENSE)
         await ctx.send(embed=embed)
 
     @commands.command(name="ping")
