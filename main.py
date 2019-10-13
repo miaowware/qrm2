@@ -37,7 +37,7 @@ class GlobalSettings(commands.Cog):
         self.colours = SimpleNamespace(good=0x43B581,
                                        neutral=0x7289DA,
                                        bad=0xF04747)
-        self.debug = debug_mode
+        self.debug = DEBUG_MODE
 
 
 # --- Bot setup ---
@@ -124,19 +124,19 @@ try:
 
 except discord.LoginFailure as ex:
     # Miscellaneous authentications errors: borked token and co
-    if debug_mode:
+    if DEBUG_MODE:
         raise
     raise SystemExit("Error: Failed to authenticate: {}".format(ex))
 
 except discord.ConnectionClosed as ex:
     # When the connection to the gateway (websocket) is closed
-    if debug_mode:
+    if DEBUG_MODE:
         raise
     raise SystemExit("Error: Discord gateway connection closed: [Code {}] {}".format(ex.code, ex.reason))
 
 except ConnectionResetError as ex:
     # More generic connection reset error
-    if debug_mode:
+    if DEBUG_MODE:
         raise
     raise SystemExit("ConnectionResetError: {}".format(ex))
 
