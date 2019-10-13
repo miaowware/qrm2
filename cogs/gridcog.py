@@ -128,7 +128,6 @@ class GridCog(commands.Cog):
 
 
 def get_coords(grid: str):
-    '''Get coordinates for a maidenhead grid locator'''
     if len(grid) < 3:
         raise ValueError('The grid locator must be at least 4 characters long.')
 
@@ -158,5 +157,4 @@ def get_coords(grid: str):
 
 
 def setup(bot: commands.Bot):
-    '''Set up the cog.'''
     bot.add_cog(GridCog(bot))

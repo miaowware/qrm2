@@ -116,5 +116,4 @@ class StudyCog(commands.Cog):
 
 
 def setup(bot: commands.Bot):
-    '''Set up the cog.'''
     bot.add_cog(StudyCog(bot))

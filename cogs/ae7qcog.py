@@ -138,5 +138,4 @@ class AE7QCog(commands.Cog):
 
 
 def setup(bot: commands.Bot):
-    '''Set up the cog.'''
     bot.add_cog(AE7QCog(bot))

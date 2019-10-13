@@ -115,5 +115,4 @@ class ImageCog(commands.Cog):
 
 
 def setup(bot: commands.Bot):
-    '''Set up the cog.'''
     bot.add_cog(ImageCog(bot))

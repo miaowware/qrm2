@@ -50,7 +50,6 @@ bot = commands.Bot(command_prefix=opt.prefix,
 # --- Helper functions ---
 
 async def add_react(msg: discord.Message, react: str):
-    '''Adds a react to a message.'''
     try:
         await msg.add_reaction(react)
     except discord.Forbidden:
@@ -60,7 +59,6 @@ async def add_react(msg: discord.Message, react: str):
 # --- Checks ---
 
 async def check_if_owner(ctx: commands.Context):
-    '''Checks if the user running the command is a bot owner.'''
     if ctx.author.id in opt.owners_uids:
         return True
     await add_react(ctx.message, "❌")
