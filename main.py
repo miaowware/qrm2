@@ -23,7 +23,7 @@ import keys
 
 exit_code = 1  # The default exit code. ?shutdown and ?restart will change it accordingly (fail-safe)
 
-DEBUG_MODE = opt.DEBUG  # Separate assignement in-case we define an override (ternary operator goes here)
+debug_mode = opt.debug  # Separate assignement in-case we define an override (ternary operator goes here)
 
 
 class GlobalSettings(commands.Cog):
@@ -37,13 +37,13 @@ class GlobalSettings(commands.Cog):
         self.colours = SimpleNamespace(good=0x43B581,
                                        neutral=0x7289DA,
                                        bad=0xF04747)
-        self.debug = DEBUG_MODE
+        self.debug = debug_mode
 
 
 # --- Bot setup ---
 
-bot = commands.Bot(command_prefix=opt.PREFIX,
-                   description=info.DESCRIPTION,
+bot = commands.Bot(command_prefix=opt.prefix,
+                   description=info.description,
                    help_command=commands.MinimalHelpCommand())
 
 
@@ -61,7 +61,7 @@ async def add_react(msg: discord.Message, react: str):
 
 async def check_if_owner(ctx: commands.Context):
     '''Checks if the user running the command is a bot owner.'''
-    if ctx.author.id in opt.OWNERS_UIDS:
+    if ctx.author.id in opt.owners_uids:
         return True
     await add_react(ctx.message, "❌")
     return False
@@ -93,7 +93,6 @@ async def _shutdown_bot(ctx: commands.Context):
 
 @bot.event
 async def on_ready():
-    '''Print when the bot is ready to use.'''
     print(f"Logged in as: {bot.user} - {bot.user.id}")
     print("------")
 
@@ -102,7 +101,7 @@ async def on_ready():
 
 @tasks.loop(minutes=5)
 async def _ensure_activity():
-    await bot.change_presence(activity=discord.Game(name=opt.GAME))
+    await bot.change_presence(activity=discord.Game(name=opt.game))
 
 
 @_ensure_activity.before_loop
@@ -113,30 +112,30 @@ async def _before_ensure_activity():
 # --- Run ---
 
 bot.add_cog(GlobalSettings(bot))
-for cog in opt.COGS:
+for cog in opt.cogs:
     bot.load_extension(f"cogs.{cog}")
 
 _ensure_activity.start()
 
 
 try:
-    bot.run(keys.DISCORD_TOKEN)
+    bot.run(keys.discord_token)
 
 except discord.LoginFailure as ex:
     # Miscellaneous authentications errors: borked token and co
-    if DEBUG_MODE:
+    if debug_mode:
         raise
     raise SystemExit("Error: Failed to authenticate: {}".format(ex))
 
 except discord.ConnectionClosed as ex:
     # When the connection to the gateway (websocket) is closed
-    if DEBUG_MODE:
+    if debug_mode:
         raise
     raise SystemExit("Error: Discord gateway connection closed: [Code {}] {}".format(ex.code, ex.reason))
 
 except ConnectionResetError as ex:
     # More generic connection reset error
-    if DEBUG_MODE:
+    if debug_mode:
         raise
     raise SystemExit("ConnectionResetError: {}".format(ex))
 

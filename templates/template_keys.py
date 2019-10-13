@@ -13,4 +13,4 @@ API keys and tokens for the bot.
 """
 
 # The Discord bot token
-DISCORD_TOKEN = ""
+discord_token = ""
