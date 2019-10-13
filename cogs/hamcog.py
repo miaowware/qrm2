@@ -28,15 +28,20 @@ class HamCog(commands.Cog):
         '''Look up a Q Code.'''
         with ctx.typing():
             q = q.upper()
-            try:
-                code = self.qcodes[q]
-                embed = discord.Embed(title=q, description=self.qcodes[q], colour=self.gs.colours.good)
-            except:
-                embed = discord.Embed(title=f'Q Code {q} not found', colour=self.gs.colours.bad)
+            if q in self.qcodes:
+                embed = discord.Embed(title=q, description=self.qcodes[q],
+                                      colour=self.gs.colours.good,
+                                      timestamp=datetime.utcnow())
+            else:
+                embed = discord.Embed(title=f'Q Code {q} not found',
+                                      colour=self.gs.colours.bad,
+                                      timestamp=datetime.utcnow())
+            embed.set_footer(text=ctx.author.name,
+                             icon_url=str(ctx.author.avatar_url))
         await ctx.send(embed=embed)
 
     @commands.command(name="phonetics", aliases=['ph', 'phoneticize', 'phoneticise', 'phone'])
-    async def _phonetics_lookup(self, ctx, *, msg : str):
+    async def _phonetics_lookup(self, ctx, *, msg: str):
         '''Get phonetics for a word or phrase.'''
         with ctx.typing():
             result = ''
@@ -47,7 +52,12 @@ class HamCog(commands.Cog):
                 else:
                     result += char
                 result += ' '
-            embed = discord.Embed(title=f'Phonetics for {msg}', description=result.title(), colour=self.gs.colours.good)
+            embed = discord.Embed(title=f'Phonetics for {msg}',
+                                  description=result.title(),
+                                  colour=self.gs.colours.good,
+                                  timestamp=datetime.utcnow())
+            embed.set_footer(text=ctx.author.name,
+                             icon_url=str(ctx.author.avatar_url))
         await ctx.send(embed=embed)
 
     @commands.command(name="utc", aliases=['z'])
@@ -56,7 +66,12 @@ class HamCog(commands.Cog):
         with ctx.typing():
             d = datetime.utcnow()
             result = '**' + d.strftime('%Y-%m-%d %H:%M') + 'Z**'
-            embed = discord.Embed(title='The current time is:', description=result, colour=self.gs.colours.good)
+            embed = discord.Embed(title='The current time is:',
+                                  description=result,
+                                  colour=self.gs.colours.good,
+                                  timestamp=datetime.utcnow())
+            embed.set_footer(text=ctx.author.name,
+                             icon_url=str(ctx.author.avatar_url))
         await ctx.send(embed=embed)
 
 
