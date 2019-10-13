@@ -46,6 +46,7 @@ bot = commands.Bot(command_prefix=opt.prefix,
                    description=info.description,
                    help_command=commands.MinimalHelpCommand())
 
+
 # --- Helper functions ---
 
 async def add_react(msg: discord.Message, react: str):
@@ -60,9 +61,8 @@ async def add_react(msg: discord.Message, react: str):
 async def check_if_owner(ctx: commands.Context):
     if ctx.author.id in opt.owners_uids:
         return True
-    else:
-        await add_react(ctx.message, "❌")
-        return False
+    await add_react(ctx.message, "❌")
+    return False
 
 
 # --- Commands ---

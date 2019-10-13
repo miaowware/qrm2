@@ -7,11 +7,11 @@ This file is part of discord-qrmbot and is released under the terms of the GNU
 General Public License, version 2.
 """
 
-import discord
-import discord.ext.commands as commands
-
 import json
 from datetime import datetime
+
+import discord
+import discord.ext.commands as commands
 
 
 class MorseCog(commands.Cog):
@@ -72,8 +72,8 @@ class MorseCog(commands.Cog):
             weight = 0
             for char in msg:
                 try:
-                    cwChar = self.ascii2morse[char].replace('-', '==')
-                    weight += len(cwChar) * 2 + 2
+                    cw_char = self.ascii2morse[char].replace('-', '==')
+                    weight += len(cw_char) * 2 + 2
                 except KeyError:
                     res = f'Unknown character {char} in callsign'
                     await ctx.send(res)

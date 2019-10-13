@@ -7,7 +7,6 @@ This file is part of discord-qrmbot and is released under the terms of the GNU
 General Public License, version 2.
 """
 
-import discord
 import discord.ext.commands as commands
 
 
@@ -17,7 +16,7 @@ class FunCog(commands.Cog):
         self.gs = bot.get_cog("GlobalSettings")
 
     @commands.command(name="xkcd", aliases=['x'])
-    async def _xkcd(self, ctx, num : str):
+    async def _xkcd(self, ctx, num: str):
         '''Look up an xkcd by number.'''
         await ctx.send('http://xkcd.com/' + num)
 

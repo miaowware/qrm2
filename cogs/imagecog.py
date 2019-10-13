@@ -7,12 +7,13 @@ This file is part of discord-qrmbot and is released under the terms of the GNU
 General Public License, version 2.
 """
 
+import io
+from datetime import datetime
+
 import discord
 import discord.ext.commands as commands
 
 import aiohttp
-import io
-from datetime import datetime
 
 
 class ImageCog(commands.Cog):
@@ -46,35 +47,41 @@ class ImageCog(commands.Cog):
         await ctx.send(embed=embed, file=img)
 
     @commands.command(name="cond", aliases=['condx'])
-    async def _band_conditions(self, ctx, msg: str = ''):
+    async def _band_conditions(self, ctx):
         '''Posts an image of HF Band Conditions.'''
         with ctx.typing():
-            async with aiohttp.ClientSession() as session:
-                async with session.get('http://www.hamqsl.com/solarsun.php') as resp:
-                    if resp.status != 200:
-                        return await ctx.send('Could not download file...')
-                    data = io.BytesIO(await resp.read())
             embed = discord.Embed(title='Current Solar Conditions',
                                   colour=self.gs.colours.good,
                                   timestamp=datetime.utcnow())
-            embed.set_image(url=f'attachment://condx.png')
+            async with aiohttp.ClientSession() as session:
+                async with session.get('http://www.hamqsl.com/solarsun.php') as resp:
+                    if resp.status != 200:
+                        embed.description = 'Could not download file...'
+                        embed.colour = self.gs.colours.bad
+                    else:
+                        data = io.BytesIO(await resp.read())
+                        embed.set_image(url=f'attachment://condx.png')
             embed.set_footer(text=ctx.author.name,
                              icon_url=str(ctx.author.avatar_url))
         await ctx.send(embed=embed, file=discord.File(data, 'condx.png'))
 
     @commands.command(name="grayline", aliases=['greyline', 'grey', 'gray', 'gl'])
-    async def _grayline(self, ctx, msg: str = ''):
+    async def _grayline(self, ctx):
         '''Posts a map of the current greyline, where HF propagation is the best.'''
+        gl_url = ('http://www.fourmilab.ch/cgi-bin/uncgi/Earth?img=NOAAtopo.evif'
+                  '&imgsize=320&dynimg=y&opt=-p&lat=&lon=&alt=&tle=&date=0&utc=&jd=')
         with ctx.typing():
-            async with aiohttp.ClientSession() as session:
-                async with session.get('http://www.fourmilab.ch/cgi-bin/uncgi/Earth?img=NOAAtopo.evif&imgsize=320&dynimg=y&opt=-p&lat=&lon=&alt=&tle=&date=0&utc=&jd=') as resp:
-                    if resp.status != 200:
-                        return await ctx.send('Could not download file...')
-                    data = io.BytesIO(await resp.read())
             embed = discord.Embed(title='Current Greyline Conditions',
                                   colour=self.gs.colours.good,
                                   timestamp=datetime.utcnow())
-            embed.set_image(url=f'attachment://greyline.jpg')
+            async with aiohttp.ClientSession() as session:
+                async with session.get(gl_url) as resp:
+                    if resp.status != 200:
+                        embed.description = 'Could not download file...'
+                        embed.colour = self.gs.colours.bad
+                    else:
+                        data = io.BytesIO(await resp.read())
+                        embed.set_image(url=f'attachment://greyline.jpg')
             embed.set_footer(text=ctx.author.name,
                              icon_url=str(ctx.author.avatar_url))
         await ctx.send(embed=embed, file=discord.File(data, 'greyline.jpg'))

@@ -7,10 +7,10 @@ This file is part of discord-qrmbot and is released under the terms of the GNU
 General Public License, version 2.
 """
 
+from datetime import datetime
+
 import discord
 import discord.ext.commands as commands
-
-from datetime import datetime
 
 
 class BaseCog(commands.Cog):

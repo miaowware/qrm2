@@ -13,10 +13,11 @@ KE8FGB: assigned once, no restrictions
 NA2AAA: unassigned, no records
 """
 
+from datetime import datetime
+
 import discord
 import discord.ext.commands as commands
 
-from datetime import datetime
 from bs4 import BeautifulSoup
 import aiohttp
 
@@ -85,9 +86,9 @@ class AE7QCog(commands.Cog):
                     if 'colspan' in td.attrs and int(td.attrs['colspan']) > 1:
                         for i in range(int(td.attrs['colspan']) - 1):
                             row_cells.append(row_cells[-1])
-                for i in range(len(row_cells)):
-                    if row_cells[i] == '"':
-                        row_cells[i] = table_contents[-1][i]
+                for i, cell in enumerate(row_cells):
+                    if cell == '"':
+                        cell = table_contents[-1][i]
             if len(row_cells) > 1:
                 table_contents += [row_cells]
 
