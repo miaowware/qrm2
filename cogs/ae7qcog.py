@@ -1,0 +1,141 @@
+"""
+ae7q cog for qrm
+---
+Copyright (C) 2019 Abigail Gold, 0x5c
+
+This file is part of discord-qrmbot and is released under the terms of the GNU
+General Public License, version 2.
+---
+Test callsigns:
+KN8U: active, restricted
+AB2EE: expired, restricted
+KE8FGB: assigned once, no restrictions
+NA2AAA: unassigned, no records
+"""
+
+import discord
+import discord.ext.commands as commands
+
+from datetime import datetime
+from bs4 import BeautifulSoup
+import aiohttp
+
+
+class AE7QCog(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        self.gs = bot.get_cog("GlobalSettings")
+
+    @commands.group(name="ae7q", aliases=["ae"])
+    async def _ae7q_lookup(self, ctx):
+        '''Look up a callsign, FRN, or Licensee ID on ae7q.com'''
+        if ctx.invoked_subcommand is None:
+            await ctx.send('Invalid ae7q command passed\nPossible commands:' +
+                           '`call`, `frn`, `lic` or `licensee`.')
+
+    @_ae7q_lookup.command(name="call")
+    async def _ae7q_call(self, ctx, callsign: str):
+        callsign = callsign.upper()
+        desc = ''
+        base_url = "http://ae7q.com/query/data/CallHistory.php?CALL="
+
+        async with aiohttp.ClientSession() as session:
+            async with session.get(base_url + callsign) as resp:
+                if resp.status != 200:
+                    return await ctx.send('Could not load AE7Q')
+                page = await resp.text()
+
+        soup = BeautifulSoup(page, features="html.parser")
+        tables = soup.select("table.Database")
+
+        for table in tables:
+            rows = table.find_all("tr")
+            if len(rows) > 1 and len(rows[0]) > 1:
+                break
+            elif desc == '':
+                for row in rows:
+                    desc += " ".join(row.getText().split())
+                    desc += '\n'
+                desc = desc.replace(callsign, f'`{callsign}`')
+            rows = None
+
+        if rows is None:
+            embed = discord.Embed(title=f"AE7Q History for {callsign}",
+                                  colour=self.gs.colours.bad,
+                                  url=f"{base_url}{callsign}",
+                                  timestamp=datetime.utcnow())
+            embed.set_footer(text=ctx.author.name,
+                             icon_url=str(ctx.author.avatar_url))
+            embed.description = desc
+            embed.description += f'\nNo records found for `{callsign}`'
+            await ctx.send(embed=embed)
+            return
+
+        table_contents = []  # store your table here
+        for tr in rows:
+            if rows.index(tr) == 0:
+                continue
+            else:
+                row_cells = []
+                for td in tr.find_all('td'):
+                    if td.getText().strip() != '':
+                        row_cells.append(td.getText().strip())
+                    else:
+                        row_cells.append('-')
+                    if 'colspan' in td.attrs and int(td.attrs['colspan']) > 1:
+                        for i in range(int(td.attrs['colspan']) - 1):
+                            row_cells.append(row_cells[-1])
+                for i in range(len(row_cells)):
+                    if row_cells[i] == '"':
+                        row_cells[i] = table_contents[-1][i]
+            if len(row_cells) > 1:
+                table_contents += [row_cells]
+
+        embed = discord.Embed(title=f"AE7Q Records for {callsign}",
+                              colour=self.gs.colours.good,
+                              url=f"{base_url}{callsign}",
+                              timestamp=datetime.utcnow())
+
+        embed.set_footer(text=ctx.author.name,
+                         icon_url=str(ctx.author.avatar_url))
+
+        for row in table_contents[0:3]:
+            header = f'**{row[0]}** ({row[1]})'
+            body = f'Class: *{row[2]}*\n'
+            body += f'Region: *{row[3]}*\n'
+            body += f'Status: *{row[4]}*\n'
+            body += f'Granted: *{row[5]}*\n'
+            body += f'Effective: *{row[6]}*\n'
+            body += f'Cancelled: *{row[7]}*\n'
+            body += f'Expires: *{row[8]}*'
+            embed.add_field(name=header, value=body, inline=False)
+
+        embed.description = desc
+        if len(table_contents) > 3:
+            embed.description += f'\nRecords 1 to 3 of {len(table_contents)}.'
+            embed.description += ' See ae7q.com for more...'
+
+        await ctx.send(embed=embed)
+
+    # TODO: write commands for other AE7Q response types?
+    # @_ae7q_lookup.command(name="trustee")
+    # async def _ae7q_trustee(self, ctx, callsign: str):
+    #     pass
+
+    # @_ae7q_lookup.command(name="applications", aliases=['apps'])
+    # async def _ae7q_applications(self, ctx, callsign: str):
+    #     pass
+
+    # @_ae7q_lookup.command(name="frn")
+    # async def _ae7q_frn(self, ctx, frn: str):
+    #     base_url = "http://ae7q.com/query/data/FrnHistory.php?FRN="
+    #     pass
+
+    # @_ae7q_lookup.command(name="licensee", aliases=["lic"])
+    # async def _ae7q_licensee(self, ctx, frn: str):
+    #     base_url = "http://ae7q.com/query/data/LicenseeIdHistory.php?ID="
+    #     pass
+
+
+def setup(bot):
+    bot.add_cog(AE7QCog(bot))
