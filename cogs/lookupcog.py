@@ -16,7 +16,7 @@ from util import cty_json
 
 
 class LookupCog(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commmands.Bot):
         self.bot = bot
         self.gs = bot.get_cog("GlobalSettings")
         self.CTY = None
@@ -24,12 +24,12 @@ class LookupCog(commands.Cog):
         self.up_cty_first_run = True
 
     @commands.command(name="qrz")
-    async def _qrz_lookup(self, ctx, call: str):
+    async def _qrz_lookup(self, ctx: commands.Context, call: str):
         '''Links to info about a callsign from QRZ.'''
         await ctx.send(f'http://qrz.com/db/{call}')
 
     @commands.command(name="sat")
-    async def _sat_lookup(self, ctx, sat: str, grid1: str, grid2: str = None):
+    async def _sat_lookup(self, ctx: commands.Context, sat: str, grid1: str, grid2: str = None):
         '''Links to info about satellite passes on satmatch.com.
     Usage: `?sat sat_name grid1 grid2`'''
         now = datetime.utcnow().strftime('%Y-%m-%d%%20%H:%M')
@@ -45,7 +45,7 @@ class LookupCog(commands.Cog):
                   )
 
     @commands.command(name="dxcc", aliases=['dx'])
-    async def _dxcc_lookup(self, ctx, q: str):
+    async def _dxcc_lookup(self, ctx: commands.Context, q: str):
         '''Gets info about a prefix.'''
         with ctx.typing():
             noMatch = True
@@ -102,7 +102,7 @@ class LookupCog(commands.Cog):
             self.up_cty_first_run = False
 
 
-def setup(bot):
+def setup(bot: commands.Bot):
     lookupcog = LookupCog(bot)
     bot.add_cog(lookupcog)
     lookupcog._update_cty.start()
