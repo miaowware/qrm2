@@ -14,3 +14,5 @@ API keys and tokens for the bot.
 
 # The Discord bot token
 discord_token = ""
+qrz_user = ""
+qrz_pass = ""
