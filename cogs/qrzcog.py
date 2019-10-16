@@ -23,13 +23,13 @@ class QRZCog(commands.Cog):
         try:
             with open('data/qrz_session') as qrz_file:
                 self.key = qrz_file.readline().strip()
-            qrz_test_session(self.key)
+            await qrz_test_session(self.key)
         except FileNotFoundError:
-            self.key = qrz_login(self.gs.keys.qrz_user, self.gs.keys.qrz_pass)
+            self.key = await qrz_login(self.gs.keys.qrz_user, self.gs.keys.qrz_pass)
             with open('data/qrz_session', 'w') as qrz_file:
                 qrz_file.write(self.key)
         except ConnectionError:
-            self.key = qrz_login(self.gs.keys.qrz_user, self.gs.keys.qrz_pass)
+            self.key = await qrz_login(self.gs.keys.qrz_user, self.gs.keys.qrz_pass)
             with open('data/qrz_session', 'w') as qrz_file:
                 qrz_file.write(self.key)
 
@@ -55,11 +55,14 @@ class QRZCog(commands.Cog):
                 resp_xml = await resp.text()
 
         xml_soup = BeautifulSoup(resp_xml, "xml")
-        print(xml_soup)
 
         resp_data = {tag.name: tag.contents[0] for tag in xml_soup.select('QRZDatabase Callsign *')}
         resp_session = {tag.name: tag.contents[0] for tag in xml_soup.select('QRZDatabase Session *')}
         if 'Error' in resp_session:
+            if 'Session Timeout' in resp_session['Error']:
+                self.key = await qrz_login(self.gs.keys.qrz_user, self.gs.keys.qrz_pass)
+                with open('data/qrz_session', 'w') as qrz_file:
+                    qrz_file.write(self.key)
             raise ValueError(resp_session['Error'])
 
         embed = discord.Embed(title=f"QRZ Data for {resp_data['call']}",
