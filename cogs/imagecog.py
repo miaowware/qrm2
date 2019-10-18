@@ -34,17 +34,27 @@ class ImageCog(commands.Cog):
 
         with ctx.typing():
             if arg not in name:
-                arg = 'us'
-            img = discord.File(f"resources/images/bandchart/{arg}bandchart.png",
-                               filename=f'{arg}bandchart.png')
-            embed = discord.Embed(title=f'{name[arg]} Amateur Radio Bands',
-                                  colour=self.gs.colours.good,
-                                  timestamp=datetime.utcnow())
-            embed.set_image(url=f'attachment://{arg}bandchart.png')
-            embed.set_footer(text=ctx.author.name,
-                             icon_url=str(ctx.author.avatar_url))
+                desc = 'Possible arguments are:\n'
+                for abbrev, title in name.items():
+                    desc += f'`{abbrev}`: {title}\n'
+                embed = discord.Embed(title=f'Bandplan Not Found!',
+                                      description=desc,
+                                      colour=self.gs.colours.bad,
+                                      timestamp=datetime.utcnow())
+                embed.set_footer(text=ctx.author.name,
+                                 icon_url=str(ctx.author.avatar_url))
+                await ctx.send(embed=embed)
+            else:
+                img = discord.File(f"resources/images/bandchart/{arg}bandchart.png",
+                                   filename=f'{arg}bandchart.png')
+                embed = discord.Embed(title=f'{name[arg]} Amateur Radio Bands',
+                                      colour=self.gs.colours.good,
+                                      timestamp=datetime.utcnow())
+                embed.set_image(url=f'attachment://{arg}bandchart.png')
+                embed.set_footer(text=ctx.author.name,
+                                 icon_url=str(ctx.author.avatar_url))
 
-        await ctx.send(embed=embed, file=img)
+                await ctx.send(embed=embed, file=img)
 
     @commands.command(name="cond", aliases=['condx'])
     async def _band_conditions(self, ctx: commands.Context):
@@ -101,17 +111,27 @@ class ImageCog(commands.Cog):
         arg = msg.lower()
         with ctx.typing():
             if arg not in map_titles:
-                arg = 'us'
-            img = discord.File(f"resources/images/map/{arg}map.png",
-                               filename=f'{arg}map.png')
-            embed = discord.Embed(title=f'{map_titles[arg]} Map',
-                                  colour=self.gs.colours.good,
-                                  timestamp=datetime.utcnow())
-            embed.set_image(url=f'attachment://{arg}map.png')
-            embed.set_footer(text=ctx.author.name,
-                             icon_url=str(ctx.author.avatar_url))
+                desc = 'Possible arguments are:\n'
+                for abbrev, title in map_titles.items():
+                    desc += f'`{abbrev}`: {title}\n'
+                embed = discord.Embed(title=f'Map Not Found!',
+                                      description=desc,
+                                      colour=self.gs.colours.bad,
+                                      timestamp=datetime.utcnow())
+                embed.set_footer(text=ctx.author.name,
+                                 icon_url=str(ctx.author.avatar_url))
+                await ctx.send(embed=embed)
+            else:
+                img = discord.File(f"resources/images/map/{arg}map.png",
+                                   filename=f'{arg}map.png')
+                embed = discord.Embed(title=f'{map_titles[arg]} Map',
+                                      colour=self.gs.colours.good,
+                                      timestamp=datetime.utcnow())
+                embed.set_image(url=f'attachment://{arg}map.png')
+                embed.set_footer(text=ctx.author.name,
+                                 icon_url=str(ctx.author.avatar_url))
 
-        await ctx.send(embed=embed, file=img)
+                await ctx.send(embed=embed, file=img)
 
 
 def setup(bot: commands.Bot):
