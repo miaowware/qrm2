@@ -34,8 +34,6 @@ class QRZCog(commands.Cog):
                 qrz_file.write(self.key)
 
     @commands.command(name="qrz", aliases=["call"])
-    async def _qrz_lookup(self, ctx: commands.Context, call: str):
-        '''Links to info about a callsign from QRZ.'''
         if self.gs.keys.qrz_user == '' or self.gs.keys.qrz_pass == '':
             await ctx.send(f'http://qrz.com/db/{call}')
             return
@@ -74,7 +72,7 @@ class QRZCog(commands.Cog):
         if 'image' in resp_data:
             embed.set_image(url=resp_data['image'])
 
-        data = await qrz_process_info(resp_data)
+        data = qrz_process_info(resp_data)
 
         for title, val in data.items():
             if val is not None:
@@ -115,7 +113,7 @@ async def qrz_test_session(key: str):
         raise ConnectionError(resp_session['Error'])
 
 
-async def qrz_process_info(data: dict):
+def qrz_process_info(data: dict):
     if 'name' in data:
         if 'fname' in data:
             name = data['fname'] + ' ' + data['name']
