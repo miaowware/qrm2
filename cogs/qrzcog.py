@@ -79,7 +79,7 @@ class QRZCog(commands.Cog):
                 self.key = qrz_file.readline().strip()
             await qrz_test_session(self.key)
         except (FileNotFoundError, ConnectionError):
-            await self.qrz_get_session()
+            await self.get_session()
 
 
 async def qrz_login(user: str, passwd: str):
@@ -108,7 +108,6 @@ async def qrz_test_session(key: str):
             resp_xml = await resp.text()
 
     xml_soup = BeautifulSoup(resp_xml, "xml")
-    print(xml_soup)
 
     resp_session = {tag.name: tag.contents[0] for tag in xml_soup.select('QRZDatabase Session *')}
     if 'Error' in resp_session:
