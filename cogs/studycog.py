@@ -7,23 +7,24 @@ This file is part of discord-qrmbot and is released under the terms of the GNU
 General Public License, version 2.
 """
 
+import random
+import json
+from datetime import datetime
+
 import discord
 import discord.ext.commands as commands
 
-import random
-import json
 import aiohttp
-from datetime import datetime
 
 
 class StudyCog(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.gs = bot.get_cog("GlobalSettings")
         self.lastq = dict()
 
     @commands.command(name="rq", aliases=['randomq'])
-    async def _random_question(self, ctx, level: str = None):
+    async def _random_question(self, ctx: commands.Context, level: str = None):
         '''Gets a random question from the Technician, General, and/or Extra question pools.'''
         tech_pool = 'E2_2018'
         gen_pool = 'E3_2019'
@@ -45,12 +46,12 @@ class StudyCog(commands.Cog):
             if level in ['e', 'ae', 'extra']:
                 selected_pool = extra_pool
 
-            if (level is None) or (level == 'all'):  # no pool given or user wants all, so pick a random pool and use that
+            if (level is None) or (level == 'all'):  # no pool given or user wants all, so pick a random pool
                 selected_pool = random.choice([tech_pool, gen_pool, extra_pool])
             if (level is not None) and (selected_pool is None):  # unrecognized pool given by user
                 await ctx.send('The question pool you gave was unrecognized. ' +
-                              'There are many ways to call up certain question pools - try ?rq t, g, or e. ' +
-                              '(Note that only the US question pools are available).')
+                               'There are many ways to call up certain question pools - try ?rq t, g, or e. ' +
+                               '(Note that only the US question pools are available).')
                 return
 
             async with aiohttp.ClientSession() as session:
@@ -70,11 +71,11 @@ class StudyCog(commands.Cog):
             embed.set_footer(text=ctx.author.name,
                              icon_url=str(ctx.author.avatar_url))
             embed = embed.add_field(name='Question:', value=question['text'], inline=False)
-            embed = embed.add_field(name='Answers:', value=
-                                    '**A:** ' + question['answers']['A'] +
+            embed = embed.add_field(name='Answers:', value='**A:** ' + question['answers']['A'] +
                                     '\n**B:** ' + question['answers']['B'] +
                                     '\n**C:** ' + question['answers']['C'] +
-                                    '\n**D:** ' + question['answers']['D'], inline=False)
+                                    '\n**D:** ' + question['answers']['D'],
+                                    inline=False)
             embed = embed.add_field(name='Answer:', value='Type _?rqa_ for answer', inline=False)
             if 'image' in question:
                 image_url = f'https://hamstudy.org/_1330011/images/{selected_pool.split("_",1)[1]}/{question["image"]}'
@@ -83,7 +84,7 @@ class StudyCog(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="rqa")
-    async def _q_answer(self, ctx, ans: str = None):
+    async def _q_answer(self, ctx: commands.Context, ans: str = None):
         '''Returns the answer to question last asked (Optional argument: your answer).'''
         with ctx.typing():
             correct_ans = self.lastq[ctx.message.channel.id][1]
@@ -114,5 +115,5 @@ class StudyCog(commands.Cog):
         await ctx.send(embed=embed)
 
 
-def setup(bot):
+def setup(bot: commands.Bot):
     bot.add_cog(StudyCog(bot))

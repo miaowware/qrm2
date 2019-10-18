@@ -13,28 +13,29 @@ KE8FGB: assigned once, no restrictions
 NA2AAA: unassigned, no records
 """
 
+from datetime import datetime
+
 import discord
 import discord.ext.commands as commands
 
-from datetime import datetime
 from bs4 import BeautifulSoup
 import aiohttp
 
 
 class AE7QCog(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.gs = bot.get_cog("GlobalSettings")
 
     @commands.group(name="ae7q", aliases=["ae"])
-    async def _ae7q_lookup(self, ctx):
+    async def _ae7q_lookup(self, ctx: commands.Context):
         '''Look up a callsign, FRN, or Licensee ID on ae7q.com'''
         if ctx.invoked_subcommand is None:
             await ctx.send('Invalid ae7q command passed\nPossible commands:' +
                            '`call`, `frn`, `lic` or `licensee`.')
 
     @_ae7q_lookup.command(name="call")
-    async def _ae7q_call(self, ctx, callsign: str):
+    async def _ae7q_call(self, ctx: commands.Context, callsign: str):
         callsign = callsign.upper()
         desc = ''
         base_url = "http://ae7q.com/query/data/CallHistory.php?CALL="
@@ -52,7 +53,7 @@ class AE7QCog(commands.Cog):
             rows = table.find_all("tr")
             if len(rows) > 1 and len(rows[0]) > 1:
                 break
-            elif desc == '':
+            if desc == '':
                 for row in rows:
                     desc += " ".join(row.getText().split())
                     desc += '\n'
@@ -75,19 +76,18 @@ class AE7QCog(commands.Cog):
         for tr in rows:
             if rows.index(tr) == 0:
                 continue
-            else:
-                row_cells = []
-                for td in tr.find_all('td'):
-                    if td.getText().strip() != '':
-                        row_cells.append(td.getText().strip())
-                    else:
-                        row_cells.append('-')
-                    if 'colspan' in td.attrs and int(td.attrs['colspan']) > 1:
-                        for i in range(int(td.attrs['colspan']) - 1):
-                            row_cells.append(row_cells[-1])
-                for i in range(len(row_cells)):
-                    if row_cells[i] == '"':
-                        row_cells[i] = table_contents[-1][i]
+            row_cells = []
+            for td in tr.find_all('td'):
+                if td.getText().strip() != '':
+                    row_cells.append(td.getText().strip())
+                else:
+                    row_cells.append('-')
+                if 'colspan' in td.attrs and int(td.attrs['colspan']) > 1:
+                    for i in range(int(td.attrs['colspan']) - 1):
+                        row_cells.append(row_cells[-1])
+            for i, cell in enumerate(row_cells):
+                if cell == '"':
+                    cell = table_contents[-1][i]
             if len(row_cells) > 1:
                 table_contents += [row_cells]
 
@@ -137,5 +137,5 @@ class AE7QCog(commands.Cog):
     #     pass
 
 
-def setup(bot):
+def setup(bot: commands.Bot):
     bot.add_cog(AE7QCog(bot))

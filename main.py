@@ -27,7 +27,7 @@ debug_mode = opt.debug  # Separate assignement in-case we define an override (te
 
 
 class GlobalSettings(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
         self.opt = opt
@@ -46,6 +46,7 @@ bot = commands.Bot(command_prefix=opt.prefix,
                    description=info.description,
                    help_command=commands.MinimalHelpCommand())
 
+
 # --- Helper functions ---
 
 async def add_react(msg: discord.Message, react: str):
@@ -60,16 +61,15 @@ async def add_react(msg: discord.Message, react: str):
 async def check_if_owner(ctx: commands.Context):
     if ctx.author.id in opt.owners_uids:
         return True
-    else:
-        await add_react(ctx.message, "❌")
-        return False
+    await add_react(ctx.message, "❌")
+    return False
 
 
 # --- Commands ---
 
 @bot.command(name="restart")
 @commands.check(check_if_owner)
-async def _restart_bot(ctx):
+async def _restart_bot(ctx: commands.Context):
     """Restarts the bot."""
     global exit_code
     await add_react(ctx.message, "✅")
@@ -79,7 +79,7 @@ async def _restart_bot(ctx):
 
 @bot.command(name="shutdown")
 @commands.check(check_if_owner)
-async def _shutdown_bot(ctx):
+async def _shutdown_bot(ctx: commands.Context):
     """Shuts down the bot."""
     global exit_code
     await add_react(ctx.message, "✅")

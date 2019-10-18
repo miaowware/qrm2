@@ -7,15 +7,15 @@ This file is part of discord-qrmbot and is released under the terms of the GNU
 General Public License, version 2.
 """
 
-import discord
-import discord.ext.commands as commands
-
 import json
 from datetime import datetime
 
+import discord
+import discord.ext.commands as commands
+
 
 class MorseCog(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.gs = bot.get_cog("GlobalSettings")
         with open('resources/morse.json') as morse_file:
@@ -23,7 +23,7 @@ class MorseCog(commands.Cog):
             self.morse2ascii = {v: k for k, v in self.ascii2morse.items()}
 
     @commands.command(name="morse", aliases=['cw'])
-    async def _morse(self, ctx, *, msg: str):
+    async def _morse(self, ctx: commands.Context, *, msg: str):
         """Converts ASCII to international morse code."""
         with ctx.typing():
             result = ''
@@ -42,7 +42,7 @@ class MorseCog(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="unmorse", aliases=['demorse', 'uncw', 'decw'])
-    async def _unmorse(self, ctx, *, msg: str):
+    async def _unmorse(self, ctx: commands.Context, *, msg: str):
         '''Converts international morse code to ASCII.'''
         with ctx.typing():
             result = ''
@@ -65,15 +65,15 @@ class MorseCog(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="weight", aliases=["cwweight", 'cww'])
-    async def _weight(self, ctx, msg: str):
+    async def _weight(self, ctx: commands.Context, msg: str):
         '''Calculates the CW Weight of a callsign.'''
         with ctx.typing():
             msg = msg.upper()
             weight = 0
             for char in msg:
                 try:
-                    cwChar = self.ascii2morse[char].replace('-', '==')
-                    weight += len(cwChar) * 2 + 2
+                    cw_char = self.ascii2morse[char].replace('-', '==')
+                    weight += len(cw_char) * 2 + 2
                 except KeyError:
                     res = f'Unknown character {char} in callsign'
                     await ctx.send(res)
@@ -88,5 +88,5 @@ class MorseCog(commands.Cog):
         await ctx.send(embed=embed)
 
 
-def setup(bot):
+def setup(bot: commands.Bot):
     bot.add_cog(MorseCog(bot))

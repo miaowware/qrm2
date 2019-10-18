@@ -7,14 +7,14 @@ This file is part of discord-qrmbot and is released under the terms of the GNU
 General Public License, version 2.
 """
 
+from datetime import datetime
+
 import discord
 import discord.ext.commands as commands
 
-from datetime import datetime
-
 
 class BaseCog(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.gs = bot.get_cog("GlobalSettings")
 
@@ -33,7 +33,8 @@ class BaseCog(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="ping")
-    async def _ping(self, ctx):
+    async def _ping(self, ctx: commands.Context):
+        """Show the current latency to the discord endpoint."""
         embed = discord.Embed(title="**Pong!**",
                               description=f'Current ping is {self.bot.latency*1000:.1f} ms',
                               colour=self.gs.colours.neutral,
@@ -43,5 +44,5 @@ class BaseCog(commands.Cog):
         await ctx.send(embed=embed)
 
 
-def setup(bot):
+def setup(bot: commands.Bot):
     bot.add_cog(BaseCog(bot))
