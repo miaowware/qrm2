@@ -66,24 +66,20 @@ class QRZCog(commands.Cog):
         await ctx.send(embed=embed)
 
     async def get_session(self):
-        """QRZ API Session handling."""
+        """Session creation and caching."""
+        self.key = await qrz_login(self.gs.keys.qrz_user, self.gs.keys.qrz_pass)
+        with open('data/qrz_session', 'w') as qrz_file:
+            qrz_file.write(self.key)
+
+    @tasks.loop(count=)
+    async def _qrz_session_init(self):
+        """Helper task to allow obtaining a session at cog instantiation."""
         try:
             with open('data/qrz_session') as qrz_file:
                 self.key = qrz_file.readline().strip()
             await qrz_test_session(self.key)
-        except FileNotFoundError:
-            self.key = await qrz_login(self.gs.keys.qrz_user, self.gs.keys.qrz_pass)
-            with open('data/qrz_session', 'w') as qrz_file:
-                qrz_file.write(self.key)
-        except ConnectionError:
-            self.key = await qrz_login(self.gs.keys.qrz_user, self.gs.keys.qrz_pass)
-            with open('data/qrz_session', 'w') as qrz_file:
-                qrz_file.write(self.key)
-
-    @tasks.loop(count=1)
-    async def _qrz_session_init(self):
-        """Helper task to allow initialisation of the session at cog instantiation."""
-        await self.qrz_get_session()
+        except (FileNotFoundError, ConnectionError):
+            await self.qrz_get_session()
 
 
 async def qrz_login(user: str, passwd: str):
