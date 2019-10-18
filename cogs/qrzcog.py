@@ -10,7 +10,7 @@ from collections import OrderedDict
 from datetime import datetime
 
 import discord
-import discord.ext.commands as commands
+from discord.ext import commands, tasks
 
 import aiohttp
 from bs4 import BeautifulSoup
@@ -20,20 +20,10 @@ class QRZCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.gs = bot.get_cog("GlobalSettings")
-        try:
-            with open('data/qrz_session') as qrz_file:
-                self.key = qrz_file.readline().strip()
-            await qrz_test_session(self.key)
-        except FileNotFoundError:
-            self.key = await qrz_login(self.gs.keys.qrz_user, self.gs.keys.qrz_pass)
-            with open('data/qrz_session', 'w') as qrz_file:
-                qrz_file.write(self.key)
-        except ConnectionError:
-            self.key = await qrz_login(self.gs.keys.qrz_user, self.gs.keys.qrz_pass)
-            with open('data/qrz_session', 'w') as qrz_file:
-                qrz_file.write(self.key)
+        self._qrz_session_init.start()
 
     @commands.command(name="qrz", aliases=["call"])
+    async def _qrz_lookup(self, ctx: commands.Context, call: str):
         if self.gs.keys.qrz_user == '' or self.gs.keys.qrz_pass == '':
             await ctx.send(f'http://qrz.com/db/{call}')
             return
@@ -41,9 +31,7 @@ class QRZCog(commands.Cog):
         try:
             await qrz_test_session(self.key)
         except ConnectionError:
-            self.key = await qrz_login(self.gs.keys.qrz_user, self.gs.keys.qrz_pass)
-            with open('data/qrz_session', 'w') as qrz_file:
-                qrz_file.write(self.key)
+            await self.get_session()
 
         url = f'http://xmldata.qrz.com/xml/current/?s={self.key};callsign={call}'
         async with aiohttp.ClientSession() as session:
@@ -58,9 +46,7 @@ class QRZCog(commands.Cog):
         resp_session = {tag.name: tag.contents[0] for tag in xml_soup.select('QRZDatabase Session *')}
         if 'Error' in resp_session:
             if 'Session Timeout' in resp_session['Error']:
-                self.key = await qrz_login(self.gs.keys.qrz_user, self.gs.keys.qrz_pass)
-                with open('data/qrz_session', 'w') as qrz_file:
-                    qrz_file.write(self.key)
+                await self.get_session()
             raise ValueError(resp_session['Error'])
 
         embed = discord.Embed(title=f"QRZ Data for {resp_data['call']}",
@@ -78,6 +64,26 @@ class QRZCog(commands.Cog):
             if val is not None:
                 embed.add_field(name=title, value=val, inline=True)
         await ctx.send(embed=embed)
+
+    async def get_session(self):
+        """QRZ API Session handling."""
+        try:
+            with open('data/qrz_session') as qrz_file:
+                self.key = qrz_file.readline().strip()
+            await qrz_test_session(self.key)
+        except FileNotFoundError:
+            self.key = await qrz_login(self.gs.keys.qrz_user, self.gs.keys.qrz_pass)
+            with open('data/qrz_session', 'w') as qrz_file:
+                qrz_file.write(self.key)
+        except ConnectionError:
+            self.key = await qrz_login(self.gs.keys.qrz_user, self.gs.keys.qrz_pass)
+            with open('data/qrz_session', 'w') as qrz_file:
+                qrz_file.write(self.key)
+
+    @tasks.loop(count=1)
+    async def _qrz_session_init(self):
+        """Helper task to allow initialisation of the session at cog instantiation."""
+        await self.qrz_get_session()
 
 
 async def qrz_login(user: str, passwd: str):
