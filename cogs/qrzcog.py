@@ -71,7 +71,7 @@ class QRZCog(commands.Cog):
         with open('data/qrz_session', 'w') as qrz_file:
             qrz_file.write(self.key)
 
-    @tasks.loop(count=)
+    @tasks.loop(count=1)
     async def _qrz_session_init(self):
         """Helper task to allow obtaining a session at cog instantiation."""
         try:
