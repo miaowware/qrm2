@@ -34,7 +34,7 @@ class ImageCog(commands.Cog):
         with ctx.typing():
             if arg not in name:
                 arg = 'us'
-            img = discord.File(f"resources/images/{arg}bandchart.png",
+            img = discord.File(f"resources/images/bandchart/{arg}bandchart.png",
                                filename=f'{arg}bandchart.png')
             embed = discord.Embed(title=f'{name[arg]} Amateur Radio Bands',
                                   colour=self.gs.colours.good,
@@ -95,7 +95,7 @@ class ImageCog(commands.Cog):
         with ctx.typing():
             if arg not in map_titles:
                 arg = 'us'
-            img = discord.File(f"resources/images/{arg}map.png",
+            img = discord.File(f"resources/images/map/{arg}map.png",
                                filename=f'{arg}map.png')
             embed = discord.Embed(title=f'{map_titles[arg]} Map',
                                   colour=self.gs.colours.good,
