@@ -11,17 +11,18 @@ General Public License, version 2.
 from types import SimpleNamespace
 
 import discord
-from discord.ext import commands, tasks
+#from discord.ext import commands, tasks
 
 import info
 
 import options as opt
 import keys
 
+import pathlib
 
 # --- Settings ---
 
-exit_code = 1  # The default exit code. ?shutdown and ?restart will change it accordingly (fail-safe)
+#exit_code = 1  # The default exit code. ?shutdown and ?restart will change it accordingly (fail-safe)
 
 debug_mode = opt.debug  # Separate assignement in-case we define an override (ternary operator goes here)
 
@@ -104,7 +105,7 @@ async def _ensure_activity():
 
 @_ensure_activity.before_loop
 async def _before_ensure_activity():
-    await bot.wait_until_ready()
+        await bot.wait_until_ready()
 
 
 # --- Run ---
@@ -127,8 +128,7 @@ except discord.LoginFailure as ex:
 
 except discord.ConnectionClosed as ex:
     # When the connection to the gateway (websocket) is closed
-    if debug_mode:
-        raise
+    if debug_mode: raise
     raise SystemExit("Error: Discord gateway connection closed: [Code {}] {}".format(ex.code, ex.reason))
 
 except ConnectionResetError as ex:
@@ -140,7 +140,7 @@ except ConnectionResetError as ex:
 # --- Exit ---
 # Codes for the wrapper shell script:
 # 0 - Clean exit, don't restart
-# 1 - Error exit, [restarting is up to the shell script]
+#1 - Error exit, [restarting is up to the shell script]
 # 42 - Clean exit, do restart
 
 raise SystemExit(exit_code)
