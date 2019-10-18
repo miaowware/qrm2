@@ -20,6 +20,7 @@ class QRZCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.gs = bot.get_cog("GlobalSettings")
+        self.session = aiohttp.ClientSession()
         self._qrz_session_init.start()
 
     @commands.command(name="qrz", aliases=["call"])
@@ -29,16 +30,15 @@ class QRZCog(commands.Cog):
             return
 
         try:
-            await qrz_test_session(self.key)
+            await qrz_test_session(self.key, self.session)
         except ConnectionError:
             await self.get_session()
 
         url = f'http://xmldata.qrz.com/xml/current/?s={self.key};callsign={call}'
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as resp:
-                if resp.status != 200:
-                    raise ConnectionError(f'Unable to connect to QRZ (HTTP Error {resp.status})')
-                resp_xml = await resp.text()
+        async with self.session.get(url) as resp:
+            if resp.status != 200:
+                raise ConnectionError(f'Unable to connect to QRZ (HTTP Error {resp.status})')
+            resp_xml = await resp.text()
 
         xml_soup = BeautifulSoup(resp_xml, "xml")
 
@@ -67,7 +67,7 @@ class QRZCog(commands.Cog):
 
     async def get_session(self):
         """Session creation and caching."""
-        self.key = await qrz_login(self.gs.keys.qrz_user, self.gs.keys.qrz_pass)
+        self.key = await qrz_login(self.gs.keys.qrz_user, self.gs.keys.qrz_pass, self.session)
         with open('data/qrz_session', 'w') as qrz_file:
             qrz_file.write(self.key)
 
@@ -77,18 +77,17 @@ class QRZCog(commands.Cog):
         try:
             with open('data/qrz_session') as qrz_file:
                 self.key = qrz_file.readline().strip()
-            await qrz_test_session(self.key)
+            await qrz_test_session(self.key, self.session)
         except (FileNotFoundError, ConnectionError):
             await self.get_session()
 
 
-async def qrz_login(user: str, passwd: str):
+async def qrz_login(user: str, passwd: str, session: aiohttp.ClientSession):
     url = f'http://xmldata.qrz.com/xml/current/?username={user};password={passwd};agent=qrmbot'
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url) as resp:
-            if resp.status != 200:
-                raise ConnectionError(f'Unable to connect to QRZ (HTTP Error {resp.status})')
-            resp_xml = await resp.text()
+    async with session.get(url) as resp:
+        if resp.status != 200:
+            raise ConnectionError(f'Unable to connect to QRZ (HTTP Error {resp.status})')
+        resp_xml = await resp.text()
 
     xml_soup = BeautifulSoup(resp_xml, "xml")
     resp_data = {tag.name: tag.contents[0] for tag in xml_soup.select('QRZDatabase Session *')}
@@ -99,13 +98,12 @@ async def qrz_login(user: str, passwd: str):
     return resp_data['Key']
 
 
-async def qrz_test_session(key: str):
+async def qrz_test_session(key: str, session: aiohttp.ClientSession):
     url = f'http://xmldata.qrz.com/xml/current/?s={key}'
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url) as resp:
-            if resp.status != 200:
-                raise ConnectionError(f'Unable to connect to QRZ (HTTP Error {resp.status})')
-            resp_xml = await resp.text()
+    async with session.get(url) as resp:
+        if resp.status != 200:
+            raise ConnectionError(f'Unable to connect to QRZ (HTTP Error {resp.status})')
+        resp_xml = await resp.text()
 
     xml_soup = BeautifulSoup(resp_xml, "xml")
 
