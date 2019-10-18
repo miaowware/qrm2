@@ -20,6 +20,6 @@ General Public License, version 2.
 
 authors = ("@ClassAbbyAmplifier#2229", "@0x5c")
 description = """A bot with various useful ham radio-related functions, written in Python."""
-license = "Released under the GNU Public License v2"
+license = "Released under the GNU General Public License v2"
 contributing = "Check out the source on GitHub, contributions welcome: https://github.com/classabbyamp/discord-qrm-bot"
 release_timestamp = "not yet :P"
