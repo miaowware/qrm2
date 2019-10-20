@@ -41,16 +41,28 @@ class QRZCog(commands.Cog):
                 raise ConnectionError(f'Unable to connect to QRZ (HTTP Error {resp.status})')
             resp_xml = etree.parse(BytesIO(await resp.read())).getroot()
 
-        resp_xml_data = resp_xml.xpath('/x:QRZDatabase/x:Callsign',
-                                                namespaces={'x':'http://xmldata.qrz.com'})
-        resp_data = {el.tag.split('}')[1]: el.text for el in resp_xml_data[0].getiterator()}
         resp_xml_session = resp_xml.xpath('/x:QRZDatabase/x:Session',
-                                          namespaces={'x':'http://xmldata.qrz.com'})
+                                          namespaces={'x': 'http://xmldata.qrz.com'})
         resp_session = {el.tag.split('}')[1]: el.text for el in resp_xml_session[0].getiterator()}
         if 'Error' in resp_session:
             if 'Session Timeout' in resp_session['Error']:
                 await self.get_session()
+                await self._qrz_lookup(ctx, call)
+                return
+            if 'Not found' in resp_session['Error']:
+                embed = discord.Embed(title=f"QRZ Data for {call.upper()}",
+                                      colour=self.gs.colours.bad,
+                                      description='No data found!',
+                                      timestamp=datetime.utcnow())
+                embed.set_footer(text=ctx.author.name,
+                                 icon_url=str(ctx.author.avatar_url))
+                await ctx.send(embed=embed)
+                return
             raise ValueError(resp_session['Error'])
+
+        resp_xml_data = resp_xml.xpath('/x:QRZDatabase/x:Callsign',
+                                                namespaces={'x':'http://xmldata.qrz.com'})
+        resp_data = {el.tag.split('}')[1]: el.text for el in resp_xml_data[0].getiterator()}
 
         embed = discord.Embed(title=f"QRZ Data for {resp_data['call']}",
                               colour=self.gs.colours.good,
