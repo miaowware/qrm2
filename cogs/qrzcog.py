@@ -8,12 +8,13 @@ General Public License, version 2.
 """
 from collections import OrderedDict
 from datetime import datetime
+from io import BytesIO
 
 import discord
 from discord.ext import commands, tasks
 
 import aiohttp
-from bs4 import BeautifulSoup
+from lxml import etree
 
 
 class QRZCog(commands.Cog):
@@ -38,12 +39,14 @@ class QRZCog(commands.Cog):
         async with self.session.get(url) as resp:
             if resp.status != 200:
                 raise ConnectionError(f'Unable to connect to QRZ (HTTP Error {resp.status})')
-            resp_xml = await resp.text()
+            resp_xml = etree.parse(BytesIO(await resp.read())).getroot()
 
-        xml_soup = BeautifulSoup(resp_xml, "xml")
-
-        resp_data = {tag.name: tag.contents[0] for tag in xml_soup.select('QRZDatabase Callsign *')}
-        resp_session = {tag.name: tag.contents[0] for tag in xml_soup.select('QRZDatabase Session *')}
+        resp_xml_data = resp_xml.xpath('/x:QRZDatabase/x:Callsign',
+                                                namespaces={'x':'http://xmldata.qrz.com'})
+        resp_data = {el.tag.split('}')[1]: el.text for el in resp_xml_data[0].getiterator()}
+        resp_xml_session = resp_xml.xpath('/x:QRZDatabase/x:Session',
+                                          namespaces={'x':'http://xmldata.qrz.com'})
+        resp_session = {el.tag.split('}')[1]: el.text for el in resp_xml_session[0].getiterator()}
         if 'Error' in resp_session:
             if 'Session Timeout' in resp_session['Error']:
                 await self.get_session()
@@ -87,15 +90,16 @@ async def qrz_login(user: str, passwd: str, session: aiohttp.ClientSession):
     async with session.get(url) as resp:
         if resp.status != 200:
             raise ConnectionError(f'Unable to connect to QRZ (HTTP Error {resp.status})')
-        resp_xml = await resp.text()
+        resp_xml = etree.parse(BytesIO(await resp.read())).getroot()
 
-    xml_soup = BeautifulSoup(resp_xml, "xml")
-    resp_data = {tag.name: tag.contents[0] for tag in xml_soup.select('QRZDatabase Session *')}
-    if 'Error' in resp_data:
-        raise ConnectionError(resp_data['Error'])
-    if resp_data['SubExp'] == 'non-subscriber':
+    resp_xml_session = resp_xml.xpath('/x:QRZDatabase/x:Session',
+                                      namespaces={'x':'http://xmldata.qrz.com'})
+    resp_session = {el.tag.split('}')[1]: el.text for el in resp_xml_session[0].getiterator()}
+    if 'Error' in resp_session:
+        raise ConnectionError(resp_session['Error'])
+    if resp_session['SubExp'] == 'non-subscriber':
         raise ConnectionError('Invalid QRZ Subscription')
-    return resp_data['Key']
+    return resp_session['Key']
 
 
 async def qrz_test_session(key: str, session: aiohttp.ClientSession):
@@ -103,11 +107,11 @@ async def qrz_test_session(key: str, session: aiohttp.ClientSession):
     async with session.get(url) as resp:
         if resp.status != 200:
             raise ConnectionError(f'Unable to connect to QRZ (HTTP Error {resp.status})')
-        resp_xml = await resp.text()
+        resp_xml = etree.parse(BytesIO(await resp.read())).getroot()
 
-    xml_soup = BeautifulSoup(resp_xml, "xml")
-
-    resp_session = {tag.name: tag.contents[0] for tag in xml_soup.select('QRZDatabase Session *')}
+    resp_xml_session = resp_xml.xpath('/x:QRZDatabase/x:Session',
+                                      namespaces={'x':'http://xmldata.qrz.com'})
+    resp_session = {el.tag.split('}')[1]: el.text for el in resp_xml_session[0].getiterator()}
     if 'Error' in resp_session:
         raise ConnectionError(resp_session['Error'])
 
