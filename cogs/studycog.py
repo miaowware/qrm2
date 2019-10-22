@@ -17,7 +17,7 @@ import discord.ext.commands as commands
 import aiohttp
 
 
-class StudyCog(commands.Cog):
+class StudyCog(commands.Cog, name='HamStudy Commands'):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.gs = bot.get_cog("GlobalSettings")
@@ -66,6 +66,7 @@ class StudyCog(commands.Cog):
             question = random.choice(pool_questions)
 
             embed = discord.Embed(title=question['id'],
+                                  description='Data courtesy of HamStudy.org',
                                   colour=self.gs.colours.good,
                                   timestamp=datetime.utcnow())
             embed.set_footer(text=ctx.author.name,
@@ -94,19 +95,19 @@ class StudyCog(commands.Cog):
                 if ans == correct_ans:
                     result = f'Correct! The answer to {q_num} was **{correct_ans}**.'
                     embed = discord.Embed(title=f'{q_num} Answer',
-                                          description=result,
+                                          description=f'Data courtesy of HamStudy.org\n\n{result}',
                                           colour=self.gs.colours.good,
                                           timestamp=datetime.utcnow())
                 else:
                     result = f'Incorrect. The answer to {q_num} was **{correct_ans}**, not **{ans}**.'
                     embed = discord.Embed(title=f'{q_num} Answer',
-                                          description=result,
+                                          description=f'Data courtesy of HamStudy.org\n\n{result}',
                                           colour=self.gs.colours.bad,
                                           timestamp=datetime.utcnow())
             else:
                 result = f'The correct answer to {q_num} was **{correct_ans}**.'
                 embed = discord.Embed(title=f'{q_num} Answer',
-                                      description=result,
+                                      description=f'Data courtesy of HamStudy.org\n\n{result}',
                                       colour=self.gs.colours.neutral,
                                       timestamp=datetime.utcnow())
 

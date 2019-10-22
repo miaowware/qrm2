@@ -14,7 +14,7 @@ import discord
 import discord.ext.commands as commands
 
 
-class GridCog(commands.Cog):
+class GridCog(commands.Cog, name='Location Commands'):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.gs = bot.get_cog("GlobalSettings")

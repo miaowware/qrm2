@@ -14,7 +14,7 @@ import discord
 import discord.ext.commands as commands
 
 
-class HamCog(commands.Cog):
+class HamCog(commands.Cog, name='Ham Radio Commands'):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.gs = bot.get_cog("GlobalSettings")

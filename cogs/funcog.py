@@ -10,7 +10,7 @@ General Public License, version 2.
 import discord.ext.commands as commands
 
 
-class FunCog(commands.Cog):
+class FunCog(commands.Cog, name='Fun Commands'):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.gs = bot.get_cog("GlobalSettings")
@@ -25,7 +25,7 @@ class FunCog(commands.Cog):
         '''Returns an xkcd about tar.'''
         await ctx.send('http://xkcd.com/1168')
 
-    @commands.command(name="xd")
+    @commands.command(name="xd", hidden=True)
     async def _xd(self, ctx: commands.Context):
         '''ecks dee'''
         await ctx.send('ECKS DEE :smirk:')

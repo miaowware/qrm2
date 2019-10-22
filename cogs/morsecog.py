@@ -14,7 +14,7 @@ import discord
 import discord.ext.commands as commands
 
 
-class MorseCog(commands.Cog):
+class MorseCog(commands.Cog, name='Morse Code Commands'):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.gs = bot.get_cog("GlobalSettings")

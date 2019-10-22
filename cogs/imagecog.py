@@ -16,7 +16,7 @@ import discord.ext.commands as commands
 import aiohttp
 
 
-class ImageCog(commands.Cog):
+class ImageCog(commands.Cog, name='Image Lookup Commands'):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.gs = bot.get_cog("GlobalSettings")
@@ -34,16 +34,7 @@ class ImageCog(commands.Cog):
 
         with ctx.typing():
             if arg not in name:
-                desc = 'Possible arguments are:\n'
-                for abbrev, title in name.items():
-                    desc += f'`{abbrev}`: {title}\n'
-                embed = discord.Embed(title=f'Bandplan Not Found!',
-                                      description=desc,
-                                      colour=self.gs.colours.bad,
-                                      timestamp=datetime.utcnow())
-                embed.set_footer(text=ctx.author.name,
-                                 icon_url=str(ctx.author.avatar_url))
-                await ctx.send(embed=embed)
+                await ctx.send_help(ctx.command)
             else:
                 img = discord.File(f"resources/images/bandchart/{arg}bandchart.png",
                                    filename=f'{arg}bandchart.png')
@@ -111,16 +102,7 @@ class ImageCog(commands.Cog):
         arg = msg.lower()
         with ctx.typing():
             if arg not in map_titles:
-                desc = 'Possible arguments are:\n'
-                for abbrev, title in map_titles.items():
-                    desc += f'`{abbrev}`: {title}\n'
-                embed = discord.Embed(title=f'Map Not Found!',
-                                      description=desc,
-                                      colour=self.gs.colours.bad,
-                                      timestamp=datetime.utcnow())
-                embed.set_footer(text=ctx.author.name,
-                                 icon_url=str(ctx.author.avatar_url))
-                await ctx.send(embed=embed)
+                await ctx.send_help(ctx.command)
             else:
                 img = discord.File(f"resources/images/map/{arg}map.png",
                                    filename=f'{arg}map.png')

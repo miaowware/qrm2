@@ -67,7 +67,7 @@ async def check_if_owner(ctx: commands.Context):
 
 # --- Commands ---
 
-@bot.command(name="restart")
+@bot.command(name="restart", hidden=True)
 @commands.check(check_if_owner)
 async def _restart_bot(ctx: commands.Context):
     """Restarts the bot."""
@@ -77,7 +77,7 @@ async def _restart_bot(ctx: commands.Context):
     await bot.logout()
 
 
-@bot.command(name="shutdown")
+@bot.command(name="shutdown", hidden=True)
 @commands.check(check_if_owner)
 async def _shutdown_bot(ctx: commands.Context):
     """Shuts down the bot."""

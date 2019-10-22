@@ -15,11 +15,14 @@ General Public License, version 2.
 
 `contrubuting`: Info on how to contribute to the bot.
 
+`release`: Current bot version.
+
 `release_timestamp`: When the bot was last released.
 """
 
-authors = ("@ClassAbbyAmplifier#2229", "@0x5c")
+authors = ("@ClassAbbyAmplifier#2229", "@0x5c#0639")
 description = """A bot with various useful ham radio-related functions, written in Python."""
 license = "Released under the GNU General Public License v2"
 contributing = "Check out the source on GitHub, contributions welcome: https://github.com/classabbyamp/discord-qrm-bot"
+release = 'v1.0'
 release_timestamp = "not yet :P"
