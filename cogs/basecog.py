@@ -8,7 +8,6 @@ General Public License, version 2.
 """
 
 from datetime import datetime
-import itertools
 
 import discord
 import discord.ext.commands as commands
@@ -109,7 +108,7 @@ class BaseCog(commands.Cog, name='Basic Commands'):
         embed = embed.add_field(name="Authors", value=", ".join(self.gs.info.authors))
         embed = embed.add_field(name="Contributing", value=self.gs.info.contributing)
         embed = embed.add_field(name="License", value=self.gs.info.license)
-        embed = embed.add_field(name="Version", value=f'{self.gs.info.release} (Released: {self.gs.info.release_timestamp})')
+        embed = embed.add_field(name="Version", value=f'v{self.gs.info.release} (Released: {self.gs.info.release_timestamp})')
         await ctx.send(embed=embed)
 
     @commands.command(name="ping")
