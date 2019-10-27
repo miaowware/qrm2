@@ -61,7 +61,7 @@ class QRZCog(commands.Cog):
             raise ValueError(resp_session['Error'])
 
         resp_xml_data = resp_xml.xpath('/x:QRZDatabase/x:Callsign',
-                                                namespaces={'x':'http://xmldata.qrz.com'})
+                                       namespaces={'x': 'http://xmldata.qrz.com'})
         resp_data = {el.tag.split('}')[1]: el.text for el in resp_xml_data[0].getiterator()}
 
         embed = discord.Embed(title=f"QRZ Data for {resp_data['call']}",
@@ -105,7 +105,7 @@ async def qrz_login(user: str, passwd: str, session: aiohttp.ClientSession):
         resp_xml = etree.parse(BytesIO(await resp.read())).getroot()
 
     resp_xml_session = resp_xml.xpath('/x:QRZDatabase/x:Session',
-                                      namespaces={'x':'http://xmldata.qrz.com'})
+                                      namespaces={'x': 'http://xmldata.qrz.com'})
     resp_session = {el.tag.split('}')[1]: el.text for el in resp_xml_session[0].getiterator()}
     if 'Error' in resp_session:
         raise ConnectionError(resp_session['Error'])
@@ -122,7 +122,7 @@ async def qrz_test_session(key: str, session: aiohttp.ClientSession):
         resp_xml = etree.parse(BytesIO(await resp.read())).getroot()
 
     resp_xml_session = resp_xml.xpath('/x:QRZDatabase/x:Session',
-                                      namespaces={'x':'http://xmldata.qrz.com'})
+                                      namespaces={'x': 'http://xmldata.qrz.com'})
     resp_session = {el.tag.split('}')[1]: el.text for el in resp_xml_session[0].getiterator()}
     if 'Error' in resp_session:
         raise ConnectionError(resp_session['Error'])
