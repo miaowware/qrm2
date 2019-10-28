@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Rich lookup for AE7Q (callsigns only, more to come)
 - Rich lookup for QRZ, if a QRZ subscription is present
 - Timestamp and requester username and avatar are now shown on embeds
+- Current and 3-Day Forecast terrestrial weather conditions lookup commands
 ### Changed
 - Rewrote code to take advantage of discord.py's cogs
 - Moved most bot responses into embeds

@@ -27,7 +27,7 @@ owners_uids = (200102491231092736,)
 
 # The cogs to load when running the bot.
 cogs = ['basecog', 'morsecog', 'funcog', 'gridcog', 'hamcog', 'imagecog',
-        'studycog', 'ae7qcog', 'qrzcog']
+        'studycog', 'ae7qcog', 'qrzcog', 'weathercog']
 
 # The text to put in the "playing" status.
 game = 'with lids on 7.200'
