@@ -31,8 +31,7 @@ class AE7QCog(commands.Cog):
     async def _ae7q_lookup(self, ctx: commands.Context):
         '''Look up a callsign, FRN, or Licensee ID on ae7q.com'''
         if ctx.invoked_subcommand is None:
-            await ctx.send('Invalid ae7q command passed\nPossible commands:' +
-                           '`call`, `frn`, `lic` or `licensee`.')
+            await ctx.send_help(ctx.command)
 
     @_ae7q_lookup.command(name="call")
     async def _ae7q_call(self, ctx: commands.Context, callsign: str):
