@@ -8,6 +8,8 @@ General Public License, version 2.
 """
 
 from datetime import datetime
+import re
+from collections import OrderedDict
 
 import discord
 import discord.ext.commands as commands
@@ -42,6 +44,54 @@ class BaseCog(commands.Cog):
         embed.set_footer(text=ctx.author.name,
                          icon_url=str(ctx.author.avatar_url))
         await ctx.send(embed=embed)
+
+    @commands.command(name="changelog", aliases=["clog"])
+    async def _changelog(self, ctx: commands.Context):
+        """Show what has changed in recent bot versions."""
+        embed = discord.Embed(title="qrm Changelog",
+                              colour=self.gs.colours.neutral,
+                              timestamp=datetime.utcnow())
+        embed.set_footer(text=ctx.author.name,
+                         icon_url=str(ctx.author.avatar_url))
+        changelog = await parse_changelog()
+
+        for ver, log in changelog.items():
+            embed.add_field(name=ver, value=await format_changelog(log), inline=False)
+
+        await ctx.send(embed=embed)
+
+
+async def parse_changelog():
+    changelog = OrderedDict()
+    ver = ''
+    heading = ''
+
+    with open('CHANGELOG.md') as changelog_file:
+        for line in changelog_file.readlines():
+            if line.strip() == '':
+                continue
+            if re.match(r'##[^#]', line):
+                ver_match = re.match(r'\[(.+)\](?: - )?(\d{4}-\d{2}-\d{2})?', line.lstrip('#').strip())
+                ver = ver_match.group(1)
+                changelog[ver] = dict()
+                if ver_match.group(2):
+                    changelog[ver]['date'] = ver_match.group(2)
+            elif re.match(r'###[^#]', line):
+                heading = line.lstrip('#').strip()
+                changelog[ver][heading] = []
+            elif ver != '' and heading != '':
+                changelog[ver][heading].append(line.lstrip('-').strip())
+    return changelog
+
+
+async def format_changelog(log: dict):
+    formatted = ''
+    for header, lines in log.items():
+        if header != 'date':
+            formatted += f'**{header}**\n'
+            for line in lines:
+                formatted += f'- {line}\n'
+    return formatted
 
 
 def setup(bot: commands.Bot):
