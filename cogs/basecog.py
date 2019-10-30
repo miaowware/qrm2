@@ -49,14 +49,24 @@ class BaseCog(commands.Cog):
     async def _changelog(self, ctx: commands.Context):
         """Show what has changed in recent bot versions."""
         embed = discord.Embed(title="qrm Changelog",
+                              description="For a full listing, visit [Github](https://github.com/classabbyamp/discord-qrm-bot/blob/master/CHANGELOG.md).",
                               colour=self.gs.colours.neutral,
                               timestamp=datetime.utcnow())
         embed.set_footer(text=ctx.author.name,
                          icon_url=str(ctx.author.avatar_url))
         changelog = await parse_changelog()
 
+        vers = 0
         for ver, log in changelog.items():
-            embed.add_field(name=ver, value=await format_changelog(log), inline=False)
+            if ver.lower() != 'unreleased':
+                if 'date' in log:
+                    header = f'**{ver}** ({log["date"]})'
+                else:
+                    header = f'**{ver}**'
+                embed.add_field(name=header, value=await format_changelog(log), inline=False)
+                vers += 1
+            if vers >= 2:
+                break
 
         await ctx.send(embed=embed)
 
