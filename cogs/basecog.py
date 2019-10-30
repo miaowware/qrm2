@@ -49,7 +49,8 @@ class BaseCog(commands.Cog):
     async def _changelog(self, ctx: commands.Context):
         """Show what has changed in recent bot versions."""
         embed = discord.Embed(title="qrm Changelog",
-                              description="For a full listing, visit [Github](https://github.com/classabbyamp/discord-qrm-bot/blob/master/CHANGELOG.md).",
+                              description=("For a full listing, visit [Github](https://"
+                                           "github.com/classabbyamp/discord-qrm-bot/blob/master/CHANGELOG.md)."),
                               colour=self.gs.colours.neutral,
                               timestamp=datetime.utcnow())
         embed.set_footer(text=ctx.author.name,
