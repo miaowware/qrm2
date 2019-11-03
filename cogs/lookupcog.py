@@ -23,11 +23,6 @@ class LookupCog(commands.Cog):
         self.CTY_list = None
         self.up_cty_first_run = True
 
-    @commands.command(name="qrz")
-    async def _qrz_lookup(self, ctx: commands.Context, call: str):
-        '''Links to info about a callsign from QRZ.'''
-        await ctx.send(f'http://qrz.com/db/{call}')
-
     @commands.command(name="sat")
     async def _sat_lookup(self, ctx: commands.Context, sat: str, grid1: str, grid2: str = None):
         '''Links to info about satellite passes on satmatch.com.
