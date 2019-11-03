@@ -16,7 +16,7 @@ from discord.ext import commands, tasks
 import info
 
 from data import options as opt
-from data import keys as keys
+from data import keys
 
 
 # --- Settings ---
