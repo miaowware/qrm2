@@ -21,19 +21,20 @@ import discord.ext.commands as commands
 from bs4 import BeautifulSoup
 import aiohttp
 
+import global_settings as gs
+
 
 class AE7QCog(commands.Cog, name='AE7Q Commands'):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.gs = bot.get_cog("GlobalSettings")
 
-    @commands.group(name="ae7q", aliases=["ae"])
+    @commands.group(name="ae7q", aliases=["ae"], category=gs.cat.lookup)
     async def _ae7q_lookup(self, ctx: commands.Context):
         '''Look up a callsign, FRN, or Licensee ID on ae7q.com'''
         if ctx.invoked_subcommand is None:
             await ctx.send_help(ctx.command)
 
-    @_ae7q_lookup.command(name="call")
+    @_ae7q_lookup.command(name="call", category=gs.cat.lookup)
     async def _ae7q_call(self, ctx: commands.Context, callsign: str):
         callsign = callsign.upper()
         desc = ''
@@ -61,7 +62,7 @@ class AE7QCog(commands.Cog, name='AE7Q Commands'):
 
         if rows is None:
             embed = discord.Embed(title=f"AE7Q History for {callsign}",
-                                  colour=self.gs.colours.bad,
+                                  colour=gs.colours.bad,
                                   url=f"{base_url}{callsign}",
                                   timestamp=datetime.utcnow())
             embed.set_footer(text=ctx.author.name,
@@ -91,7 +92,7 @@ class AE7QCog(commands.Cog, name='AE7Q Commands'):
                 table_contents += [row_cells]
 
         embed = discord.Embed(title=f"AE7Q Records for {callsign}",
-                              colour=self.gs.colours.good,
+                              colour=gs.colours.good,
                               url=f"{base_url}{callsign}",
                               timestamp=datetime.utcnow())
 
@@ -117,20 +118,20 @@ class AE7QCog(commands.Cog, name='AE7Q Commands'):
         await ctx.send(embed=embed)
 
     # TODO: write commands for other AE7Q response types?
-    # @_ae7q_lookup.command(name="trustee")
+    # @_ae7q_lookup.command(name="trustee", category=gs.cat.lookup)
     # async def _ae7q_trustee(self, ctx, callsign: str):
     #     pass
 
-    # @_ae7q_lookup.command(name="applications", aliases=['apps'])
+    # @_ae7q_lookup.command(name="applications", aliases=['apps'], category=gs.cat.lookup)
     # async def _ae7q_applications(self, ctx, callsign: str):
     #     pass
 
-    # @_ae7q_lookup.command(name="frn")
+    # @_ae7q_lookup.command(name="frn", category=gs.cat.lookup)
     # async def _ae7q_frn(self, ctx, frn: str):
     #     base_url = "http://ae7q.com/query/data/FrnHistory.php?FRN="
     #     pass
 
-    # @_ae7q_lookup.command(name="licensee", aliases=["lic"])
+    # @_ae7q_lookup.command(name="licensee", aliases=["lic"], category=gs.cat.lookup)
     # async def _ae7q_licensee(self, ctx, frn: str):
     #     base_url = "http://ae7q.com/query/data/LicenseeIdHistory.php?ID="
     #     pass

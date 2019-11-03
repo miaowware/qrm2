@@ -15,13 +15,14 @@ import discord.ext.commands as commands
 
 import aiohttp
 
+import global_settings as gs
+
 
 class ImageCog(commands.Cog, name='Image Lookup Commands'):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.gs = bot.get_cog("GlobalSettings")
 
-    @commands.command(name="plan", aliases=['bands'])
+    @commands.command(name="plan", aliases=['bands'], category=gs.cat.ref)
     async def _bandplan(self, ctx: commands.Context, msg: str = ''):
         '''Posts an image of Frequency Allocations.
     Optional argument: `cn`, `ca`, `nl`, `us`, `mx`.'''
@@ -39,7 +40,7 @@ class ImageCog(commands.Cog, name='Image Lookup Commands'):
                 img = discord.File(f"resources/images/bandchart/{arg}bandchart.png",
                                    filename=f'{arg}bandchart.png')
                 embed = discord.Embed(title=f'{name[arg]} Amateur Radio Bands',
-                                      colour=self.gs.colours.good,
+                                      colour=gs.colours.good,
                                       timestamp=datetime.utcnow())
                 embed.set_image(url=f'attachment://{arg}bandchart.png')
                 embed.set_footer(text=ctx.author.name,
@@ -47,20 +48,20 @@ class ImageCog(commands.Cog, name='Image Lookup Commands'):
 
                 await ctx.send(embed=embed, file=img)
 
-    @commands.command(name="grayline", aliases=['greyline', 'grey', 'gray', 'gl'])
+    @commands.command(name="grayline", aliases=['greyline', 'grey', 'gray', 'gl'], category=gs.cat.maps)
     async def _grayline(self, ctx: commands.Context):
         '''Posts a map of the current greyline, where HF propagation is the best.'''
         gl_url = ('http://www.fourmilab.ch/cgi-bin/uncgi/Earth?img=NOAAtopo.evif'
                   '&imgsize=320&dynimg=y&opt=-p&lat=&lon=&alt=&tle=&date=0&utc=&jd=')
         with ctx.typing():
             embed = discord.Embed(title='Current Greyline Conditions',
-                                  colour=self.gs.colours.good,
+                                  colour=gs.colours.good,
                                   timestamp=datetime.utcnow())
             async with aiohttp.ClientSession() as session:
                 async with session.get(gl_url) as resp:
                     if resp.status != 200:
                         embed.description = 'Could not download file...'
-                        embed.colour = self.gs.colours.bad
+                        embed.colour = gs.colours.bad
                     else:
                         data = io.BytesIO(await resp.read())
                         embed.set_image(url=f'attachment://greyline.jpg')
@@ -68,7 +69,7 @@ class ImageCog(commands.Cog, name='Image Lookup Commands'):
                              icon_url=str(ctx.author.avatar_url))
         await ctx.send(embed=embed, file=discord.File(data, 'greyline.jpg'))
 
-    @commands.command(name="map")
+    @commands.command(name="map", category=gs.cat.maps)
     async def _map(self, ctx: commands.Context, msg: str = ''):
         '''Posts an image of Frequency Allocations.
     Optional argument:`cq` = CQ Zones, `itu` = ITU Zones, `arrl` or `rac` =
@@ -88,7 +89,7 @@ class ImageCog(commands.Cog, name='Image Lookup Commands'):
                 img = discord.File(f"resources/images/map/{arg}map.png",
                                    filename=f'{arg}map.png')
                 embed = discord.Embed(title=f'{map_titles[arg]} Map',
-                                      colour=self.gs.colours.good,
+                                      colour=gs.colours.good,
                                       timestamp=datetime.utcnow())
                 embed.set_image(url=f'attachment://{arg}map.png')
                 embed.set_footer(text=ctx.author.name,

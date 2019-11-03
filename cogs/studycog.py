@@ -16,14 +16,15 @@ import discord.ext.commands as commands
 
 import aiohttp
 
+import global_settings as gs
+
 
 class StudyCog(commands.Cog, name='HamStudy Commands'):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.gs = bot.get_cog("GlobalSettings")
         self.lastq = dict()
 
-    @commands.command(name="rq", aliases=['randomq'])
+    @commands.command(name="rq", aliases=['randomq'], category=gs.cat.study)
     async def _random_question(self, ctx: commands.Context, level: str = None):
         '''Gets a random question from the Technician, General, and/or Extra question pools.'''
         tech_pool = 'E2_2018'
@@ -67,7 +68,7 @@ class StudyCog(commands.Cog, name='HamStudy Commands'):
 
             embed = discord.Embed(title=question['id'],
                                   description='Data courtesy of HamStudy.org',
-                                  colour=self.gs.colours.good,
+                                  colour=gs.colours.good,
                                   timestamp=datetime.utcnow())
             embed.set_footer(text=ctx.author.name,
                              icon_url=str(ctx.author.avatar_url))
@@ -84,7 +85,7 @@ class StudyCog(commands.Cog, name='HamStudy Commands'):
             self.lastq[ctx.message.channel.id] = (question['id'], question['answer'])
         await ctx.send(embed=embed)
 
-    @commands.command(name="rqa")
+    @commands.command(name="rqa", category=gs.cat.study)
     async def _q_answer(self, ctx: commands.Context, ans: str = None):
         '''Returns the answer to question last asked (Optional argument: your answer).'''
         with ctx.typing():
@@ -96,19 +97,19 @@ class StudyCog(commands.Cog, name='HamStudy Commands'):
                     result = f'Correct! The answer to {q_num} was **{correct_ans}**.'
                     embed = discord.Embed(title=f'{q_num} Answer',
                                           description=f'Data courtesy of HamStudy.org\n\n{result}',
-                                          colour=self.gs.colours.good,
+                                          colour=gs.colours.good,
                                           timestamp=datetime.utcnow())
                 else:
                     result = f'Incorrect. The answer to {q_num} was **{correct_ans}**, not **{ans}**.'
                     embed = discord.Embed(title=f'{q_num} Answer',
                                           description=f'Data courtesy of HamStudy.org\n\n{result}',
-                                          colour=self.gs.colours.bad,
+                                          colour=gs.colours.bad,
                                           timestamp=datetime.utcnow())
             else:
                 result = f'The correct answer to {q_num} was **{correct_ans}**.'
                 embed = discord.Embed(title=f'{q_num} Answer',
                                       description=f'Data courtesy of HamStudy.org\n\n{result}',
-                                      colour=self.gs.colours.neutral,
+                                      colour=gs.colours.neutral,
                                       timestamp=datetime.utcnow())
 
         embed.set_footer(text=ctx.author.name,

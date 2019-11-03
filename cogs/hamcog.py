@@ -13,34 +13,34 @@ from datetime import datetime
 import discord
 import discord.ext.commands as commands
 
+import global_settings as gs
 
 class HamCog(commands.Cog, name='Ham Radio Commands'):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.gs = bot.get_cog("GlobalSettings")
         with open('resources/qcodes.json') as qcode_file:
             self.qcodes = json.load(qcode_file)
         with open('resources/words') as words_file:
             self.words = words_file.read().lower().splitlines()
 
-    @commands.command(name="qcode", aliases=['q'])
+    @commands.command(name="qcode", aliases=['q'], category=gs.cat.ref)
     async def _qcode_lookup(self, ctx: commands.Context, qcode: str):
         '''Look up a Q Code.'''
         with ctx.typing():
             qcode = qcode.upper()
             if qcode in self.qcodes:
                 embed = discord.Embed(title=qcode, description=self.qcodes[qcode],
-                                      colour=self.gs.colours.good,
+                                      colour=gs.colours.good,
                                       timestamp=datetime.utcnow())
             else:
                 embed = discord.Embed(title=f'Q Code {qcode} not found',
-                                      colour=self.gs.colours.bad,
+                                      colour=gs.colours.bad,
                                       timestamp=datetime.utcnow())
             embed.set_footer(text=ctx.author.name,
                              icon_url=str(ctx.author.avatar_url))
         await ctx.send(embed=embed)
 
-    @commands.command(name="phonetics", aliases=['ph', 'phoneticize', 'phoneticise', 'phone'])
+    @commands.command(name="phonetics", aliases=['ph', 'phoneticize', 'phoneticise', 'phone'], category=gs.cat.fun)
     async def _phonetics_lookup(self, ctx: commands.Context, *, msg: str):
         '''Get phonetics for a word or phrase.'''
         with ctx.typing():
@@ -53,13 +53,13 @@ class HamCog(commands.Cog, name='Ham Radio Commands'):
                 result += ' '
             embed = discord.Embed(title=f'Phonetics for {msg}',
                                   description=result.title(),
-                                  colour=self.gs.colours.good,
+                                  colour=gs.colours.good,
                                   timestamp=datetime.utcnow())
             embed.set_footer(text=ctx.author.name,
                              icon_url=str(ctx.author.avatar_url))
         await ctx.send(embed=embed)
 
-    @commands.command(name="utc", aliases=['z'])
+    @commands.command(name="utc", aliases=['z'], category=gs.cat.ref)
     async def _utc_lookup(self, ctx: commands.Context):
         '''Gets the current time in UTC.'''
         with ctx.typing():
@@ -67,7 +67,7 @@ class HamCog(commands.Cog, name='Ham Radio Commands'):
             result = '**' + now.strftime('%Y-%m-%d %H:%M') + 'Z**'
             embed = discord.Embed(title='The current time is:',
                                   description=result,
-                                  colour=self.gs.colours.good,
+                                  colour=gs.colours.good,
                                   timestamp=datetime.utcnow())
             embed.set_footer(text=ctx.author.name,
                              icon_url=str(ctx.author.avatar_url))

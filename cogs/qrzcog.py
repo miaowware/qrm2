@@ -16,17 +16,19 @@ from discord.ext import commands, tasks
 import aiohttp
 from lxml import etree
 
+import global_settings as gs
+import keys
+
 
 class QRZCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.gs = bot.get_cog("GlobalSettings")
         self.session = aiohttp.ClientSession()
         self._qrz_session_init.start()
 
-    @commands.command(name="qrz", aliases=["call"])
+    @commands.command(name="qrz", aliases=["call"], category=gs.cat.lookup)
     async def _qrz_lookup(self, ctx: commands.Context, call: str):
-        if self.gs.keys.qrz_user == '' or self.gs.keys.qrz_pass == '':
+        if keys.qrz_user == '' or keys.qrz_pass == '':
             await ctx.send(f'http://qrz.com/db/{call}')
             return
 
@@ -51,7 +53,7 @@ class QRZCog(commands.Cog):
                 return
             if 'Not found' in resp_session['Error']:
                 embed = discord.Embed(title=f"QRZ Data for {call.upper()}",
-                                      colour=self.gs.colours.bad,
+                                      colour=gs.colours.bad,
                                       description='No data found!',
                                       timestamp=datetime.utcnow())
                 embed.set_footer(text=ctx.author.name,
@@ -65,7 +67,7 @@ class QRZCog(commands.Cog):
         resp_data = {el.tag.split('}')[1]: el.text for el in resp_xml_data[0].getiterator()}
 
         embed = discord.Embed(title=f"QRZ Data for {resp_data['call']}",
-                              colour=self.gs.colours.good,
+                              colour=gs.colours.good,
                               url=f'http://www.qrz.com/db/{resp_data["call"]}',
                               timestamp=datetime.utcnow())
         embed.set_footer(text=ctx.author.name,
@@ -82,7 +84,7 @@ class QRZCog(commands.Cog):
 
     async def get_session(self):
         """Session creation and caching."""
-        self.key = await qrz_login(self.gs.keys.qrz_user, self.gs.keys.qrz_pass, self.session)
+        self.key = await qrz_login(keys.qrz_user, keys.qrz_pass, self.session)
         with open('data/qrz_session', 'w') as qrz_file:
             qrz_file.write(self.key)
 

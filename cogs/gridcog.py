@@ -13,13 +13,14 @@ from datetime import datetime
 import discord
 import discord.ext.commands as commands
 
+import global_settings as gs
+
 
 class GridCog(commands.Cog, name='Location Commands'):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.gs = bot.get_cog("GlobalSettings")
 
-    @commands.command(name="grid")
+    @commands.command(name="grid", category=gs.cat.maps)
     async def _grid_sq_lookup(self, ctx: commands.Context, lat: str, lon: str):
         '''Calculates the grid square for latitude and longitude coordinates.
     Usage: `?grid <lat> <lon>`
@@ -39,7 +40,7 @@ class GridCog(commands.Cog, name='Location Commands'):
                     grid += "**"
                     embed = discord.Embed(title=f'Maidenhead Grid Locator for {float(lat):.6f}, {float(lon):.6f}',
                                           description=grid,
-                                          colour=self.gs.colours.good,
+                                          colour=gs.colours.good,
                                           timestamp=datetime.utcnow())
                     embed.set_footer(text=ctx.author.name,
                                      icon_url=str(ctx.author.avatar_url))
@@ -48,13 +49,13 @@ class GridCog(commands.Cog, name='Location Commands'):
             except ValueError as err:
                 msg = f'Error generating grid square for {lat}, {lon}.'
                 embed = discord.Embed(title=msg, description=str(err),
-                                      colour=self.gs.colours.bad,
+                                      colour=gs.colours.bad,
                                       timestamp=datetime.utcnow())
                 embed.set_footer(text=ctx.author.name,
                                  icon_url=str(ctx.author.avatar_url))
         await ctx.send(embed=embed)
 
-    @commands.command(name="ungrid", aliases=['loc'])
+    @commands.command(name="ungrid", aliases=['loc'], category=gs.cat.maps)
     async def _location_lookup(self, ctx: commands.Context, grid: str, grid2: str = None):
         '''Calculates the latitude and longitude for the center of a grid square.
     If two grid squares are given, the distance and azimuth between them is calculated.'''
@@ -67,14 +68,14 @@ class GridCog(commands.Cog, name='Location Commands'):
                     if len(grid) >= 6:
                         embed = discord.Embed(title=f'Latitude and Longitude for {grid}',
                                               description=f'**{loc[0]:.5f}, {loc[1]:.5f}**',
-                                              colour=self.gs.colours.good,
+                                              colour=gs.colours.good,
                                               url=f'https://www.openstreetmap.org/#map=13/{loc[0]:.5f}/{loc[1]:.5f}',
                                               timestamp=datetime.utcnow())
 
                     else:
                         embed = discord.Embed(title=f'Latitude and Longitude for {grid}',
                                               description=f'**{loc[0]:.1f}, {loc[1]:.1f}**',
-                                              colour=self.gs.colours.good,
+                                              colour=gs.colours.good,
                                               url=f'https://www.openstreetmap.org/#map=10/{loc[0]:.1f}/{loc[1]:.1f}',
                                               timestamp=datetime.utcnow())
                     embed.set_footer(text=ctx.author.name,
@@ -82,7 +83,7 @@ class GridCog(commands.Cog, name='Location Commands'):
                 except Exception as e:
                     msg = f'Error generating latitude and longitude for grid {grid}.'
                     embed = discord.Embed(title=msg, description=str(e),
-                                          colour=self.gs.colours.bad,
+                                          colour=gs.colours.bad,
                                           timestamp=datetime.utcnow())
                     embed.set_footer(text=ctx.author.name,
                                      icon_url=str(ctx.author.avatar_url))
@@ -113,14 +114,14 @@ class GridCog(commands.Cog, name='Location Commands'):
                     des = f'**Distance:** {d:.1f} km ({d_mi:.1f} mi)\n**Bearing:** {bearing:.1f}°'
                     embed = discord.Embed(title=f'Great Circle Distance and Bearing from {grid} to {grid2}',
                                           description=des,
-                                          colour=self.gs.colours.good,
+                                          colour=gs.colours.good,
                                           timestamp=datetime.utcnow())
                     embed.set_footer(text=ctx.author.name,
                                      icon_url=str(ctx.author.avatar_url))
                 except Exception as e:
                     msg = f'Error generating great circle distance and bearing from {grid} and {grid2}.'
                     embed = discord.Embed(title=msg, description=str(e),
-                                          colour=self.gs.colours.bad,
+                                          colour=gs.colours.bad,
                                           timestamp=datetime.utcnow())
                     embed.set_footer(text=ctx.author.name,
                                      icon_url=str(ctx.author.avatar_url))

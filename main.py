@@ -8,8 +8,6 @@ This file is part of discord-qrmbot and is released under the terms of the GNU
 General Public License, version 2.
 """
 
-from types import SimpleNamespace
-
 import discord
 from discord.ext import commands, tasks
 
@@ -24,20 +22,6 @@ import keys
 exit_code = 1  # The default exit code. ?shutdown and ?restart will change it accordingly (fail-safe)
 
 debug_mode = opt.debug  # Separate assignement in-case we define an override (ternary operator goes here)
-
-
-class GlobalSettings(commands.Cog):
-    def __init__(self, bot: commands.Bot):
-        self.bot = bot
-
-        self.opt = opt
-        self.keys = keys
-        self.info = info
-
-        self.colours = SimpleNamespace(good=0x43B581,
-                                       neutral=0x7289DA,
-                                       bad=0xF04747)
-        self.debug = debug_mode
 
 
 # --- Bot setup ---
@@ -109,7 +93,7 @@ async def _before_ensure_activity():
 
 # --- Run ---
 
-bot.add_cog(GlobalSettings(bot))
+# bot.add_cog(GlobalSettings(bot))
 for cog in opt.cogs:
     bot.load_extension(f"cogs.{cog}")
 
