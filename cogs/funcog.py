@@ -11,6 +11,7 @@ import discord.ext.commands as commands
 
 import global_settings as gs
 
+
 class FunCog(commands.Cog, name='Fun Commands'):
     def __init__(self, bot: commands.Bot):
         self.bot = bot

@@ -17,6 +17,7 @@ import info
 import options as opt
 import global_settings as gs
 
+
 class QrmHelpCommand(commands.HelpCommand):
     def __init__(self):
         super().__init__(command_attrs={'help': 'Shows help about qrm or a command',
