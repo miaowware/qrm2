@@ -52,7 +52,7 @@ $(BOTENV)/req_done: requirements.txt $(BOTENV)/success
 	@mkdir ./data
 
 # Copying templates
-options.py keys.py:
+options.py keys.py: | data
 	@echo "\033[34;1m--> Copying template files...\033[0m"
 	@cp -nv ./templates/template_$@ ./data/$@
 	@touch ./data/$@
