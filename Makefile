@@ -49,7 +49,9 @@ $(BOTENV)/req_done: requirements.txt $(BOTENV)/success
 		pip install ${PIP_OUTPUT} -U pip setuptools wheel; \
 		pip install ${PIP_OUTPUT} -U -r requirements.txt
 	@touch $(BOTENV)/req_done
-	@mkdir ./data
+
+data:
+	mkdir data
 
 # Copying templates
 options.py keys.py: | data
