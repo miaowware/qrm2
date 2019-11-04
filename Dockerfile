@@ -3,7 +3,7 @@ FROM python:3-alpine
 COPY . /app
 WORKDIR /app
 
-VOLUME /app/data
+ENV PYTHON_BIN python3
 
 RUN \
     echo "**** install build packages ****" && \
@@ -13,11 +13,11 @@ RUN \
         gcc \
         libxml2-dev \
         libxslt-dev \
-        openssl-dev \
+        libressl-dev \
         python3-dev && \
     echo "**** install runtime packages ****" && \
     apk add --no-cache \
-        openssl \
+        libressl \
         py3-lxml \
         py3-pip \
         python3 && \
@@ -30,8 +30,6 @@ RUN \
     rm -rf \
         /root/.cache \
         /tmp/* \
-        /var/cache/apk/* && \
-    echo "**** prepare scripts ****" && \
-    chmod +x docker-run.sh
+        /var/cache/apk/*
 
-CMD ["sh", "docker-run.sh", "--pass-errors"]
+CMD ["/bin/sh", "run.sh", "--pass-errors", "--no-botenv"]
