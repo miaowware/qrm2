@@ -19,6 +19,7 @@ class BaseCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.gs = bot.get_cog("GlobalSettings")
+        self.changelog = parse_changelog()
 
     @commands.command(name="info", aliases=["about"])
     async def _info(self, ctx):
@@ -55,7 +56,7 @@ class BaseCog(commands.Cog):
                               timestamp=datetime.utcnow())
         embed.set_footer(text=ctx.author.name,
                          icon_url=str(ctx.author.avatar_url))
-        changelog = await parse_changelog()
+        changelog = self.changelog
 
         vers = 0
         for ver, log in changelog.items():
@@ -72,7 +73,7 @@ class BaseCog(commands.Cog):
         await ctx.send(embed=embed)
 
 
-async def parse_changelog():
+def parse_changelog():
     changelog = OrderedDict()
     ver = ''
     heading = ''
