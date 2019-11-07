@@ -118,21 +118,21 @@ class AE7QCog(commands.Cog, name='AE7Q Commands'):
         await ctx.send(embed=embed)
 
     # TODO: write commands for other AE7Q response types?
-    # @_ae7q_lookup.command(name="trustee", category=gs.cat.lookup)
-    # async def _ae7q_trustee(self, ctx, callsign: str):
+    # @_ae7q_lookup.command(name="trustee")
+    # async def _ae7q_trustee(self, ctx: commands.Context, callsign: str):
     #     pass
 
-    # @_ae7q_lookup.command(name="applications", aliases=['apps'], category=gs.cat.lookup)
-    # async def _ae7q_applications(self, ctx, callsign: str):
+    # @_ae7q_lookup.command(name="applications", aliases=['apps'])
+    # async def _ae7q_applications(self, ctx: commands.Context, callsign: str):
     #     pass
 
-    # @_ae7q_lookup.command(name="frn", category=gs.cat.lookup)
-    # async def _ae7q_frn(self, ctx, frn: str):
+    # @_ae7q_lookup.command(name="frn")
+    # async def _ae7q_frn(self, ctx: commands.Context, frn: str):
     #     base_url = "http://ae7q.com/query/data/FrnHistory.php?FRN="
     #     pass
 
-    # @_ae7q_lookup.command(name="licensee", aliases=["lic"], category=gs.cat.lookup)
-    # async def _ae7q_licensee(self, ctx, frn: str):
+    # @_ae7q_lookup.command(name="licensee", aliases=["lic"])
+    # async def _ae7q_licensee(self, ctx: commands.Context, frn: str):
     #     base_url = "http://ae7q.com/query/data/LicenseeIdHistory.php?ID="
     #     pass
 

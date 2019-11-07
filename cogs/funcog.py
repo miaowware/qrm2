@@ -17,9 +17,9 @@ class FunCog(commands.Cog, name='Fun Commands'):
         self.bot = bot
 
     @commands.command(name="xkcd", aliases=['x'], category=gs.cat.fun)
-    async def _xkcd(self, ctx: commands.Context, num: str):
+    async def _xkcd(self, ctx: commands.Context, number: str):
         '''Look up an xkcd by number.'''
-        await ctx.send('http://xkcd.com/' + num)
+        await ctx.send('http://xkcd.com/' + number)
 
     @commands.command(name="tar", category=gs.cat.fun)
     async def _tar(self, ctx: commands.Context):

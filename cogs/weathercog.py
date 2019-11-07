@@ -61,12 +61,12 @@ class WeatherCog(commands.Cog):
             await ctx.send_help(ctx.command)
 
     @_weather_conditions.command(name='forecast', category=gs.cat.weather)
-    async def _weather_conditions_forecast(self, ctx: commands.Context, *, args: str):
+    async def _weather_conditions_forecast(self, ctx: commands.Context, *, location: str):
         '''Posts an image of Local Weather Conditions for the next three days from [wttr.in](http://wttr.in/).
 See help for weather command for possible location types. Add a `-c` or `-f` to use Celcius or Fahrenheit.'''
         with ctx.typing():
             try:
-                units_arg = re.search(self.wttr_units_regex, args).group(1)
+                units_arg = re.search(self.wttr_units_regex, location).group(1)
             except AttributeError:
                 units_arg = ''
             if units_arg.lower() == 'f':
@@ -76,7 +76,7 @@ See help for weather command for possible location types. Add a `-c` or `-f` to 
             else:
                 units = ''
 
-            loc = self.wttr_units_regex.sub('', args).strip()
+            loc = self.wttr_units_regex.sub('', location).strip()
 
             embed = discord.Embed(title=f'Weather Forecast for {loc}',
                                   description='Data from [wttr.in](http://wttr.in/).',
@@ -99,12 +99,12 @@ See help for weather command for possible location types. Add a `-c` or `-f` to 
         await ctx.send(embed=embed, file=discord.File(data, f'{loc}_{units}pnFQ.png'))
 
     @_weather_conditions.command(name='now', category=gs.cat.weather)
-    async def _weather_conditions_now(self, ctx: commands.Context, *, args: str):
+    async def _weather_conditions_now(self, ctx: commands.Context, *, location: str):
         '''Posts an image of current Local Weather Conditions from [wttr.in](http://wttr.in/).
 See help for weather command for possible location types. Add a `-c` or `-f` to use Celcius or Fahrenheit.'''
         with ctx.typing():
             try:
-                units_arg = re.search(self.wttr_units_regex, args).group(1)
+                units_arg = re.search(self.wttr_units_regex, location).group(1)
             except AttributeError:
                 units_arg = ''
             if units_arg.lower() == 'f':
@@ -114,7 +114,7 @@ See help for weather command for possible location types. Add a `-c` or `-f` to 
             else:
                 units = ''
 
-            loc = self.wttr_units_regex.sub('', args).strip()
+            loc = self.wttr_units_regex.sub('', location).strip()
 
             embed = discord.Embed(title=f'Current Weather for {loc}',
                                   description='Data from [wttr.in](http://wttr.in/).',

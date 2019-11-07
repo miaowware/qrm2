@@ -27,9 +27,9 @@ class QRZCog(commands.Cog):
         self._qrz_session_init.start()
 
     @commands.command(name="qrz", aliases=["call"], category=gs.cat.lookup)
-    async def _qrz_lookup(self, ctx: commands.Context, call: str):
+    async def _qrz_lookup(self, ctx: commands.Context, callsign: str):
         if keys.qrz_user == '' or keys.qrz_pass == '':
-            await ctx.send(f'http://qrz.com/db/{call}')
+            await ctx.send(f'http://qrz.com/db/{callsign}')
             return
 
         try:
@@ -37,7 +37,7 @@ class QRZCog(commands.Cog):
         except ConnectionError:
             await self.get_session()
 
-        url = f'http://xmldata.qrz.com/xml/current/?s={self.key};callsign={call}'
+        url = f'http://xmldata.qrz.com/xml/current/?s={self.key};callsign={callsign}'
         async with self.session.get(url) as resp:
             if resp.status != 200:
                 raise ConnectionError(f'Unable to connect to QRZ (HTTP Error {resp.status})')
@@ -49,10 +49,10 @@ class QRZCog(commands.Cog):
         if 'Error' in resp_session:
             if 'Session Timeout' in resp_session['Error']:
                 await self.get_session()
-                await self._qrz_lookup(ctx, call)
+                await self._qrz_lookup(ctx, callsign)
                 return
             if 'Not found' in resp_session['Error']:
-                embed = discord.Embed(title=f"QRZ Data for {call.upper()}",
+                embed = discord.Embed(title=f"QRZ Data for {callsign.upper()}",
                                       colour=gs.colours.bad,
                                       description='No data found!',
                                       timestamp=datetime.utcnow())

@@ -86,21 +86,21 @@ class StudyCog(commands.Cog, name='HamStudy Commands'):
         await ctx.send(embed=embed)
 
     @commands.command(name="rqa", category=gs.cat.study)
-    async def _q_answer(self, ctx: commands.Context, ans: str = None):
+    async def _q_answer(self, ctx: commands.Context, answer: str = None):
         '''Returns the answer to question last asked (Optional argument: your answer).'''
         with ctx.typing():
             correct_ans = self.lastq[ctx.message.channel.id][1]
             q_num = self.lastq[ctx.message.channel.id][0]
-            if ans is not None:
-                ans = ans.upper()
-                if ans == correct_ans:
+            if answer is not None:
+                answer = answer.upper()
+                if answer == correct_ans:
                     result = f'Correct! The answer to {q_num} was **{correct_ans}**.'
                     embed = discord.Embed(title=f'{q_num} Answer',
                                           description=f'Data courtesy of HamStudy.org\n\n{result}',
                                           colour=gs.colours.good,
                                           timestamp=datetime.utcnow())
                 else:
-                    result = f'Incorrect. The answer to {q_num} was **{correct_ans}**, not **{ans}**.'
+                    result = f'Incorrect. The answer to {q_num} was **{correct_ans}**, not **{answer}**.'
                     embed = discord.Embed(title=f'{q_num} Answer',
                                           description=f'Data courtesy of HamStudy.org\n\n{result}',
                                           colour=gs.colours.bad,
