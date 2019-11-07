@@ -22,15 +22,14 @@ class ImageCog(commands.Cog):
         self.gs = bot.get_cog("GlobalSettings")
 
     @commands.command(name="plan", aliases=['bands'])
-    async def _bandplan(self, ctx: commands.Context, msg: str = ''):
-        '''Posts an image of Frequency Allocations.
-    Optional argument: `cn`, `ca`, `nl`, `us`, `mx`.'''
+    async def _bandplan(self, ctx: commands.Context, region: str = ''):
+        '''Posts an image of Frequency Allocations. Argument options: `cn`, `ca`, `nl`, `us`, `mx`.'''
         name = {'cn': 'Chinese',
                 'ca': 'Canadian',
                 'nl': 'Dutch',
                 'us': 'US',
                 'mx': 'Mexican'}
-        arg = msg.lower()
+        arg = region.lower()
 
         with ctx.typing():
             if arg not in name:
@@ -78,10 +77,10 @@ class ImageCog(commands.Cog):
         await ctx.send(embed=embed, file=discord.File(data, 'greyline.jpg'))
 
     @commands.command(name="map")
-    async def _map(self, ctx: commands.Context, msg: str = ''):
-        '''Posts an image of Frequency Allocations.
-    Optional argument:`cq` = CQ Zones, `itu` = ITU Zones, `arrl` or `rac` =
-    ARRL/RAC sections, `cn` = Chinese Callsign Areas, `us` = US Callsign Areas.'''
+    async def _map(self, ctx: commands.Context, map_id: str = ''):
+        '''Posts an image of a ham-relevant map.
+Argument options:`cq` = CQ Zones, `itu` = ITU Zones, `arrl` or `rac` =
+ARRL/RAC sections, `cn` = Chinese Callsign Areas, `us` = US Callsign Areas.'''
         map_titles = {"cq": 'Worldwide CQ Zones Map',
                       "itu": 'Worldwide ITU Zones Map',
                       "arrl": 'ARRL/RAC Section Map',
@@ -89,7 +88,7 @@ class ImageCog(commands.Cog):
                       "cn": 'Chinese Callsign Areas',
                       "us": 'US Callsign Areas'}
 
-        arg = msg.lower()
+        arg = map_id.lower()
         with ctx.typing():
             if arg not in map_titles:
                 desc = 'Possible arguments are:\n'

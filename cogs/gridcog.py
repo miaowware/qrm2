@@ -21,9 +21,8 @@ class GridCog(commands.Cog):
 
     @commands.command(name="grid")
     async def _grid_sq_lookup(self, ctx: commands.Context, lat: str, lon: str):
-        '''Calculates the grid square for latitude and longitude coordinates.
-    Usage: `?grid <lat> <lon>`
-    `lat` and `lon` are decimal coordinates, with negative being latitude South and longitude West.'''
+        '''Calculates the grid square for latitude and longitude coordinates,
+with negative being latitude South and longitude West.'''
         with ctx.typing():
             grid = "**"
             try:
@@ -57,7 +56,7 @@ class GridCog(commands.Cog):
     @commands.command(name="ungrid", aliases=['loc'])
     async def _location_lookup(self, ctx: commands.Context, grid: str, grid2: str = None):
         '''Calculates the latitude and longitude for the center of a grid square.
-    If two grid squares are given, the distance and azimuth between them is calculated.'''
+If two grid squares are given, the distance and azimuth between them is calculated.'''
         with ctx.typing():
             if grid2 is None or grid2 == '':
                 try:

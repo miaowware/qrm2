@@ -22,7 +22,7 @@ class BaseCog(commands.Cog):
         self.changelog = parse_changelog()
 
     @commands.command(name="info", aliases=["about"])
-    async def _info(self, ctx):
+    async def _info(self, ctx: commands.Context):
         """Shows info about qrm."""
         embed = discord.Embed(title="About qrm",
                               description=self.gs.info.description,

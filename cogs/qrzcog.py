@@ -25,9 +25,9 @@ class QRZCog(commands.Cog):
         self._qrz_session_init.start()
 
     @commands.command(name="qrz", aliases=["call"])
-    async def _qrz_lookup(self, ctx: commands.Context, call: str):
+    async def _qrz_lookup(self, ctx: commands.Context, callsign: str):
         if self.gs.keys.qrz_user == '' or self.gs.keys.qrz_pass == '':
-            await ctx.send(f'http://qrz.com/db/{call}')
+            await ctx.send(f'http://qrz.com/db/{callsign}')
             return
 
         try:
@@ -35,7 +35,7 @@ class QRZCog(commands.Cog):
         except ConnectionError:
             await self.get_session()
 
-        url = f'http://xmldata.qrz.com/xml/current/?s={self.key};callsign={call}'
+        url = f'http://xmldata.qrz.com/xml/current/?s={self.key};callsign={callsign}'
         async with self.session.get(url) as resp:
             if resp.status != 200:
                 raise ConnectionError(f'Unable to connect to QRZ (HTTP Error {resp.status})')

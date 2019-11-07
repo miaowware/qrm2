@@ -65,8 +65,8 @@ class MorseCog(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="weight", aliases=["cwweight", 'cww'])
-    async def _weight(self, ctx: commands.Context, msg: str):
-        '''Calculates the CW Weight of a callsign.'''
+    async def _weight(self, ctx: commands.Context, *, msg: str):
+        '''Calculates the CW Weight of a callsign or message.'''
         with ctx.typing():
             msg = msg.upper()
             weight = 0

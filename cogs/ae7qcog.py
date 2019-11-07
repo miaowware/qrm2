@@ -118,20 +118,20 @@ class AE7QCog(commands.Cog):
 
     # TODO: write commands for other AE7Q response types?
     # @_ae7q_lookup.command(name="trustee")
-    # async def _ae7q_trustee(self, ctx, callsign: str):
+    # async def _ae7q_trustee(self, ctx: commands.Context, callsign: str):
     #     pass
 
     # @_ae7q_lookup.command(name="applications", aliases=['apps'])
-    # async def _ae7q_applications(self, ctx, callsign: str):
+    # async def _ae7q_applications(self, ctx: commands.Context, callsign: str):
     #     pass
 
     # @_ae7q_lookup.command(name="frn")
-    # async def _ae7q_frn(self, ctx, frn: str):
+    # async def _ae7q_frn(self, ctx: commands.Context, frn: str):
     #     base_url = "http://ae7q.com/query/data/FrnHistory.php?FRN="
     #     pass
 
     # @_ae7q_lookup.command(name="licensee", aliases=["lic"])
-    # async def _ae7q_licensee(self, ctx, frn: str):
+    # async def _ae7q_licensee(self, ctx: commands.Context, frn: str):
     #     base_url = "http://ae7q.com/query/data/LicenseeIdHistory.php?ID="
     #     pass
 

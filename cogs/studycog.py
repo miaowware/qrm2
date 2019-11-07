@@ -84,13 +84,13 @@ class StudyCog(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="rqa")
-    async def _q_answer(self, ctx: commands.Context, ans: str = None):
+    async def _q_answer(self, ctx: commands.Context, answer: str = None):
         '''Returns the answer to question last asked (Optional argument: your answer).'''
         with ctx.typing():
             correct_ans = self.lastq[ctx.message.channel.id][1]
             q_num = self.lastq[ctx.message.channel.id][0]
-            if ans is not None:
-                ans = ans.upper()
+            if answer is not None:
+                answer = ans.upper()
                 if ans == correct_ans:
                     result = f'Correct! The answer to {q_num} was **{correct_ans}**.'
                     embed = discord.Embed(title=f'{q_num} Answer',
@@ -98,7 +98,7 @@ class StudyCog(commands.Cog):
                                           colour=self.gs.colours.good,
                                           timestamp=datetime.utcnow())
                 else:
-                    result = f'Incorrect. The answer to {q_num} was **{correct_ans}**, not **{ans}**.'
+                    result = f'Incorrect. The answer to {q_num} was **{correct_ans}**, not **{answer}**.'
                     embed = discord.Embed(title=f'{q_num} Answer',
                                           description=result,
                                           colour=self.gs.colours.bad,
