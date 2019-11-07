@@ -30,12 +30,13 @@ class AE7QCog(commands.Cog, name='AE7Q Commands'):
 
     @commands.group(name="ae7q", aliases=["ae"], category=gs.cat.lookup)
     async def _ae7q_lookup(self, ctx: commands.Context):
-        '''Look up a callsign, FRN, or Licensee ID on ae7q.com'''
+        '''Look up a callsign, FRN, or Licensee ID on [ae7q.com](http://ae7q.com/).'''
         if ctx.invoked_subcommand is None:
             await ctx.send_help(ctx.command)
 
     @_ae7q_lookup.command(name="call", category=gs.cat.lookup)
     async def _ae7q_call(self, ctx: commands.Context, callsign: str):
+        '''Look up the history for a callsign on [ae7q.com](http://ae7q.com/).'''
         callsign = callsign.upper()
         desc = ''
         base_url = "http://ae7q.com/query/data/CallHistory.php?CALL="

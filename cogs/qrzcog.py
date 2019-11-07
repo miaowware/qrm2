@@ -28,6 +28,7 @@ class QRZCog(commands.Cog):
 
     @commands.command(name="qrz", aliases=["call"], category=gs.cat.lookup)
     async def _qrz_lookup(self, ctx: commands.Context, callsign: str):
+        '''Look up a callsign on [QRZ.com](https://www.qrz.com/).'''
         if keys.qrz_user == '' or keys.qrz_pass == '':
             await ctx.send(f'http://qrz.com/db/{callsign}')
             return

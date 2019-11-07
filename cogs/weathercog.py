@@ -60,7 +60,7 @@ class WeatherCog(commands.Cog):
         if ctx.invoked_subcommand is None:
             await ctx.send_help(ctx.command)
 
-    @_weather_conditions.command(name='forecast', category=gs.cat.weather)
+    @_weather_conditions.command(name='forecast', aliases=['fc', 'future'], category=gs.cat.weather)
     async def _weather_conditions_forecast(self, ctx: commands.Context, *, location: str):
         '''Posts an image of Local Weather Conditions for the next three days from [wttr.in](http://wttr.in/).
 See help for weather command for possible location types. Add a `-c` or `-f` to use Celcius or Fahrenheit.'''
@@ -98,7 +98,7 @@ See help for weather command for possible location types. Add a `-c` or `-f` to 
                              icon_url=str(ctx.author.avatar_url))
         await ctx.send(embed=embed, file=discord.File(data, f'{loc}_{units}pnFQ.png'))
 
-    @_weather_conditions.command(name='now', category=gs.cat.weather)
+    @_weather_conditions.command(name='now', aliases=['n'], category=gs.cat.weather)
     async def _weather_conditions_now(self, ctx: commands.Context, *, location: str):
         '''Posts an image of current Local Weather Conditions from [wttr.in](http://wttr.in/).
 See help for weather command for possible location types. Add a `-c` or `-f` to use Celcius or Fahrenheit.'''

@@ -39,13 +39,13 @@ class QrmHelpCommand(commands.HelpCommand):
     def get_command_signature(self, command):
         parent = command.full_parent_name
         if command.aliases != []:
-            aliases = '|'.join(command.aliases)
-            fmt = f'[{command.name}|{aliases}]'
+            aliases = ', '.join(command.aliases)
+            fmt = command.name
             if parent:
                 fmt = f'{parent} {fmt}'
             alias = fmt
-        else:
-            alias = command.name if not parent else f'{parent} {command.name}'
+            return f'{opt.prefix}{alias} {command.signature}\n    *Aliases:* {aliases}'
+        alias = command.name if not parent else f'{parent} {command.name}'
         return f'{opt.prefix}{alias} {command.signature}'
 
     async def send_error_message(self, error):
@@ -89,7 +89,7 @@ class QrmHelpCommand(commands.HelpCommand):
         await self.context.send(embed=embed)
 
     async def send_group_help(self, group):
-        embed = discord.Embed(title=f'{group.name} Help',
+        embed = discord.Embed(title=self.get_command_signature(group),
                               description=group.help,
                               colour=gs.colours.neutral,
                               timestamp=datetime.utcnow()
