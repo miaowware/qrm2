@@ -1,4 +1,4 @@
-FROM python:3-alpine
+FROM alpine:3.10
 
 COPY . /app
 WORKDIR /app
@@ -20,6 +20,7 @@ RUN \
         libressl \
         py3-lxml \
         py3-pip \
+        cython \
         python3 && \
     echo "**** install pip packages ****" && \
     pip3 install -U pip setuptools wheel && \
