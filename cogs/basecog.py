@@ -39,9 +39,7 @@ class BaseCog(commands.Cog):
     @commands.command(name="ping")
     async def _ping(self, ctx: commands.Context):
         """Show the current latency to the discord endpoint."""
-        content = ''
-        if random.random() < 0.05:
-            content = f'<@{ctx.message.author.id}>'
+        content = ctx.message.author.mention if random.random() < 0.05 else ''
         embed = discord.Embed(title="**Pong!**",
                               description=f'Current ping is {self.bot.latency*1000:.1f} ms',
                               colour=self.gs.colours.neutral,
