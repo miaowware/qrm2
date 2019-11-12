@@ -7,11 +7,12 @@ This file is part of discord-qrmbot and is released under the terms of the GNU
 General Public License, version 2.
 """
 
+from datetime import datetime
+import threading
+
 import discord
 from discord.ext import commands, tasks
 
-import json
-from datetime import datetime
 from ctyparser import BigCty
 
 
@@ -21,9 +22,10 @@ class LookupCog(commands.Cog):
         self.gs = bot.get_cog("GlobalSettings")
         try:
             self.CTY = BigCty('./data/cty.json')
-        except:  # TODO: BARE EXCEPT! Figure out which one it is
+        except OSError:
             self.CTY = BigCty()
-            self.CTY.update()  # TODO: thread this
+            update = threading.Thread(target=run_update, args=(self.CTY, "./data/cty.json"))
+            update.start()
 
     @commands.command(name="sat")
     async def _sat_lookup(self, ctx: commands.Context, sat: str, grid1: str, grid2: str = None):
@@ -45,7 +47,10 @@ class LookupCog(commands.Cog):
             queryMatch = None
             query = query.upper()
             if query != 'LAST_UPDATED':
-                embed = discord.Embed(title=f'DXCC Info for {query}')
+                embed = discord.Embed(title=f'DXCC Info for {query}',
+                                      timestamp=datetime.utcnow())
+                embed.set_footer(text=f'{ctx.author.name} | Last Updated: {self.CTY.formatted_version}',
+                                 icon_url=str(ctx.author.avatar_url))
                 embed.description = f'Prefix {query} not found'
                 embed.colour = self.gs.colours.bad
                 while noMatch:
@@ -71,16 +76,25 @@ class LookupCog(commands.Cog):
                         embed.description = ''
                         embed.colour = self.gs.colours.good
             else:
-                result = f'CTY.DAT last updated on {self.CTY.format_version()}'
+                result = f'CTY.DAT last updated on {self.CTY.formatted_version}'
                 embed = discord.Embed(title=result, colour=self.gs.colours.neutral)
+                embed.set_footer(text=f'{ctx.author.name}',
+                                 icon_url=str(ctx.author.avatar_url))
         await ctx.send(embed=embed)
 
     @tasks.loop(hours=24)
     async def _update_cty(self):
-        self.CTY.update()  # TODO: Thread this!
+        update = threading.Thread(target=run_update, args=(self.CTY, "./data/cty.json"))
+        update.start()
 
     def cog_unload(self):
         self.CTY.dump("./data/cty.json")
+
+
+def run_update(cty_obj, dump_loc):
+    update = cty_obj.update()
+    if update:
+        cty_obj.dump(dump_loc)
 
 
 def setup(bot: commands.Bot):
