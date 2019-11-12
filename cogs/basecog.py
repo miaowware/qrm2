@@ -31,6 +31,7 @@ class BaseCog(commands.Cog):
                               timestamp=datetime.utcnow())
         embed.set_footer(text=ctx.author.name,
                          icon_url=str(ctx.author.avatar_url))
+        embed.set_thumbnail(url=str(self.bot.user.avatar_url))
         embed = embed.add_field(name="Authors", value=", ".join(self.gs.info.authors))
         embed = embed.add_field(name="Contributing", value=self.gs.info.contributing)
         embed = embed.add_field(name="License", value=self.gs.info.license)
