@@ -71,7 +71,7 @@ class QRZCog(commands.Cog):
         embed.set_footer(text=ctx.author.name,
                          icon_url=str(ctx.author.avatar_url))
         if 'image' in resp_data:
-            embed.set_image(url=resp_data['image'])
+            embed.set_thumbnail(url=resp_data['image'])
 
         data = qrz_process_info(resp_data)
 
