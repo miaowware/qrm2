@@ -1,5 +1,5 @@
 # A quick installation script for painless discord bots.
-# v1.1.0
+# v2.0.0
 # Copyright (c) 2019 0x5c
 # Released under the terms of the MIT license.
 # Part of:
@@ -32,7 +32,7 @@ help:
 
 # Main install target
 .PHONY: install
-install: $(BOTENV)/req_done options.py keys.py
+install: $(BOTENV)/req_done data/options.py data/keys.py
 
 # Virual environment setup
 $(BOTENV)/success:
@@ -50,14 +50,16 @@ $(BOTENV)/req_done: requirements.txt $(BOTENV)/success
 		pip install ${PIP_OUTPUT} -U -r requirements.txt
 	@touch $(BOTENV)/req_done
 
+# Creating the ./data subdirectory
 data:
-	mkdir data
+	@echo "\033[34;1m--> Creating ./data ...\033[0m"
+	@mkdir -p data
 
 # Copying templates
-options.py keys.py: | data
-	@echo "\033[34;1m--> Copying template files...\033[0m"
-	@cp -nv ./templates/template_$@ ./data/$@
-	@touch ./data/$@
+data/options.py data/keys.py: ./data
+	@echo "\033[34;1m--> Copying template for ./$@ ...\033[0m"
+	@cp -nv ./templates/$@ ./$@
+	@touch ./$@
 
 # Deletes the python cache and the virtual environment
 .PHONY: clean
