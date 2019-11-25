@@ -17,7 +17,7 @@ from ctyparser import BigCty
 
 
 class LookupCog(commands.Cog):
-    def __init__(self, bot: commmands.Bot):
+    def __init__(self, bot):
         self.bot = bot
         self.gs = bot.get_cog("GlobalSettings")
         try:
