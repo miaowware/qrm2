@@ -13,6 +13,8 @@ from datetime import datetime
 import discord
 import discord.ext.commands as commands
 
+from resources import callsign_info
+
 
 class HamCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -71,6 +73,33 @@ class HamCog(commands.Cog):
                                   timestamp=datetime.utcnow())
             embed.set_footer(text=ctx.author.name,
                              icon_url=str(ctx.author.avatar_url))
+        await ctx.send(embed=embed)
+
+    @commands.command(name="vanities", aliases=["vanity", "pfx", "prefixes", "prefix"])
+    async def _vanity_prefixes(self, ctx: commands.Context, country: str = None):
+        '''Lists valid prefixes for countries.'''
+        if country is None:
+            await ctx.send_help(ctx.command)
+            return
+        if country.lower() not in callsign_info.options:
+            embed = discord.Embed(title=f'{country} not found!',
+                                  description=f'Valid countries: {", ".join(callsign_info.options.keys())}',
+                                  colour=self.gs.colours.bad,
+                                  timestamp=datetime.utcnow())
+            embed.set_footer(text=ctx.author.name,
+                             icon_url=str(ctx.author.avatar_url))
+            await ctx.send(embed=embed)
+            return
+        embed = discord.Embed(title=callsign_info.options[country.lower()][0],
+                              description=callsign_info.options[country.lower()][1],
+                              colour=self.gs.colours.good,
+                              timestamp=datetime.utcnow())
+        embed.set_footer(text=ctx.author.name,
+                         icon_url=str(ctx.author.avatar_url))
+
+        for name, val in callsign_info.options[country.lower()][2].items():
+            embed.add_field(name=name, value=val, inline=False)
+
         await ctx.send(embed=embed)
 
 
