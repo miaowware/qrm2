@@ -24,7 +24,7 @@ class StudyCog(commands.Cog, name='HamStudy Commands'):
         self.bot = bot
         self.lastq = dict()
 
-    @commands.command(name="rq", aliases=['randomq'], category=cmn.cat.study)
+    @commands.command(name="hamstudy", aliases=['rq', 'randomquestion', 'randomq'], category=cmn.cat.study)
     async def _random_question(self, ctx: commands.Context, level: str = None):
         '''Gets a random question from the Technician, General, and/or Extra question pools.'''
         tech_pool = 'E2_2018'
@@ -85,7 +85,8 @@ class StudyCog(commands.Cog, name='HamStudy Commands'):
             self.lastq[ctx.message.channel.id] = (question['id'], question['answer'])
         await ctx.send(embed=embed)
 
-    @commands.command(name="rqa", category=cmn.cat.study)
+    @commands.command(name="hamstudyanswer", aliases=['rqa', 'randomquestionanswer', 'randomqa', 'hamstudya'],
+                      category=cmn.cat.study)
     async def _q_answer(self, ctx: commands.Context, answer: str = None):
         '''Returns the answer to question last asked (Optional argument: your answer).'''
         with ctx.typing():

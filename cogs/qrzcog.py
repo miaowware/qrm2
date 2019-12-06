@@ -26,7 +26,7 @@ class QRZCog(commands.Cog):
         self.session = aiohttp.ClientSession()
         self._qrz_session_init.start()
 
-    @commands.command(name="qrz", aliases=["call"], category=cmn.cat.lookup)
+    @commands.command(name="call", aliases=["qrz"], category=cmn.cat.lookup)
     async def _qrz_lookup(self, ctx: commands.Context, callsign: str):
         '''Look up a callsign on [QRZ.com](https://www.qrz.com/).'''
         if keys.qrz_user == '' or keys.qrz_pass == '':

@@ -25,7 +25,7 @@ class WeatherCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.command(name="cond", aliases=['condx'], category=cmn.cat.weather)
+    @commands.command(name="bandconditions", aliases=['cond', 'condx', 'conditions'], category=cmn.cat.weather)
     async def _band_conditions(self, ctx: commands.Context):
         '''Posts an image of HF Band Conditions.'''
         with ctx.typing():

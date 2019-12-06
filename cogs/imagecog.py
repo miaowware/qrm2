@@ -22,7 +22,7 @@ class ImageCog(commands.Cog, name='Image Lookup Commands'):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.command(name="plan", aliases=['bands'], category=cmn.cat.ref)
+    @commands.command(name="bandplan", aliases=['plan', 'bands'], category=cmn.cat.ref)
     async def _bandplan(self, ctx: commands.Context, region: str = ''):
         '''Posts an image of Frequency Allocations. Argument options: `cn`, `ca`, `nl`, `us`, `mx`.'''
         name = {'cn': 'Chinese',

@@ -65,7 +65,7 @@ class MorseCog(commands.Cog, name='Morse Code Commands'):
                              icon_url=str(ctx.author.avatar_url))
         await ctx.send(embed=embed)
 
-    @commands.command(name="weight", aliases=["cwweight", 'cww'], category=cmn.cat.ref)
+    @commands.command(name="cwweight", aliases=["weight", 'cww'], category=cmn.cat.ref)
     async def _weight(self, ctx: commands.Context, *, msg: str):
         '''Calculates the CW Weight of a callsign or message.'''
         with ctx.typing():
