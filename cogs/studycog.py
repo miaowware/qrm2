@@ -97,14 +97,14 @@ class StudyCog(commands.Cog):
                 if answer == correct_ans:
                     result = f'Correct! The answer to {q_num} was **{correct_ans}**.'
                     embed = discord.Embed(title=f'{q_num} Answer',
-                                          description=(f'Data courtesy of [HamStudy.org](https://hamstudy.org/)'
+                                          description=('Data courtesy of [HamStudy.org](https://hamstudy.org/)'
                                                        f'\n\n{result}'),
                                           colour=cmn.colours.good,
                                           timestamp=datetime.utcnow())
                 else:
                     result = f'Incorrect. The answer to {q_num} was **{correct_ans}**, not **{answer}**.'
                     embed = discord.Embed(title=f'{q_num} Answer',
-                                          description=(f'Data courtesy of [HamStudy.org](https://hamstudy.org)'
+                                          description=('Data courtesy of [HamStudy.org](https://hamstudy.org)'
                                                        f'\n\n{result}'),
                                           colour=cmn.colours.bad,
                                           timestamp=datetime.utcnow())
