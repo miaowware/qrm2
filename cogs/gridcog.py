@@ -120,7 +120,7 @@ If two grid squares are given, the distance and azimuth between them is calculat
                 except Exception as e:
                     msg = f'Error generating great circle distance and bearing from {grid} and {grid2}.'
                     embed = discord.Embed(title=msg, description=str(e),
-                                          colour=gs.colours.bad,
+                                          colour=cmn.colours.bad,
                                           timestamp=datetime.utcnow())
                     embed.set_footer(text=ctx.author.name,
                                      icon_url=str(ctx.author.avatar_url))
