@@ -16,18 +16,21 @@ from discord.ext import commands, tasks
 import aiohttp
 from lxml import etree
 
+import common as cmn
+import keys
+
 
 class QRZCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.gs = bot.get_cog("GlobalSettings")
         self.session = aiohttp.ClientSession()
         self._qrz_session_init.start()
 
-    @commands.command(name="qrz", aliases=["call"])
-    async def _qrz_lookup(self, ctx: commands.Context, call: str):
-        if self.gs.keys.qrz_user == '' or self.gs.keys.qrz_pass == '':
-            await ctx.send(f'http://qrz.com/db/{call}')
+    @commands.command(name="call", aliases=["qrz"], category=cmn.cat.lookup)
+    async def _qrz_lookup(self, ctx: commands.Context, callsign: str):
+        '''Look up a callsign on [QRZ.com](https://www.qrz.com/).'''
+        if keys.qrz_user == '' or keys.qrz_pass == '':
+            await ctx.send(f'http://qrz.com/db/{callsign}')
             return
 
         try:
@@ -35,7 +38,7 @@ class QRZCog(commands.Cog):
         except ConnectionError:
             await self.get_session()
 
-        url = f'http://xmldata.qrz.com/xml/current/?s={self.key};callsign={call}'
+        url = f'http://xmldata.qrz.com/xml/current/?s={self.key};callsign={callsign}'
         async with self.session.get(url) as resp:
             if resp.status != 200:
                 raise ConnectionError(f'Unable to connect to QRZ (HTTP Error {resp.status})')
@@ -47,11 +50,11 @@ class QRZCog(commands.Cog):
         if 'Error' in resp_session:
             if 'Session Timeout' in resp_session['Error']:
                 await self.get_session()
-                await self._qrz_lookup(ctx, call)
+                await self._qrz_lookup(ctx, callsign)
                 return
             if 'Not found' in resp_session['Error']:
-                embed = discord.Embed(title=f"QRZ Data for {call.upper()}",
-                                      colour=self.gs.colours.bad,
+                embed = discord.Embed(title=f"QRZ Data for {callsign.upper()}",
+                                      colour=cmn.colours.bad,
                                       description='No data found!',
                                       timestamp=datetime.utcnow())
                 embed.set_footer(text=ctx.author.name,
@@ -65,7 +68,7 @@ class QRZCog(commands.Cog):
         resp_data = {el.tag.split('}')[1]: el.text for el in resp_xml_data[0].getiterator()}
 
         embed = discord.Embed(title=f"QRZ Data for {resp_data['call']}",
-                              colour=self.gs.colours.good,
+                              colour=cmn.colours.good,
                               url=f'http://www.qrz.com/db/{resp_data["call"]}',
                               timestamp=datetime.utcnow())
         embed.set_footer(text=ctx.author.name,
@@ -82,7 +85,7 @@ class QRZCog(commands.Cog):
 
     async def get_session(self):
         """Session creation and caching."""
-        self.key = await qrz_login(self.gs.keys.qrz_user, self.gs.keys.qrz_pass, self.session)
+        self.key = await qrz_login(keys.qrz_user, keys.qrz_pass, self.session)
         with open('data/qrz_session', 'w') as qrz_file:
             qrz_file.write(self.key)
 

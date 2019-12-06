@@ -9,23 +9,24 @@ General Public License, version 2.
 
 import discord.ext.commands as commands
 
+import common as cmn
+
 
 class FunCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.gs = bot.get_cog("GlobalSettings")
 
-    @commands.command(name="xkcd", aliases=['x'])
-    async def _xkcd(self, ctx: commands.Context, num: str):
+    @commands.command(name="xkcd", aliases=['x'], category=cmn.cat.fun)
+    async def _xkcd(self, ctx: commands.Context, number: str):
         '''Look up an xkcd by number.'''
-        await ctx.send('http://xkcd.com/' + num)
+        await ctx.send('http://xkcd.com/' + number)
 
-    @commands.command(name="tar")
+    @commands.command(name="tar", category=cmn.cat.fun)
     async def _tar(self, ctx: commands.Context):
         '''Returns an xkcd about tar.'''
         await ctx.send('http://xkcd.com/1168')
 
-    @commands.command(name="xd")
+    @commands.command(name="xd", hidden=True, category=cmn.cat.fun)
     async def _xd(self, ctx: commands.Context):
         '''ecks dee'''
         await ctx.send('ECKS DEE :smirk:')

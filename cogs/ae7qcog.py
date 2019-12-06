@@ -21,20 +21,22 @@ import discord.ext.commands as commands
 from bs4 import BeautifulSoup
 import aiohttp
 
+import common as cmn
+
 
 class AE7QCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.gs = bot.get_cog("GlobalSettings")
 
-    @commands.group(name="ae7q", aliases=["ae"])
+    @commands.group(name="ae7q", aliases=["ae"], category=cmn.cat.lookup)
     async def _ae7q_lookup(self, ctx: commands.Context):
-        '''Look up a callsign, FRN, or Licensee ID on ae7q.com'''
+        '''Look up a callsign, FRN, or Licensee ID on [ae7q.com](http://ae7q.com/).'''
         if ctx.invoked_subcommand is None:
             await ctx.send_help(ctx.command)
 
-    @_ae7q_lookup.command(name="call")
+    @_ae7q_lookup.command(name="call", category=cmn.cat.lookup)
     async def _ae7q_call(self, ctx: commands.Context, callsign: str):
+        '''Look up the history for a callsign on [ae7q.com](http://ae7q.com/).'''
         callsign = callsign.upper()
         desc = ''
         base_url = "http://ae7q.com/query/data/CallHistory.php?CALL="
@@ -61,7 +63,7 @@ class AE7QCog(commands.Cog):
 
         if rows is None:
             embed = discord.Embed(title=f"AE7Q History for {callsign}",
-                                  colour=self.gs.colours.bad,
+                                  colour=cmn.colours.bad,
                                   url=f"{base_url}{callsign}",
                                   timestamp=datetime.utcnow())
             embed.set_footer(text=ctx.author.name,
@@ -91,7 +93,7 @@ class AE7QCog(commands.Cog):
                 table_contents += [row_cells]
 
         embed = discord.Embed(title=f"AE7Q Records for {callsign}",
-                              colour=self.gs.colours.good,
+                              colour=cmn.colours.good,
                               url=f"{base_url}{callsign}",
                               timestamp=datetime.utcnow())
 
@@ -118,20 +120,20 @@ class AE7QCog(commands.Cog):
 
     # TODO: write commands for other AE7Q response types?
     # @_ae7q_lookup.command(name="trustee")
-    # async def _ae7q_trustee(self, ctx, callsign: str):
+    # async def _ae7q_trustee(self, ctx: commands.Context, callsign: str):
     #     pass
 
     # @_ae7q_lookup.command(name="applications", aliases=['apps'])
-    # async def _ae7q_applications(self, ctx, callsign: str):
+    # async def _ae7q_applications(self, ctx: commands.Context, callsign: str):
     #     pass
 
     # @_ae7q_lookup.command(name="frn")
-    # async def _ae7q_frn(self, ctx, frn: str):
+    # async def _ae7q_frn(self, ctx: commands.Context, frn: str):
     #     base_url = "http://ae7q.com/query/data/FrnHistory.php?FRN="
     #     pass
 
     # @_ae7q_lookup.command(name="licensee", aliases=["lic"])
-    # async def _ae7q_licensee(self, ctx, frn: str):
+    # async def _ae7q_licensee(self, ctx: commands.Context, frn: str):
     #     base_url = "http://ae7q.com/query/data/LicenseeIdHistory.php?ID="
     #     pass
 

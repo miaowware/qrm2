@@ -16,14 +16,16 @@ import discord.ext.commands as commands
 
 import aiohttp
 
+import common as cmn
+
 
 class StudyCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.gs = bot.get_cog("GlobalSettings")
         self.lastq = dict()
+        self.source = 'Data courtesy of [HamStudy.org](https://hamstudy.org/)'
 
-    @commands.command(name="rq", aliases=['randomq'])
+    @commands.command(name="hamstudy", aliases=['rq', 'randomquestion', 'randomq'], category=cmn.cat.study)
     async def _random_question(self, ctx: commands.Context, level: str = None):
         '''Gets a random question from the Technician, General, and/or Extra question pools.'''
         tech_pool = 'E2_2018'
@@ -66,7 +68,8 @@ class StudyCog(commands.Cog):
             question = random.choice(pool_questions)
 
             embed = discord.Embed(title=question['id'],
-                                  colour=self.gs.colours.good,
+                                  description=self.source,
+                                  colour=cmn.colours.good,
                                   timestamp=datetime.utcnow())
             embed.set_footer(text=ctx.author.name,
                              icon_url=str(ctx.author.avatar_url))
@@ -83,31 +86,32 @@ class StudyCog(commands.Cog):
             self.lastq[ctx.message.channel.id] = (question['id'], question['answer'])
         await ctx.send(embed=embed)
 
-    @commands.command(name="rqa")
-    async def _q_answer(self, ctx: commands.Context, ans: str = None):
+    @commands.command(name="hamstudyanswer", aliases=['rqa', 'randomquestionanswer', 'randomqa', 'hamstudya'],
+                      category=cmn.cat.study)
+    async def _q_answer(self, ctx: commands.Context, answer: str = None):
         '''Returns the answer to question last asked (Optional argument: your answer).'''
         with ctx.typing():
             correct_ans = self.lastq[ctx.message.channel.id][1]
             q_num = self.lastq[ctx.message.channel.id][0]
-            if ans is not None:
-                ans = ans.upper()
-                if ans == correct_ans:
+            if answer is not None:
+                answer = answer.upper()
+                if answer == correct_ans:
                     result = f'Correct! The answer to {q_num} was **{correct_ans}**.'
                     embed = discord.Embed(title=f'{q_num} Answer',
-                                          description=result,
-                                          colour=self.gs.colours.good,
+                                          description=f'{self.source}\n\n{result}',
+                                          colour=cmn.colours.good,
                                           timestamp=datetime.utcnow())
                 else:
-                    result = f'Incorrect. The answer to {q_num} was **{correct_ans}**, not **{ans}**.'
+                    result = f'Incorrect. The answer to {q_num} was **{correct_ans}**, not **{answer}**.'
                     embed = discord.Embed(title=f'{q_num} Answer',
-                                          description=result,
-                                          colour=self.gs.colours.bad,
+                                          description=f'{self.source}\n\n{result}',
+                                          colour=cmn.colours.bad,
                                           timestamp=datetime.utcnow())
             else:
                 result = f'The correct answer to {q_num} was **{correct_ans}**.'
                 embed = discord.Embed(title=f'{q_num} Answer',
-                                      description=result,
-                                      colour=self.gs.colours.neutral,
+                                      description=f'{self.source}\n\n{result}',
+                                      colour=cmn.colours.neutral,
                                       timestamp=datetime.utcnow())
 
         embed.set_footer(text=ctx.author.name,
