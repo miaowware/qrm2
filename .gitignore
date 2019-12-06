@@ -1,12 +1,11 @@
 # Custom
-options.py
-keys.py
-
 cty.dat
 cty.json
 cty.zip
 
-botenv/
+/botenv/
+/devenv/
+/data/
 
 
 #########################################################
