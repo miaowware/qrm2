@@ -10,6 +10,7 @@ General Public License, version 2.
 from datetime import datetime
 import re
 from collections import OrderedDict
+import random
 
 import discord
 import discord.ext.commands as commands
@@ -115,22 +116,25 @@ class BaseCog(commands.Cog, name='Basic Commands'):
                               timestamp=datetime.utcnow())
         embed.set_footer(text=ctx.author.name,
                          icon_url=str(ctx.author.avatar_url))
+
         embed = embed.add_field(name="Authors", value=", ".join(info.authors))
         embed = embed.add_field(name="Contributing", value=info.contributing)
         embed = embed.add_field(name="License", value=info.license)
         embed = embed.add_field(name="Version", value=f'v{info.release} (Released: {info.release_timestamp})')
+        embed.set_thumbnail(url=str(self.bot.user.avatar_url))
         await ctx.send(embed=embed)
 
     @commands.command(name="ping")
     async def _ping(self, ctx: commands.Context):
         """Show the current latency to the discord endpoint."""
+        content = ctx.message.author.mention if random.random() < 0.05 else ''
         embed = discord.Embed(title="**Pong!**",
                               description=f'Current ping is {self.bot.latency*1000:.1f} ms',
                               colour=cmn.colours.neutral,
                               timestamp=datetime.utcnow())
         embed.set_footer(text=ctx.author.name,
                          icon_url=str(ctx.author.avatar_url))
-        await ctx.send(embed=embed)
+        await ctx.send(content=content, embed=embed)
 
     @commands.command(name="changelog", aliases=["clog"])
     async def _changelog(self, ctx: commands.Context):
