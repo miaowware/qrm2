@@ -13,7 +13,7 @@ from datetime import datetime
 import discord
 import discord.ext.commands as commands
 
-import common as gs
+import common as cmn
 
 
 class MorseCog(commands.Cog, name='Morse Code Commands'):
@@ -23,7 +23,7 @@ class MorseCog(commands.Cog, name='Morse Code Commands'):
             self.ascii2morse = json.load(morse_file)
             self.morse2ascii = {v: k for k, v in self.ascii2morse.items()}
 
-    @commands.command(name="morse", aliases=['cw'], category=gs.cat.ref)
+    @commands.command(name="morse", aliases=['cw'], category=cmn.cat.ref)
     async def _morse(self, ctx: commands.Context, *, msg: str):
         """Converts ASCII to international morse code."""
         with ctx.typing():
@@ -36,13 +36,13 @@ class MorseCog(commands.Cog, name='Morse Code Commands'):
                 result += ' '
             embed = discord.Embed(title=f'Morse Code for {msg}',
                                   description=result,
-                                  colour=gs.colours.good,
+                                  colour=cmn.colours.good,
                                   timestamp=datetime.utcnow())
             embed.set_footer(text=ctx.author.name,
                              icon_url=str(ctx.author.avatar_url))
         await ctx.send(embed=embed)
 
-    @commands.command(name="unmorse", aliases=['demorse', 'uncw', 'decw'], category=gs.cat.ref)
+    @commands.command(name="unmorse", aliases=['demorse', 'uncw', 'decw'], category=cmn.cat.ref)
     async def _unmorse(self, ctx: commands.Context, *, msg: str):
         '''Converts international morse code to ASCII.'''
         with ctx.typing():
@@ -59,13 +59,13 @@ class MorseCog(commands.Cog, name='Morse Code Commands'):
                 result += ' '
             embed = discord.Embed(title=f'ASCII for {msg0}',
                                   description=result,
-                                  colour=gs.colours.good,
+                                  colour=cmn.colours.good,
                                   timestamp=datetime.utcnow())
             embed.set_footer(text=ctx.author.name,
                              icon_url=str(ctx.author.avatar_url))
         await ctx.send(embed=embed)
 
-    @commands.command(name="weight", aliases=["cwweight", 'cww'], category=gs.cat.ref)
+    @commands.command(name="weight", aliases=["cwweight", 'cww'], category=cmn.cat.ref)
     async def _weight(self, ctx: commands.Context, *, msg: str):
         '''Calculates the CW Weight of a callsign or message.'''
         with ctx.typing():
@@ -82,7 +82,7 @@ class MorseCog(commands.Cog, name='Morse Code Commands'):
             res = f'The CW weight is **{weight}**'
             embed = discord.Embed(title=f'CW Weight of {msg}',
                                   description=res,
-                                  colour=gs.colours.good,
+                                  colour=cmn.colours.good,
                                   timestamp=datetime.utcnow())
             embed.set_footer(text=ctx.author.name,
                              icon_url=str(ctx.author.avatar_url))

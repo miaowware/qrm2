@@ -16,7 +16,7 @@ import discord.ext.commands as commands
 
 import aiohttp
 
-import common as gs
+import common as cmn
 
 
 class WeatherCog(commands.Cog):
@@ -25,18 +25,18 @@ class WeatherCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.command(name="cond", aliases=['condx'], category=gs.cat.weather)
+    @commands.command(name="cond", aliases=['condx'], category=cmn.cat.weather)
     async def _band_conditions(self, ctx: commands.Context):
         '''Posts an image of HF Band Conditions.'''
         with ctx.typing():
             embed = discord.Embed(title='Current Solar Conditions',
-                                  colour=gs.colours.good,
+                                  colour=cmn.colours.good,
                                   timestamp=datetime.utcnow())
             async with aiohttp.ClientSession() as session:
                 async with session.get('http://www.hamqsl.com/solarsun.php') as resp:
                     if resp.status != 200:
                         embed.description = 'Could not download file...'
-                        embed.colour = gs.colours.bad
+                        embed.colour = cmn.colours.bad
                     else:
                         data = io.BytesIO(await resp.read())
                         embed.set_image(url=f'attachment://condx.png')
@@ -44,7 +44,7 @@ class WeatherCog(commands.Cog):
                              icon_url=str(ctx.author.avatar_url))
         await ctx.send(embed=embed, file=discord.File(data, 'condx.png'))
 
-    @commands.group(name="weather", aliases=['wttr'], category=gs.cat.weather)
+    @commands.group(name="weather", aliases=['wttr'], category=cmn.cat.weather)
     async def _weather_conditions(self, ctx: commands.Context):
         '''Posts an image of Local Weather Conditions from [wttr.in](http://wttr.in/).
 
@@ -60,7 +60,7 @@ class WeatherCog(commands.Cog):
         if ctx.invoked_subcommand is None:
             await ctx.send_help(ctx.command)
 
-    @_weather_conditions.command(name='forecast', aliases=['fc', 'future'], category=gs.cat.weather)
+    @_weather_conditions.command(name='forecast', aliases=['fc', 'future'], category=cmn.cat.weather)
     async def _weather_conditions_forecast(self, ctx: commands.Context, *, location: str):
         '''Posts an image of Local Weather Conditions for the next three days from [wttr.in](http://wttr.in/).
 See help for weather command for possible location types. Add a `-c` or `-f` to use Celcius or Fahrenheit.'''
@@ -80,14 +80,14 @@ See help for weather command for possible location types. Add a `-c` or `-f` to 
 
             embed = discord.Embed(title=f'Weather Forecast for {loc}',
                                   description='Data from [wttr.in](http://wttr.in/).',
-                                  colour=gs.colours.good,
+                                  colour=cmn.colours.good,
                                   timestamp=datetime.utcnow())
             loc = loc.replace(' ', '+')
             async with aiohttp.ClientSession() as session:
                 async with session.get(f'http://wttr.in/{loc}_{units}pnFQ.png') as resp:
                     if resp.status != 200:
                         embed.description = 'Could not download file...'
-                        embed.colour = gs.colours.bad
+                        embed.colour = cmn.colours.bad
                     else:
                         data = io.BytesIO(await resp.read())
                         loc = loc.replace('+', '')
@@ -98,7 +98,7 @@ See help for weather command for possible location types. Add a `-c` or `-f` to 
                              icon_url=str(ctx.author.avatar_url))
         await ctx.send(embed=embed, file=discord.File(data, f'{loc}_{units}pnFQ.png'))
 
-    @_weather_conditions.command(name='now', aliases=['n'], category=gs.cat.weather)
+    @_weather_conditions.command(name='now', aliases=['n'], category=cmn.cat.weather)
     async def _weather_conditions_now(self, ctx: commands.Context, *, location: str):
         '''Posts an image of current Local Weather Conditions from [wttr.in](http://wttr.in/).
 See help for weather command for possible location types. Add a `-c` or `-f` to use Celcius or Fahrenheit.'''
@@ -118,14 +118,14 @@ See help for weather command for possible location types. Add a `-c` or `-f` to 
 
             embed = discord.Embed(title=f'Current Weather for {loc}',
                                   description='Data from [wttr.in](http://wttr.in/).',
-                                  colour=gs.colours.good,
+                                  colour=cmn.colours.good,
                                   timestamp=datetime.utcnow())
             loc = loc.replace(' ', '+')
             async with aiohttp.ClientSession() as session:
                 async with session.get(f'http://wttr.in/{loc}_0{units}pnFQ.png') as resp:
                     if resp.status != 200:
                         embed.description = 'Could not download file...'
-                        embed.colour = gs.colours.bad
+                        embed.colour = cmn.colours.bad
                     else:
                         data = io.BytesIO(await resp.read())
                         loc = loc.replace('+', '')

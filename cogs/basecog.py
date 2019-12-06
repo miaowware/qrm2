@@ -17,7 +17,7 @@ import discord.ext.commands as commands
 import info
 
 import options as opt
-import common as gs
+import common as cmn
 
 
 class QrmHelpCommand(commands.HelpCommand):
@@ -51,7 +51,7 @@ class QrmHelpCommand(commands.HelpCommand):
     async def send_error_message(self, error):
         embed = discord.Embed(title='qrm Help Error',
                               description=error,
-                              colour=gs.colours.bad,
+                              colour=cmn.colours.bad,
                               timestamp=datetime.utcnow()
                               )
         embed.set_footer(text=self.context.author.name,
@@ -61,7 +61,7 @@ class QrmHelpCommand(commands.HelpCommand):
     async def send_bot_help(self, mapping):
         embed = discord.Embed(title='qrm Help',
                               description=f'For command-specific help and usage, use `{opt.prefix}help [command name]`',
-                              colour=gs.colours.neutral,
+                              colour=cmn.colours.neutral,
                               timestamp=datetime.utcnow()
                               )
         embed.set_footer(text=self.context.author.name,
@@ -81,7 +81,7 @@ class QrmHelpCommand(commands.HelpCommand):
     async def send_command_help(self, command):
         embed = discord.Embed(title=self.get_command_signature(command),
                               description=command.help,
-                              colour=gs.colours.neutral,
+                              colour=cmn.colours.neutral,
                               timestamp=datetime.utcnow()
                               )
         embed.set_footer(text=self.context.author.name,
@@ -91,7 +91,7 @@ class QrmHelpCommand(commands.HelpCommand):
     async def send_group_help(self, group):
         embed = discord.Embed(title=self.get_command_signature(group),
                               description=group.help,
-                              colour=gs.colours.neutral,
+                              colour=cmn.colours.neutral,
                               timestamp=datetime.utcnow()
                               )
         embed.set_footer(text=self.context.author.name,
@@ -114,7 +114,7 @@ class BaseCog(commands.Cog, name='Basic Commands'):
         """Shows info about qrm."""
         embed = discord.Embed(title="About qrm",
                               description=info.description,
-                              colour=gs.colours.neutral,
+                              colour=cmn.colours.neutral,
                               timestamp=datetime.utcnow())
         embed.set_footer(text=ctx.author.name,
                          icon_url=str(ctx.author.avatar_url))
@@ -129,7 +129,7 @@ class BaseCog(commands.Cog, name='Basic Commands'):
         """Show the current latency to the discord endpoint."""
         embed = discord.Embed(title="**Pong!**",
                               description=f'Current ping is {self.bot.latency*1000:.1f} ms',
-                              colour=gs.colours.neutral,
+                              colour=cmn.colours.neutral,
                               timestamp=datetime.utcnow())
         embed.set_footer(text=ctx.author.name,
                          icon_url=str(ctx.author.avatar_url))
@@ -141,7 +141,7 @@ class BaseCog(commands.Cog, name='Basic Commands'):
         embed = discord.Embed(title="qrm Changelog",
                               description=("For a full listing, visit [Github](https://"
                                            "github.com/classabbyamp/discord-qrm-bot/blob/master/CHANGELOG.md)."),
-                              colour=self.gs.colours.neutral,
+                              colour=cmn.colours.neutral,
                               timestamp=datetime.utcnow())
         embed.set_footer(text=ctx.author.name,
                          icon_url=str(ctx.author.avatar_url))

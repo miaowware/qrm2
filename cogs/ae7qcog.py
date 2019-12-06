@@ -21,20 +21,20 @@ import discord.ext.commands as commands
 from bs4 import BeautifulSoup
 import aiohttp
 
-import common as gs
+import common as cmn
 
 
 class AE7QCog(commands.Cog, name='AE7Q Commands'):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.group(name="ae7q", aliases=["ae"], category=gs.cat.lookup)
+    @commands.group(name="ae7q", aliases=["ae"], category=cmn.cat.lookup)
     async def _ae7q_lookup(self, ctx: commands.Context):
         '''Look up a callsign, FRN, or Licensee ID on [ae7q.com](http://ae7q.com/).'''
         if ctx.invoked_subcommand is None:
             await ctx.send_help(ctx.command)
 
-    @_ae7q_lookup.command(name="call", category=gs.cat.lookup)
+    @_ae7q_lookup.command(name="call", category=cmn.cat.lookup)
     async def _ae7q_call(self, ctx: commands.Context, callsign: str):
         '''Look up the history for a callsign on [ae7q.com](http://ae7q.com/).'''
         callsign = callsign.upper()
@@ -63,7 +63,7 @@ class AE7QCog(commands.Cog, name='AE7Q Commands'):
 
         if rows is None:
             embed = discord.Embed(title=f"AE7Q History for {callsign}",
-                                  colour=gs.colours.bad,
+                                  colour=cmn.colours.bad,
                                   url=f"{base_url}{callsign}",
                                   timestamp=datetime.utcnow())
             embed.set_footer(text=ctx.author.name,
@@ -93,7 +93,7 @@ class AE7QCog(commands.Cog, name='AE7Q Commands'):
                 table_contents += [row_cells]
 
         embed = discord.Embed(title=f"AE7Q Records for {callsign}",
-                              colour=gs.colours.good,
+                              colour=cmn.colours.good,
                               url=f"{base_url}{callsign}",
                               timestamp=datetime.utcnow())
 

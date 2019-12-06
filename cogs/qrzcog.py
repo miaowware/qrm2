@@ -16,7 +16,7 @@ from discord.ext import commands, tasks
 import aiohttp
 from lxml import etree
 
-import common as gs
+import common as cmn
 import keys
 
 
@@ -26,7 +26,7 @@ class QRZCog(commands.Cog):
         self.session = aiohttp.ClientSession()
         self._qrz_session_init.start()
 
-    @commands.command(name="qrz", aliases=["call"], category=gs.cat.lookup)
+    @commands.command(name="qrz", aliases=["call"], category=cmn.cat.lookup)
     async def _qrz_lookup(self, ctx: commands.Context, callsign: str):
         '''Look up a callsign on [QRZ.com](https://www.qrz.com/).'''
         if keys.qrz_user == '' or keys.qrz_pass == '':
@@ -54,7 +54,7 @@ class QRZCog(commands.Cog):
                 return
             if 'Not found' in resp_session['Error']:
                 embed = discord.Embed(title=f"QRZ Data for {callsign.upper()}",
-                                      colour=gs.colours.bad,
+                                      colour=cmn.colours.bad,
                                       description='No data found!',
                                       timestamp=datetime.utcnow())
                 embed.set_footer(text=ctx.author.name,
@@ -68,7 +68,7 @@ class QRZCog(commands.Cog):
         resp_data = {el.tag.split('}')[1]: el.text for el in resp_xml_data[0].getiterator()}
 
         embed = discord.Embed(title=f"QRZ Data for {resp_data['call']}",
-                              colour=gs.colours.good,
+                              colour=cmn.colours.good,
                               url=f'http://www.qrz.com/db/{resp_data["call"]}',
                               timestamp=datetime.utcnow())
         embed.set_footer(text=ctx.author.name,
