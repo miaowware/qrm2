@@ -13,7 +13,7 @@ from datetime import datetime
 import discord
 import discord.ext.commands as commands
 
-import global_settings as gs
+import common as gs
 
 
 class MorseCog(commands.Cog, name='Morse Code Commands'):

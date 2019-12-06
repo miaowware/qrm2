@@ -16,7 +16,7 @@ import discord.ext.commands as commands
 
 import aiohttp
 
-import global_settings as gs
+import common as gs
 
 
 class StudyCog(commands.Cog, name='HamStudy Commands'):

@@ -1,5 +1,5 @@
 """
-Global settings for the bot.
+Common tools for the bot.
 ---
 Copyright (C) 2019 Abigail Gold, 0x5c
 

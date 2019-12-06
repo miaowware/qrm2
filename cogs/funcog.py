@@ -9,7 +9,7 @@ General Public License, version 2.
 
 import discord.ext.commands as commands
 
-import global_settings as gs
+import common as gs
 
 
 class FunCog(commands.Cog, name='Fun Commands'):

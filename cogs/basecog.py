@@ -17,7 +17,7 @@ import discord.ext.commands as commands
 import info
 
 import options as opt
-import global_settings as gs
+import common as gs
 
 
 class QrmHelpCommand(commands.HelpCommand):

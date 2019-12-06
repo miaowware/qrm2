@@ -16,7 +16,7 @@ from discord.ext import commands, tasks
 import aiohttp
 from lxml import etree
 
-import global_settings as gs
+import common as gs
 import keys
 
 

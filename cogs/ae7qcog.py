@@ -21,7 +21,7 @@ import discord.ext.commands as commands
 from bs4 import BeautifulSoup
 import aiohttp
 
-import global_settings as gs
+import common as gs
 
 
 class AE7QCog(commands.Cog, name='AE7Q Commands'):
