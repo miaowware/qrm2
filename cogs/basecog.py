@@ -17,7 +17,7 @@ import discord.ext.commands as commands
 
 import info
 
-import options as opt
+from data import options as opt
 import common as cmn
 
 
