@@ -27,7 +27,7 @@ class LookupCog(commands.Cog):
             update = threading.Thread(target=run_update, args=(self.CTY, "./data/cty.json"))
             update.start()
 
-    @commands.command(name="sat")
+    @commands.command(name="sat", category=cmn.cat.lookup)
     async def _sat_lookup(self, ctx: commands.Context, sat: str, grid1: str, grid2: str = None):
         '''Links to info about satellite passes on satmatch.com.
     Usage: `?sat sat_name grid1 grid2`'''
@@ -39,7 +39,7 @@ class LookupCog(commands.Cog):
             await ctx.send(f'http://www.satmatch.com/satellite/{sat}/obs1/{grid1}'
                            f'/obs2/{grid2}?search_start_time={now}&duration_hrs=24')
 
-    @commands.command(name="dxcc", aliases=['dx'])
+    @commands.command(name="dxcc", aliases=['dx'], category=cmn.cat.lookup)
     async def _dxcc_lookup(self, ctx: commands.Context, query: str):
         '''Gets info about a prefix.'''
         with ctx.typing():
