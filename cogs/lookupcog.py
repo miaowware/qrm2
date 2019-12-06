@@ -14,12 +14,12 @@ import discord
 from discord.ext import commands, tasks
 
 from ctyparser import BigCty
+import common as cmn
 
 
 class LookupCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.gs = bot.get_cog("GlobalSettings")
         try:
             self.CTY = BigCty('./data/cty.json')
         except OSError:
@@ -52,7 +52,7 @@ class LookupCog(commands.Cog):
                 embed.set_footer(text=f'{ctx.author.name} | Last Updated: {self.CTY.formatted_version}',
                                  icon_url=str(ctx.author.avatar_url))
                 embed.description = f'Prefix {query} not found'
-                embed.colour = self.gs.colours.bad
+                embed.colour = cmn.colours.bad
                 while noMatch:
                     if query in self.CTY.keys():
                         queryMatch = query
@@ -74,10 +74,10 @@ class LookupCog(commands.Cog):
                                      .add_field(name="Time Zone",
                                                 value=f'+{data["tz"]}' if data['tz'] > 0 else str(data['tz']))
                         embed.description = ''
-                        embed.colour = self.gs.colours.good
+                        embed.colour = cmn.colours.good
             else:
                 result = f'CTY.DAT last updated on {self.CTY.formatted_version}'
-                embed = discord.Embed(title=result, colour=self.gs.colours.neutral)
+                embed = discord.Embed(title=result, colour=cmn.colours.neutral)
                 embed.set_footer(text=f'{ctx.author.name}',
                                  icon_url=str(ctx.author.avatar_url))
         await ctx.send(embed=embed)
