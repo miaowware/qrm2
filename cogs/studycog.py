@@ -67,7 +67,7 @@ class StudyCog(commands.Cog):
             question = random.choice(pool_questions)
 
             embed = discord.Embed(title=question['id'],
-                                  description='Data courtesy of HamStudy.org',
+                                  description='Data courtesy of [HamStudy.org](https://hamstudy.org/)',
                                   colour=cmn.colours.good,
                                   timestamp=datetime.utcnow())
             embed.set_footer(text=ctx.author.name,
@@ -97,19 +97,21 @@ class StudyCog(commands.Cog):
                 if answer == correct_ans:
                     result = f'Correct! The answer to {q_num} was **{correct_ans}**.'
                     embed = discord.Embed(title=f'{q_num} Answer',
-                                          description=f'Data courtesy of HamStudy.org\n\n{result}',
+                                          description=(f'Data courtesy of [HamStudy.org](https://hamstudy.org/)'
+                                                       f'\n\n{result}'),
                                           colour=cmn.colours.good,
                                           timestamp=datetime.utcnow())
                 else:
                     result = f'Incorrect. The answer to {q_num} was **{correct_ans}**, not **{answer}**.'
                     embed = discord.Embed(title=f'{q_num} Answer',
-                                          description=f'Data courtesy of HamStudy.org\n\n{result}',
+                                          description=(f'Data courtesy of [HamStudy.org](https://hamstudy.org)'
+                                                       f'\n\n{result}'),
                                           colour=cmn.colours.bad,
                                           timestamp=datetime.utcnow())
             else:
                 result = f'The correct answer to {q_num} was **{correct_ans}**.'
                 embed = discord.Embed(title=f'{q_num} Answer',
-                                      description=f'Data courtesy of HamStudy.org\n\n{result}',
+                                      description=f'Data courtesy of [HamStudy.org](https://hamstudy.org/)\n\n{result}',
                                       colour=cmn.colours.neutral,
                                       timestamp=datetime.utcnow())
 
