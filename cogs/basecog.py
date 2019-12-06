@@ -104,9 +104,6 @@ class QrmHelpCommand(commands.HelpCommand):
 class BaseCog(commands.Cog, name='Basic Commands'):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self._original_help_command = bot.help_command
-        bot.help_command = QrmHelpCommand()
-        bot.help_command.cog = self
         self.changelog = parse_changelog()
 
     @commands.command(name="info", aliases=["about"])
@@ -161,9 +158,6 @@ class BaseCog(commands.Cog, name='Basic Commands'):
 
         await ctx.send(embed=embed)
 
-    def cog_unload(self):
-        self.bot.help_command = self._original_help_command
-
 
 def parse_changelog():
     changelog = OrderedDict()
@@ -200,3 +194,9 @@ async def format_changelog(log: dict):
 
 def setup(bot: commands.Bot):
     bot.add_cog(BaseCog(bot))
+    bot._original_help_command = bot.help_command
+    bot.help_command = QrmHelpCommand()
+
+
+def teardown(bot: commands.Bot):
+    bot.help_command = bot._original_help_command
