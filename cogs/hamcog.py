@@ -17,7 +17,7 @@ import common as cmn
 from resources import callsign_info
 
 
-class HamCog(commands.Cog, name='Ham Radio Commands'):
+class HamCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         with open('resources/qcodes.json') as qcode_file:

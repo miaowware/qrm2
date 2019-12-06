@@ -19,7 +19,7 @@ import aiohttp
 import common as cmn
 
 
-class StudyCog(commands.Cog, name='HamStudy Commands'):
+class StudyCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.lastq = dict()

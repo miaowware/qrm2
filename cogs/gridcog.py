@@ -16,7 +16,7 @@ import discord.ext.commands as commands
 import common as cmn
 
 
-class GridCog(commands.Cog, name='Location Commands'):
+class GridCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 

@@ -24,7 +24,7 @@ import aiohttp
 import common as cmn
 
 
-class AE7QCog(commands.Cog, name='AE7Q Commands'):
+class AE7QCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 

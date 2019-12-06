@@ -61,7 +61,8 @@ class QrmHelpCommand(commands.HelpCommand):
 
     async def send_bot_help(self, mapping):
         embed = discord.Embed(title='qrm Help',
-                              description=f'For command-specific help and usage, use `{opt.prefix}help [command name]`',
+                              description=(f'For command-specific help and usage, use `{opt.prefix}help [command name]`'
+                                           '. Many commands have shorter aliases.'),
                               colour=cmn.colours.neutral,
                               timestamp=datetime.utcnow()
                               )
@@ -102,7 +103,7 @@ class QrmHelpCommand(commands.HelpCommand):
         await self.context.send(embed=embed)
 
 
-class BaseCog(commands.Cog, name='Basic Commands'):
+class BaseCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.changelog = parse_changelog()

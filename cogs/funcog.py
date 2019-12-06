@@ -12,7 +12,7 @@ import discord.ext.commands as commands
 import common as cmn
 
 
-class FunCog(commands.Cog, name='Fun Commands'):
+class FunCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 

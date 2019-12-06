@@ -16,7 +16,7 @@ import discord.ext.commands as commands
 import common as cmn
 
 
-class MorseCog(commands.Cog, name='Morse Code Commands'):
+class MorseCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         with open('resources/morse.json') as morse_file:
