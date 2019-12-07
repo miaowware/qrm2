@@ -8,9 +8,13 @@ This file is part of discord-qrmbot and is released under the terms of the GNU
 General Public License, version 2.
 """
 
+
+from datetime import datetime
+
 import discord
 from discord.ext import commands, tasks
 
+import common as cmn
 import info
 
 from data import options as opt
@@ -20,6 +24,8 @@ from data import keys
 # --- Settings ---
 
 exit_code = 1  # The default exit code. ?shutdown and ?restart will change it accordingly (fail-safe)
+
+ext_dir = "cogs"  # The name of the directory where extensions are located.
 
 debug_mode = opt.debug  # Separate assignement in-case we define an override (ternary operator goes here)
 
@@ -37,7 +43,7 @@ async def add_react(msg: discord.Message, react: str):
     try:
         await msg.add_reaction(react)
     except discord.Forbidden:
-        print(f"!! Missing permissions to add reaction in '{msg.guild.id}/{msg.channel.id}'!")
+        print(f"[!!] Missing permissions to add reaction in '{msg.guild.id}/{msg.channel.id}'!")
 
 
 # --- Checks ---
@@ -45,7 +51,7 @@ async def add_react(msg: discord.Message, react: str):
 async def check_if_owner(ctx: commands.Context):
     if ctx.author.id in opt.owners_uids:
         return True
-    await add_react(ctx.message, "❌")
+    await add_react(ctx.message, cmn.emojis.bad)
     return False
 
 
@@ -56,7 +62,7 @@ async def check_if_owner(ctx: commands.Context):
 async def _restart_bot(ctx: commands.Context):
     """Restarts the bot."""
     global exit_code
-    await add_react(ctx.message, "✅")
+    await add_react(ctx.message, cmn.emojis.good)
     exit_code = 42  # Signals to the wrapper script that the bot needs to be restarted.
     await bot.logout()
 
@@ -66,9 +72,59 @@ async def _restart_bot(ctx: commands.Context):
 async def _shutdown_bot(ctx: commands.Context):
     """Shuts down the bot."""
     global exit_code
-    await add_react(ctx.message, "✅")
+    await add_react(ctx.message, cmn.emojis.good)
     exit_code = 0  # Signals to the wrapper script that the bot should not be restarted.
     await bot.logout()
+
+
+@bot.group(name="extctl", hidden=True)
+@commands.check(check_if_owner)
+async def _extctl(ctx: commands.Context):
+    """Extension control commands.
+    Defaults to `list` if no subcommand specified"""
+    if ctx.invoked_subcommand is None:
+        cmd = bot.get_command("extctl list")
+        await ctx.invoke(cmd)
+
+
+@_extctl.command(name="list")
+async def _extctl_list(ctx: commands.Context):
+    """Lists Extensions."""
+    embed = discord.Embed(title="Loaded Extensions",
+                          colour=cmn.colours.neutral,
+                          timestamp=datetime.utcnow())
+    embed.description = "\n".join(["‣ " + x.split(".")[1] for x in bot.extensions.keys()])
+    await ctx.send(embed=embed)
+
+
+@_extctl.command(name="load")
+async def _extctl_load(ctx: commands.Context, extension: str):
+    try:
+        bot.load_extension(ext_dir + "." + extension)
+        await add_react(ctx.message, cmn.emojis.good)
+    except commands.ExtensionError as ex:
+        embed = cmn.error_embed_factory(ctx, ex, debug_mode)
+        await ctx.send(embed=embed)
+
+
+@_extctl.command(name="reload")
+async def _extctl_reload(ctx: commands.Context, extension: str):
+    try:
+        bot.reload_extension(ext_dir + "." + extension)
+        await add_react(ctx.message, cmn.emojis.good)
+    except commands.ExtensionError as ex:
+        embed = cmn.error_embed_factory(ctx, ex, debug_mode)
+        await ctx.send(embed=embed)
+
+
+@_extctl.command(name="unload")
+async def _extctl_unload(ctx: commands.Context, extension: str):
+    try:
+        bot.unload_extension(ext_dir + "." + extension)
+        await add_react(ctx.message, cmn.emojis.good)
+    except commands.ExtensionError as ex:
+        embed = cmn.error_embed_factory(ctx, ex, debug_mode)
+        await ctx.send(embed=embed)
 
 
 # --- Events ---
