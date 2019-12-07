@@ -90,13 +90,10 @@ See help for weather command for possible location types. Add a `-c` or `-f` to 
                         embed.colour = cmn.colours.bad
                     else:
                         data = io.BytesIO(await resp.read())
-                        loc = loc.replace('+', '')
-                        loc = loc.replace('@', '')
-                        loc = loc.replace('~', '')
-                        embed.set_image(url=f'attachment://{loc}_{units}pnFQ.png')
+                        embed.set_image(url=f'attachment://wttr_forecast.png')
             embed.set_footer(text=ctx.author.name,
                              icon_url=str(ctx.author.avatar_url))
-        await ctx.send(embed=embed, file=discord.File(data, f'{loc}_{units}pnFQ.png'))
+        await ctx.send(embed=embed, file=discord.File(data, f'wttr_forecast.png'))
 
     @_weather_conditions.command(name='now', aliases=['n'], category=cmn.cat.weather)
     async def _weather_conditions_now(self, ctx: commands.Context, *, location: str):
@@ -128,13 +125,10 @@ See help for weather command for possible location types. Add a `-c` or `-f` to 
                         embed.colour = cmn.colours.bad
                     else:
                         data = io.BytesIO(await resp.read())
-                        loc = loc.replace('+', '')
-                        loc = loc.replace('@', '')
-                        loc = loc.replace('~', '')
-                        embed.set_image(url=f'attachment://{loc}_0{units}pnFQ.png')
+                        embed.set_image(url=f'attachment://wttr_now.png')
             embed.set_footer(text=ctx.author.name,
                              icon_url=str(ctx.author.avatar_url))
-        await ctx.send(embed=embed, file=discord.File(data, f'{loc}_0{units}pnFQ.png'))
+        await ctx.send(embed=embed, file=discord.File(data, 'wttr_now.png'))
 
 
 def setup(bot: commands.Bot):
