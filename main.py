@@ -25,7 +25,7 @@ from data import keys
 
 exit_code = 1  # The default exit code. ?shutdown and ?restart will change it accordingly (fail-safe)
 
-ext_dir = "cogs"  # The name of the directory where extensions are located.
+ext_dir = "exts"  # The name of the directory where extensions are located.
 
 debug_mode = opt.debug  # Separate assignement in-case we define an override (ternary operator goes here)
 
@@ -149,9 +149,8 @@ async def _before_ensure_activity():
 
 # --- Run ---
 
-# bot.add_cog(GlobalSettings(bot))
-for cog in opt.cogs:
-    bot.load_extension(f"cogs.{cog}")
+for ext in opt.exts:
+    bot.load_extension(f"exts.{ext}")
 
 _ensure_activity.start()
 

@@ -1,5 +1,5 @@
 """
-Morse Code cog for qrm
+Morse Code extension for qrm
 ---
 Copyright (C) 2019 Abigail Gold, 0x5c
 
