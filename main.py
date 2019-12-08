@@ -17,8 +17,8 @@ from discord.ext import commands, tasks
 import common as cmn
 import info
 
-from data import options as opt
-from data import keys
+import data.options as opt
+import data.keys as keys
 
 
 # --- Settings ---

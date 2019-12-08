@@ -17,7 +17,7 @@ import aiohttp
 from lxml import etree
 
 import common as cmn
-import keys
+import data.keys as keys
 
 
 class QRZCog(commands.Cog):
