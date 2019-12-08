@@ -21,7 +21,10 @@ import discord
 import discord.ext.commands as commands
 
 
-__all__ = ["colours", "cat", "emojis", "error_embed_factory"]
+import data.options as opt
+
+
+__all__ = ["colours", "cat", "emojis", "error_embed_factory", "add_react", "check_if_owner"]
 
 
 # --- Common values ---
@@ -56,3 +59,19 @@ def error_embed_factory(ctx: commands.Context, exception: Exception, debug_mode:
                      icon_url=str(ctx.author.avatar_url))
     embed.description = "```\n" + '\n'.join(fmtd_ex) + "```"
     return embed
+
+
+async def add_react(msg: discord.Message, react: str):
+    try:
+        await msg.add_reaction(react)
+    except discord.Forbidden:
+        print(f"[!!] Missing permissions to add reaction in '{msg.guild.id}/{msg.channel.id}'!")
+
+
+# --- Checks ---
+
+async def check_if_owner(ctx: commands.Context):
+    if ctx.author.id in opt.owners_uids:
+        return True
+    await add_react(ctx.message, emojis.bad)
+    return False

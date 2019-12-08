@@ -37,48 +37,30 @@ bot = commands.Bot(command_prefix=opt.prefix,
                    help_command=commands.MinimalHelpCommand())
 
 
-# --- Helper functions ---
-
-async def add_react(msg: discord.Message, react: str):
-    try:
-        await msg.add_reaction(react)
-    except discord.Forbidden:
-        print(f"[!!] Missing permissions to add reaction in '{msg.guild.id}/{msg.channel.id}'!")
-
-
-# --- Checks ---
-
-async def check_if_owner(ctx: commands.Context):
-    if ctx.author.id in opt.owners_uids:
-        return True
-    await add_react(ctx.message, cmn.emojis.bad)
-    return False
-
-
 # --- Commands ---
 
 @bot.command(name="restart", hidden=True)
-@commands.check(check_if_owner)
+@commands.check(cmn.check_if_owner)
 async def _restart_bot(ctx: commands.Context):
     """Restarts the bot."""
     global exit_code
-    await add_react(ctx.message, cmn.emojis.good)
+    await cmn.add_react(ctx.message, cmn.emojis.good)
     exit_code = 42  # Signals to the wrapper script that the bot needs to be restarted.
     await bot.logout()
 
 
 @bot.command(name="shutdown", hidden=True)
-@commands.check(check_if_owner)
+@commands.check(cmn.check_if_owner)
 async def _shutdown_bot(ctx: commands.Context):
     """Shuts down the bot."""
     global exit_code
-    await add_react(ctx.message, cmn.emojis.good)
+    await cmn.add_react(ctx.message, cmn.emojis.good)
     exit_code = 0  # Signals to the wrapper script that the bot should not be restarted.
     await bot.logout()
 
 
 @bot.group(name="extctl", hidden=True)
-@commands.check(check_if_owner)
+@commands.check(cmn.check_if_owner)
 async def _extctl(ctx: commands.Context):
     """Extension control commands.
     Defaults to `list` if no subcommand specified"""
@@ -101,7 +83,7 @@ async def _extctl_list(ctx: commands.Context):
 async def _extctl_load(ctx: commands.Context, extension: str):
     try:
         bot.load_extension(ext_dir + "." + extension)
-        await add_react(ctx.message, cmn.emojis.good)
+        await cmn.add_react(ctx.message, cmn.emojis.good)
     except commands.ExtensionError as ex:
         embed = cmn.error_embed_factory(ctx, ex, debug_mode)
         await ctx.send(embed=embed)
@@ -111,7 +93,7 @@ async def _extctl_load(ctx: commands.Context, extension: str):
 async def _extctl_reload(ctx: commands.Context, extension: str):
     try:
         bot.reload_extension(ext_dir + "." + extension)
-        await add_react(ctx.message, cmn.emojis.good)
+        await cmn.add_react(ctx.message, cmn.emojis.good)
     except commands.ExtensionError as ex:
         embed = cmn.error_embed_factory(ctx, ex, debug_mode)
         await ctx.send(embed=embed)
@@ -121,7 +103,7 @@ async def _extctl_reload(ctx: commands.Context, extension: str):
 async def _extctl_unload(ctx: commands.Context, extension: str):
     try:
         bot.unload_extension(ext_dir + "." + extension)
-        await add_react(ctx.message, cmn.emojis.good)
+        await cmn.add_react(ctx.message, cmn.emojis.good)
     except commands.ExtensionError as ex:
         embed = cmn.error_embed_factory(ctx, ex, debug_mode)
         await ctx.send(embed=embed)
