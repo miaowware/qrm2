@@ -150,7 +150,7 @@ async def _before_ensure_activity():
 # --- Run ---
 
 for ext in opt.exts:
-    bot.load_extension(extdir + '.' + ext)
+    bot.load_extension(ext_dir + '.' + ext)
 
 _ensure_activity.start()
 
