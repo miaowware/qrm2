@@ -1,5 +1,5 @@
 """
-Grid cog for qrm
+Grid extension for qrm
 ---
 Copyright (C) 2019 Abigail Gold, 0x5c
 
