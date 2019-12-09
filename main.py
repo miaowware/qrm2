@@ -45,6 +45,7 @@ async def _restart_bot(ctx: commands.Context):
     """Restarts the bot."""
     global exit_code
     await cmn.add_react(ctx.message, cmn.emojis.good)
+    print(f"[**] Restarting! Requested by {ctx.author}.")
     exit_code = 42  # Signals to the wrapper script that the bot needs to be restarted.
     await bot.logout()
 
@@ -55,6 +56,7 @@ async def _shutdown_bot(ctx: commands.Context):
     """Shuts down the bot."""
     global exit_code
     await cmn.add_react(ctx.message, cmn.emojis.good)
+    print(f"[**] Shutting down! Requested by {ctx.author}.")
     exit_code = 0  # Signals to the wrapper script that the bot should not be restarted.
     await bot.logout()
 
