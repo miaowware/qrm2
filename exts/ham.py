@@ -3,7 +3,7 @@ Ham extension for qrm
 ---
 Copyright (C) 2019 Abigail Gold, 0x5c
 
-This file is part of discord-qrmbot and is released under the terms of the GNU
+This file is part of discord-qrm2 and is released under the terms of the GNU
 General Public License, version 2.
 """
 import json

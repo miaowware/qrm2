@@ -3,7 +3,7 @@ Static info about the bot.
 ---
 Copyright (C) 2019 Abigail Gold, 0x5c
 
-This file is part of discord-qrmbot and is released under the terms of the GNU
+This file is part of discord-qrm2 and is released under the terms of the GNU
 General Public License, version 2.
 ---
 
@@ -23,5 +23,5 @@ General Public License, version 2.
 authors = ("@ClassAbbyAmplifier#2229", "@0x5c#0639")
 description = """A bot with various useful ham radio-related functions, written in Python."""
 license = "Released under the GNU General Public License v2"
-contributing = "Check out the source on GitHub, contributions welcome: https://github.com/classabbyamp/discord-qrm-bot"
+contributing = "Check out the source on GitHub, contributions welcome: https://github.com/classabbyamp/discord-qrm2"
 release = '1.0.0'

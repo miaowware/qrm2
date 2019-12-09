@@ -2,6 +2,6 @@ version: '3'
 services:
     bot:
         build: .
-        container_name: "qrmbot"
+        container_name: "discord-qrm2"
         volumes:
             - "./data:/app/data:rw"
