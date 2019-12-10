@@ -111,12 +111,7 @@ class BaseCog(commands.Cog):
     @commands.command(name="info", aliases=["about"])
     async def _info(self, ctx: commands.Context):
         """Shows info about qrm."""
-        embed = discord.Embed(title="About qrm",
-                              description=info.description,
-                              colour=cmn.colours.neutral,
-                              timestamp=datetime.utcnow())
-        embed.set_footer(text=ctx.author.name,
-                         icon_url=str(ctx.author.avatar_url))
+        embed = cmn.embed_factory(ctx, "About qrm", info.description, cmn.colours.neutral)
 
         embed = embed.add_field(name="Authors", value=", ".join(info.authors))
         embed = embed.add_field(name="License", value=info.license)
