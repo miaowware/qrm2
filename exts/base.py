@@ -50,24 +50,13 @@ class QrmHelpCommand(commands.HelpCommand):
         return f'{opt.prefix}{alias} {command.signature}'
 
     async def send_error_message(self, error):
-        embed = discord.Embed(title='qrm Help Error',
-                              description=error,
-                              colour=cmn.colours.bad,
-                              timestamp=datetime.utcnow()
-                              )
-        embed.set_footer(text=self.context.author.name,
-                         icon_url=str(self.context.author.avatar_url))
+        embed = cmn.embed_factory(self.context, 'qrm Help Error', error, cmn.colours.bad)
         await self.context.send(embed=embed)
 
     async def send_bot_help(self, mapping):
-        embed = discord.Embed(title='qrm Help',
-                              description=(f'For command-specific help and usage, use `{opt.prefix}help [command name]`'
-                                           '. Many commands have shorter aliases.'),
-                              colour=cmn.colours.neutral,
-                              timestamp=datetime.utcnow()
-                              )
-        embed.set_footer(text=self.context.author.name,
-                         icon_url=str(self.context.author.avatar_url))
+        description = (f'For command-specific help and usage, use `{opt.prefix}help [command name]`'
+                       '. Many commands have shorter aliases.')
+        embed = cmn.embed_factory(self.context, "qrm Help", description)
 
         for cat, cmds in mapping.items():
             cmds = list(filter(lambda x: not x.hidden, cmds))
@@ -81,23 +70,11 @@ class QrmHelpCommand(commands.HelpCommand):
         await self.context.send(embed=embed)
 
     async def send_command_help(self, command):
-        embed = discord.Embed(title=self.get_command_signature(command),
-                              description=command.help,
-                              colour=cmn.colours.neutral,
-                              timestamp=datetime.utcnow()
-                              )
-        embed.set_footer(text=self.context.author.name,
-                         icon_url=str(self.context.author.avatar_url))
+        embed = cmn.embed_factory(self.context, self.get_command_signature(command), command.help)
         await self.context.send(embed=embed)
 
     async def send_group_help(self, group):
-        embed = discord.Embed(title=self.get_command_signature(group),
-                              description=group.help,
-                              colour=cmn.colours.neutral,
-                              timestamp=datetime.utcnow()
-                              )
-        embed.set_footer(text=self.context.author.name,
-                         icon_url=str(self.context.author.avatar_url))
+        embed = cmn.embed_factory(self.context, self.get_command_signature(group), group.help)
         for cmd in group.commands:
             embed.add_field(name=self.get_command_signature(cmd), value=cmd.help, inline=False)
         await self.context.send(embed=embed)
@@ -111,7 +88,7 @@ class BaseCog(commands.Cog):
     @commands.command(name="info", aliases=["about"])
     async def _info(self, ctx: commands.Context):
         """Shows info about qrm."""
-        embed = cmn.embed_factory(ctx, "About qrm", info.description, cmn.colours.neutral)
+        embed = cmn.embed_factory(ctx, "About qrm", info.description)
 
         embed = embed.add_field(name="Authors", value=", ".join(info.authors))
         embed = embed.add_field(name="License", value=info.license)
@@ -124,28 +101,19 @@ class BaseCog(commands.Cog):
     async def _ping(self, ctx: commands.Context):
         """Show the current latency to the discord endpoint."""
         content = ctx.message.author.mention if random.random() < 0.05 else ''
-        embed = discord.Embed(title="**Pong!**",
-                              description=f'Current ping is {self.bot.latency*1000:.1f} ms',
-                              colour=cmn.colours.neutral,
-                              timestamp=datetime.utcnow())
-        embed.set_footer(text=ctx.author.name,
-                         icon_url=str(ctx.author.avatar_url))
+        ping = f'Current ping is {self.bot.latency*1000:.1f} ms'
+        embed = cmn.embed_factory(ctx, "**Pong!**", ping)
         await ctx.send(content=content, embed=embed)
 
     @commands.command(name="changelog", aliases=["clog"])
     async def _changelog(self, ctx: commands.Context):
         """Show what has changed in recent bot versions."""
-        embed = discord.Embed(title="qrm Changelog",
-                              description=("For a full listing, visit [Github](https://"
-                                           "github.com/classabbyamp/discord-qrm2/blob/master/CHANGELOG.md)."),
-                              colour=cmn.colours.neutral,
-                              timestamp=datetime.utcnow())
-        embed.set_footer(text=ctx.author.name,
-                         icon_url=str(ctx.author.avatar_url))
-        changelog = self.changelog
+        description = ("For a full listing, visit [Github](https://"
+                       "github.com/classabbyamp/discord-qrm2/blob/master/CHANGELOG.md).")
+        embed = cmn.embed_factory(ctx, "qrm Changelog", description)
 
         vers = 0
-        for ver, log in changelog.items():
+        for ver, log in self.changelog.items():
             if ver.lower() != 'unreleased':
                 if 'date' in log:
                     header = f'**{ver}** ({log["date"]})'
@@ -155,7 +123,6 @@ class BaseCog(commands.Cog):
                 vers += 1
             if vers >= 2:
                 break
-
         await ctx.send(embed=embed)
 
 

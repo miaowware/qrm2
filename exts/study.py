@@ -67,12 +67,7 @@ class StudyCog(commands.Cog):
             pool_questions = random.choice(pool_section)['questions']
             question = random.choice(pool_questions)
 
-            embed = discord.Embed(title=question['id'],
-                                  description=self.source,
-                                  colour=cmn.colours.good,
-                                  timestamp=datetime.utcnow())
-            embed.set_footer(text=ctx.author.name,
-                             icon_url=str(ctx.author.avatar_url))
+            embed = cmn.embed_factory(ctx, question['id'], self.source, cmn.colours.good)
             embed = embed.add_field(name='Question:', value=question['text'], inline=False)
             embed = embed.add_field(name='Answers:', value='**A:** ' + question['answers']['A'] +
                                     '\n**B:** ' + question['answers']['B'] +
@@ -97,25 +92,14 @@ class StudyCog(commands.Cog):
                 answer = answer.upper()
                 if answer == correct_ans:
                     result = f'Correct! The answer to {q_num} was **{correct_ans}**.'
-                    embed = discord.Embed(title=f'{q_num} Answer',
-                                          description=f'{self.source}\n\n{result}',
-                                          colour=cmn.colours.good,
-                                          timestamp=datetime.utcnow())
+                    embed = cmn.embed_factory(ctx, f'{q_num} Answer', f'{self.source}\n\n{result}', cmn.colours.good)
                 else:
                     result = f'Incorrect. The answer to {q_num} was **{correct_ans}**, not **{answer}**.'
-                    embed = discord.Embed(title=f'{q_num} Answer',
-                                          description=f'{self.source}\n\n{result}',
-                                          colour=cmn.colours.bad,
-                                          timestamp=datetime.utcnow())
+                    embed = cmn.embed_factory(ctx, f'{q_num} Answer', f'{self.source}\n\n{result}', cmn.colours.bad)
             else:
                 result = f'The correct answer to {q_num} was **{correct_ans}**.'
-                embed = discord.Embed(title=f'{q_num} Answer',
-                                      description=f'{self.source}\n\n{result}',
-                                      colour=cmn.colours.neutral,
-                                      timestamp=datetime.utcnow())
+                embed = cmn.embed_factory(ctx, f'{q_num} Answer', f'{self.source}\n\n{result}')
 
-        embed.set_footer(text=ctx.author.name,
-                         icon_url=str(ctx.author.avatar_url))
         await ctx.send(embed=embed)
 
 

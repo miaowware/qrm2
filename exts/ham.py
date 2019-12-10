@@ -31,15 +31,9 @@ class HamCog(commands.Cog):
         with ctx.typing():
             qcode = qcode.upper()
             if qcode in self.qcodes:
-                embed = discord.Embed(title=qcode, description=self.qcodes[qcode],
-                                      colour=cmn.colours.good,
-                                      timestamp=datetime.utcnow())
+                embed = cmn.embed_factory(ctx, qcode, self.qcodes[qcode], cmn.colours.good)
             else:
-                embed = discord.Embed(title=f'Q Code {qcode} not found',
-                                      colour=cmn.colours.bad,
-                                      timestamp=datetime.utcnow())
-            embed.set_footer(text=ctx.author.name,
-                             icon_url=str(ctx.author.avatar_url))
+                embed = cmn.embed_factory(ctx, f'Q Code {qcode} Not Found', "", cmn.colours.bad)
         await ctx.send(embed=embed)
 
     @commands.command(name="phonetics", aliases=['ph', 'phoneticize', 'phoneticise', 'phone'], category=cmn.cat.fun)
@@ -53,12 +47,7 @@ class HamCog(commands.Cog):
                 else:
                     result += char
                 result += ' '
-            embed = discord.Embed(title=f'Phonetics for {msg}',
-                                  description=result.title(),
-                                  colour=cmn.colours.good,
-                                  timestamp=datetime.utcnow())
-            embed.set_footer(text=ctx.author.name,
-                             icon_url=str(ctx.author.avatar_url))
+            embed = cmn.embed_factory(ctx, f'Phonetics for {msg}', result.title(), cmn.colours.good)
         await ctx.send(embed=embed)
 
     @commands.command(name="utc", aliases=['z'], category=cmn.cat.ref)
@@ -67,12 +56,7 @@ class HamCog(commands.Cog):
         with ctx.typing():
             now = datetime.utcnow()
             result = '**' + now.strftime('%Y-%m-%d %H:%M') + 'Z**'
-            embed = discord.Embed(title='The current time is:',
-                                  description=result,
-                                  colour=cmn.colours.good,
-                                  timestamp=datetime.utcnow())
-            embed.set_footer(text=ctx.author.name,
-                             icon_url=str(ctx.author.avatar_url))
+            embed = cmn.embed_factory(ctx, 'The current time is:', result, cmn.colours.good)
         await ctx.send(embed=embed)
 
     @commands.command(name="prefixes", aliases=["vanity", "pfx", "vanities", "prefix"])
@@ -82,24 +66,15 @@ class HamCog(commands.Cog):
             await ctx.send_help(ctx.command)
             return
         if country.lower() not in callsign_info.options:
-            embed = discord.Embed(title=f'{country} not found!',
-                                  description=f'Valid countries: {", ".join(callsign_info.options.keys())}',
-                                  colour=cmn.colours.bad,
-                                  timestamp=datetime.utcnow())
-            embed.set_footer(text=ctx.author.name,
-                             icon_url=str(ctx.author.avatar_url))
-            await ctx.send(embed=embed)
-            return
-        embed = discord.Embed(title=callsign_info.options[country.lower()][0],
-                              description=callsign_info.options[country.lower()][1],
-                              colour=cmn.colours.good,
-                              timestamp=datetime.utcnow())
-        embed.set_footer(text=ctx.author.name,
-                         icon_url=str(ctx.author.avatar_url))
+            embed = cmn.embed_factory(ctx, f'{country} Not Found!',
+                                      f'Valid countries: {", ".join(callsign_info.options.keys())}',
+                                      cmn.colours.bad)
+        else:
+            embed = cmn.embed_factory(ctx, callsign_info.options[country.lower()][0],
+                                      callsign_info.options[country.lower()][1], cmn.colours.good)
 
-        for name, val in callsign_info.options[country.lower()][2].items():
-            embed.add_field(name=name, value=val, inline=False)
-
+            for name, val in callsign_info.options[country.lower()][2].items():
+                embed.add_field(name=name, value=val, inline=False)
         await ctx.send(embed=embed)
 
 

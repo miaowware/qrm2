@@ -34,12 +34,7 @@ class MorseCog(commands.Cog):
                 except KeyError:
                     result += '<?>'
                 result += ' '
-            embed = discord.Embed(title=f'Morse Code for {msg}',
-                                  description=result,
-                                  colour=cmn.colours.good,
-                                  timestamp=datetime.utcnow())
-            embed.set_footer(text=ctx.author.name,
-                             icon_url=str(ctx.author.avatar_url))
+            embed = cmn.embed_factory(ctx, f'Morse Code for {msg}', result, cmn.colours.good)
         await ctx.send(embed=embed)
 
     @commands.command(name="unmorse", aliases=['demorse', 'uncw', 'decw'], category=cmn.cat.ref)
@@ -57,12 +52,7 @@ class MorseCog(commands.Cog):
                     except KeyError:
                         result += '<?>'
                 result += ' '
-            embed = discord.Embed(title=f'ASCII for {msg0}',
-                                  description=result,
-                                  colour=cmn.colours.good,
-                                  timestamp=datetime.utcnow())
-            embed.set_footer(text=ctx.author.name,
-                             icon_url=str(ctx.author.avatar_url))
+            embed = cmn.embed_factory(ctx, f'ASCII for {msg0}', result, cmn.colours.good)
         await ctx.send(embed=embed)
 
     @commands.command(name="cwweight", aliases=["weight", 'cww'], category=cmn.cat.ref)
@@ -80,12 +70,7 @@ class MorseCog(commands.Cog):
                     await ctx.send(res)
                     return
             res = f'The CW weight is **{weight}**'
-            embed = discord.Embed(title=f'CW Weight of {msg}',
-                                  description=res,
-                                  colour=cmn.colours.good,
-                                  timestamp=datetime.utcnow())
-            embed.set_footer(text=ctx.author.name,
-                             icon_url=str(ctx.author.avatar_url))
+            embed = cmn.embed_factory(ctx, f'CW Weight of {msg}', res, cmn.colours.good)
         await ctx.send(embed=embed)
 
 

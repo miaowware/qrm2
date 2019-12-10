@@ -62,59 +62,47 @@ class AE7QCog(commands.Cog):
             rows = None
 
         if rows is None:
-            embed = discord.Embed(title=f"AE7Q History for {callsign}",
-                                  colour=cmn.colours.bad,
-                                  url=f"{base_url}{callsign}",
-                                  timestamp=datetime.utcnow())
-            embed.set_footer(text=ctx.author.name,
-                             icon_url=str(ctx.author.avatar_url))
-            embed.description = desc
+            embed = cmn.embed_factory(ctx, f"AE7Q History for {callsign}", desc,
+                                      cmn.colours.bad, f"{base_url}{callsign}")
             embed.description += f'\nNo records found for `{callsign}`'
-            await ctx.send(embed=embed)
-            return
 
-        table_contents = []  # store your table here
-        for tr in rows:
-            if rows.index(tr) == 0:
-                continue
-            row_cells = []
-            for td in tr.find_all('td'):
-                if td.getText().strip() != '':
-                    row_cells.append(td.getText().strip())
-                else:
-                    row_cells.append('-')
-                if 'colspan' in td.attrs and int(td.attrs['colspan']) > 1:
-                    for i in range(int(td.attrs['colspan']) - 1):
-                        row_cells.append(row_cells[-1])
-            for i, cell in enumerate(row_cells):
-                if cell == '"':
-                    cell = table_contents[-1][i]
-            if len(row_cells) > 1:
-                table_contents += [row_cells]
+        else:
+            table_contents = []  # store your table here
+            for tr in rows:
+                if rows.index(tr) == 0:
+                    continue
+                row_cells = []
+                for td in tr.find_all('td'):
+                    if td.getText().strip() != '':
+                        row_cells.append(td.getText().strip())
+                    else:
+                        row_cells.append('-')
+                    if 'colspan' in td.attrs and int(td.attrs['colspan']) > 1:
+                        for i in range(int(td.attrs['colspan']) - 1):
+                            row_cells.append(row_cells[-1])
+                for i, cell in enumerate(row_cells):
+                    if cell == '"':
+                        cell = table_contents[-1][i]
+                if len(row_cells) > 1:
+                    table_contents += [row_cells]
 
-        embed = discord.Embed(title=f"AE7Q Records for {callsign}",
-                              colour=cmn.colours.good,
-                              url=f"{base_url}{callsign}",
-                              timestamp=datetime.utcnow())
+            embed = cmn.embed_factory(ctx, f"AE7Q History for {callsign}", desc,
+                                      cmn.colours.good, f"{base_url}{callsign}")
 
-        embed.set_footer(text=ctx.author.name,
-                         icon_url=str(ctx.author.avatar_url))
+            for row in table_contents[0:3]:
+                header = f'**{row[0]}** ({row[1]})'
+                body = f'Class: *{row[2]}*\n'
+                body += f'Region: *{row[3]}*\n'
+                body += f'Status: *{row[4]}*\n'
+                body += f'Granted: *{row[5]}*\n'
+                body += f'Effective: *{row[6]}*\n'
+                body += f'Cancelled: *{row[7]}*\n'
+                body += f'Expires: *{row[8]}*'
+                embed.add_field(name=header, value=body, inline=False)
 
-        for row in table_contents[0:3]:
-            header = f'**{row[0]}** ({row[1]})'
-            body = f'Class: *{row[2]}*\n'
-            body += f'Region: *{row[3]}*\n'
-            body += f'Status: *{row[4]}*\n'
-            body += f'Granted: *{row[5]}*\n'
-            body += f'Effective: *{row[6]}*\n'
-            body += f'Cancelled: *{row[7]}*\n'
-            body += f'Expires: *{row[8]}*'
-            embed.add_field(name=header, value=body, inline=False)
-
-        embed.description = desc
-        if len(table_contents) > 3:
-            embed.description += f'\nRecords 1 to 3 of {len(table_contents)}.'
-            embed.description += ' See ae7q.com for more...'
+            if len(table_contents) > 3:
+                embed.description += f'\nRecords 1 to 3 of {len(table_contents)}.'
+                embed.description += f' [Visit ae7q.com]({base_url}{callsign}) for more...'
 
         await ctx.send(embed=embed)
 

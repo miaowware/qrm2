@@ -48,12 +48,14 @@ emojis = SimpleNamespace(good='✅',
 # --- Helper functions ---
 
 
-def embed_factory(ctx: commands.Context, title: str, desc: str, colour: Union[discord.Colour, int]) -> discord.Embed:
+def embed_factory(ctx: commands.Context, title: str, desc: str,
+                  colour: Union[discord.Colour, int] = colours.neutral, url: str = "") -> discord.Embed:
     """Creates an embed"""
     embed = discord.Embed(title=title,
                           description=desc,
                           timestamp=datetime.utcnow(),
-                          colour=colour)
+                          colour=colour,
+                          url=url)
     embed.set_footer(text=ctx.author,
                      icon_url=str(ctx.author.avatar_url))
     return embed

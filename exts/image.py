@@ -37,23 +37,13 @@ class ImageCog(commands.Cog):
                 desc = 'Possible arguments are:\n'
                 for abbrev, title in name.items():
                     desc += f'`{abbrev}`: {title}\n'
-                embed = discord.Embed(title=f'Bandplan Not Found!',
-                                      description=desc,
-                                      colour=cmn.colours.bad,
-                                      timestamp=datetime.utcnow())
-                embed.set_footer(text=ctx.author.name,
-                                 icon_url=str(ctx.author.avatar_url))
+                embed = cmn.embed_factory(ctx, 'Bandplan Not Found!', desc, cmn.colours.bad)
                 await ctx.send(embed=embed)
             else:
                 img = discord.File(f"resources/images/bandchart/{arg}bandchart.png",
                                    filename=f'{arg}bandchart.png')
-                embed = discord.Embed(title=f'{name[arg]} Amateur Radio Bands',
-                                      colour=cmn.colours.good,
-                                      timestamp=datetime.utcnow())
+                embed = cmn.embed_factory(ctx, f'{name[arg]} Amateur Radio Bands', "", colour=cmn.colours.good)
                 embed.set_image(url=f'attachment://{arg}bandchart.png')
-                embed.set_footer(text=ctx.author.name,
-                                 icon_url=str(ctx.author.avatar_url))
-
                 await ctx.send(embed=embed, file=img)
 
     @commands.command(name="grayline", aliases=['greyline', 'grey', 'gray', 'gl'], category=cmn.cat.maps)
@@ -62,9 +52,7 @@ class ImageCog(commands.Cog):
         gl_url = ('http://www.fourmilab.ch/cgi-bin/uncgi/Earth?img=NOAAtopo.evif'
                   '&imgsize=320&dynimg=y&opt=-p&lat=&lon=&alt=&tle=&date=0&utc=&jd=')
         with ctx.typing():
-            embed = discord.Embed(title='Current Greyline Conditions',
-                                  colour=cmn.colours.good,
-                                  timestamp=datetime.utcnow())
+            embed = cmn.embed_factory(ctx, 'Current Greyline Conditions', '', colour=cmn.colours.good)
             async with aiohttp.ClientSession() as session:
                 async with session.get(gl_url) as resp:
                     if resp.status != 200:
@@ -73,8 +61,6 @@ class ImageCog(commands.Cog):
                     else:
                         data = io.BytesIO(await resp.read())
                         embed.set_image(url=f'attachment://greyline.jpg')
-            embed.set_footer(text=ctx.author.name,
-                             icon_url=str(ctx.author.avatar_url))
         await ctx.send(embed=embed, file=discord.File(data, 'greyline.jpg'))
 
     @commands.command(name="map", category=cmn.cat.maps)
@@ -93,23 +79,13 @@ class ImageCog(commands.Cog):
                 desc = 'Possible arguments are:\n'
                 for abbrev, title in map_titles.items():
                     desc += f'`{abbrev}`: {title}\n'
-                embed = discord.Embed(title=f'Map Not Found!',
-                                      description=desc,
-                                      colour=cmn.colours.bad,
-                                      timestamp=datetime.utcnow())
-                embed.set_footer(text=ctx.author.name,
-                                 icon_url=str(ctx.author.avatar_url))
+                embed = cmn.embed_factory(ctx, f'Map Not Found!', desc, cmn.colours.bad)
                 await ctx.send(embed=embed)
             else:
                 img = discord.File(f"resources/images/map/{arg}map.png",
                                    filename=f'{arg}map.png')
-                embed = discord.Embed(title=f'{map_titles[arg]} Map',
-                                      colour=cmn.colours.good,
-                                      timestamp=datetime.utcnow())
+                embed = cmn.embed_factory(ctx, f'{map_titles[arg]} Map', "", cmn.colours.good)
                 embed.set_image(url=f'attachment://{arg}map.png')
-                embed.set_footer(text=ctx.author.name,
-                                 icon_url=str(ctx.author.avatar_url))
-
                 await ctx.send(embed=embed, file=img)
 
 
