@@ -8,9 +8,7 @@ General Public License, version 2.
 """
 
 import math
-from datetime import datetime
 
-import discord
 import discord.ext.commands as commands
 
 import common as cmn
@@ -38,7 +36,7 @@ with negative being latitude South and longitude West.'''
                     grid += chr(ord('a') + int((lonf - (int(lonf/2)*2)) / (5/60)))
                     grid += chr(ord('a') + int((latf - (int(latf/1)*1)) / (2.5/60)))
                     grid += "**"
-                    title=f'Maidenhead Grid Locator for {float(lat):.6f}, {float(lon):.6f}'
+                    title = f'Maidenhead Grid Locator for {float(lat):.6f}, {float(lon):.6f}'
                     embed = cmn.embed_factory(ctx, title, grid, cmn.colours.good)
                 else:
                     raise ValueError('Out of range.')

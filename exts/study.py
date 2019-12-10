@@ -9,9 +9,7 @@ General Public License, version 2.
 
 import random
 import json
-from datetime import datetime
 
-import discord
 import discord.ext.commands as commands
 
 import aiohttp

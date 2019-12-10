@@ -8,7 +8,6 @@ General Public License, version 2.
 """
 
 import io
-from datetime import datetime
 import re
 
 import discord
