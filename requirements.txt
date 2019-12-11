@@ -1,3 +1,4 @@
 discord.py
+ctyparser
 beautifulsoup4
 lxml
