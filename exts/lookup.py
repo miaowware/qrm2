@@ -68,7 +68,7 @@ class LookupCog(commands.Cog):
                 else:
                     query = query[:-1]
             else:
-                embed.title += f'{full_query} not found'
+                embed.title += full_query + ' not found'
                 embed.colour = cmn.colours.bad
         await ctx.send(embed=embed)
 
