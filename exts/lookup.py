@@ -46,40 +46,34 @@ class LookupCog(commands.Cog):
             noMatch = True
             queryMatch = None
             query = query.upper()
-            if query != 'LAST_UPDATED':
-                embed = discord.Embed(title=f'DXCC Info for {query}',
-                                      timestamp=datetime.utcnow())
-                embed.set_footer(text=f'{ctx.author.name} | Last Updated: {self.CTY.formatted_version}',
-                                 icon_url=str(ctx.author.avatar_url))
-                embed.description = f'Prefix {query} not found'
-                embed.colour = cmn.colours.bad
-                while noMatch:
-                    if query in self.CTY.keys():
-                        queryMatch = query
+            embed = discord.Embed(title=f'DXCC Info for {query} not found',
+                                  timestamp=datetime.utcnow())
+            embed.set_footer(text=f'{ctx.author.name}',
+                             icon_url=str(ctx.author.avatar_url))
+            embed.description = f'*Last Updated: {self.CTY.formatted_version}*'
+            embed.colour = cmn.colours.bad
+            while noMatch:
+                if query in self.CTY.keys():
+                    queryMatch = query
+                    noMatch = False
+                else:
+                    query = query[:-1]
+                    if len(query) == 0:
                         noMatch = False
-                    else:
-                        query = query[:-1]
-                        if len(query) == 0:
-                            noMatch = False
-                    if queryMatch is not None:
-                        data = self.CTY[queryMatch]
-                        embed = embed.add_field(name="Entity",
-                                                value=data['entity'])\
-                                     .add_field(name="CQ Zone",
-                                                value=data['cq'])\
-                                     .add_field(name="ITU Zone",
-                                                value=data['itu'])\
-                                     .add_field(name="Continent",
-                                                value=data['continent'])\
-                                     .add_field(name="Time Zone",
-                                                value=f'+{data["tz"]}' if data['tz'] > 0 else str(data['tz']))
-                        embed.description = ''
-                        embed.colour = cmn.colours.good
-            else:
-                result = f'CTY.DAT last updated on {self.CTY.formatted_version}'
-                embed = discord.Embed(title=result, colour=cmn.colours.neutral)
-                embed.set_footer(text=f'{ctx.author.name}',
-                                 icon_url=str(ctx.author.avatar_url))
+                if queryMatch is not None:
+                    data = self.CTY[queryMatch]
+                    embed.add_field(name="Entity",
+                                    value=data['entity'])\
+                         .add_field(name="CQ Zone",
+                                    value=data['cq'])\
+                         .add_field(name="ITU Zone",
+                                    value=data['itu'])\
+                         .add_field(name="Continent",
+                                    value=data['continent'])\
+                         .add_field(name="Time Zone",
+                                    value=f'+{data["tz"]}' if data['tz'] > 0 else str(data['tz']))
+                    embed.title = f'DXCC Info for {query}'
+                    embed.colour = cmn.colours.good
         await ctx.send(embed=embed)
 
     @tasks.loop(hours=24)

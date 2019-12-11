@@ -1,6 +1,4 @@
 discord.py
-feedparser
-requests
 ctyparser
 beautifulsoup4
 lxml
