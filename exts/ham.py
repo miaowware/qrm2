@@ -1,9 +1,9 @@
 """
-Ham cog for qrm
+Ham extension for qrm
 ---
 Copyright (C) 2019 Abigail Gold, 0x5c
 
-This file is part of discord-qrmbot and is released under the terms of the GNU
+This file is part of discord-qrm2 and is released under the terms of the GNU
 General Public License, version 2.
 """
 import json
@@ -84,7 +84,7 @@ class HamCog(commands.Cog):
         if country.lower() not in callsign_info.options:
             embed = discord.Embed(title=f'{country} not found!',
                                   description=f'Valid countries: {", ".join(callsign_info.options.keys())}',
-                                  colour=self.gs.colours.bad,
+                                  colour=cmn.colours.bad,
                                   timestamp=datetime.utcnow())
             embed.set_footer(text=ctx.author.name,
                              icon_url=str(ctx.author.avatar_url))
@@ -92,7 +92,7 @@ class HamCog(commands.Cog):
             return
         embed = discord.Embed(title=callsign_info.options[country.lower()][0],
                               description=callsign_info.options[country.lower()][1],
-                              colour=self.gs.colours.good,
+                              colour=cmn.colours.good,
                               timestamp=datetime.utcnow())
         embed.set_footer(text=ctx.author.name,
                          icon_url=str(ctx.author.avatar_url))

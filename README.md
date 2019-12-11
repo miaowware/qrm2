@@ -1,4 +1,4 @@
-# Discord QRM Bot
+# qrm, a Bot for Discord
 
 A discord bot with ham radio functionalities.
 

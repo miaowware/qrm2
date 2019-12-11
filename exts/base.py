@@ -1,9 +1,9 @@
 """
-Base cog for qrm
+Base extension for qrm
 ---
 Copyright (C) 2019 Abigail Gold, 0x5c
 
-This file is part of discord-qrmbot and is released under the terms of the GNU
+This file is part of discord-qrm2 and is released under the terms of the GNU
 General Public License, version 2.
 """
 
@@ -17,7 +17,7 @@ import discord.ext.commands as commands
 
 import info
 
-from data import options as opt
+import data.options as opt
 import common as cmn
 
 
@@ -142,7 +142,7 @@ class BaseCog(commands.Cog):
         """Show what has changed in recent bot versions."""
         embed = discord.Embed(title="qrm Changelog",
                               description=("For a full listing, visit [Github](https://"
-                                           "github.com/classabbyamp/discord-qrm-bot/blob/master/CHANGELOG.md)."),
+                                           "github.com/classabbyamp/discord-qrm2/blob/master/CHANGELOG.md)."),
                               colour=cmn.colours.neutral,
                               timestamp=datetime.utcnow())
         embed.set_footer(text=ctx.author.name,

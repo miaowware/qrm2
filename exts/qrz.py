@@ -1,9 +1,9 @@
 """
-QRZ cog for qrm
+QRZ extension for qrm
 ---
 Copyright (C) 2019 Abigail Gold, 0x5c
 
-This file is part of discord-qrmbot and is released under the terms of the GNU
+This file is part of discord-qrm2 and is released under the terms of the GNU
 General Public License, version 2.
 """
 from collections import OrderedDict
@@ -17,7 +17,7 @@ import aiohttp
 from lxml import etree
 
 import common as cmn
-import keys
+import data.keys as keys
 
 
 class QRZCog(commands.Cog):
@@ -101,7 +101,7 @@ class QRZCog(commands.Cog):
 
 
 async def qrz_login(user: str, passwd: str, session: aiohttp.ClientSession):
-    url = f'http://xmldata.qrz.com/xml/current/?username={user};password={passwd};agent=qrmbot'
+    url = f'http://xmldata.qrz.com/xml/current/?username={user};password={passwd};agent=discord-qrm2'
     async with session.get(url) as resp:
         if resp.status != 200:
             raise ConnectionError(f'Unable to connect to QRZ (HTTP Error {resp.status})')
