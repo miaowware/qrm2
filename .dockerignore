@@ -1,11 +1,12 @@
-data/
-templates/data/
-.github/
+/data/
+/templates/data/
 
+.github/
+.git/
+/*env/
 .flake8
 .gitignore
 
-Dockerfile
 docker-compose.yml
 Makefile
 
