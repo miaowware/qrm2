@@ -55,7 +55,7 @@ def error_embed_factory(ctx: commands.Context, exception: Exception, debug_mode:
     embed = discord.Embed(title="Error",
                           timestamp=datetime.utcnow(),
                           colour=colours.bad)
-    embed.set_footer(text=ctx.author,
+    embed.set_footer(text=ctx.author.name,
                      icon_url=str(ctx.author.avatar_url))
     embed.description = "```\n" + '\n'.join(fmtd_ex) + "```"
     return embed
