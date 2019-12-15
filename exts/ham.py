@@ -102,6 +102,18 @@ class HamCog(commands.Cog):
 
         await ctx.send(embed=embed)
 
+    @commands.command(name="contests", aliases=["cc", "tests"], category=cmn.cat.ref)
+    async def _contests(self, ctx: commands.Context):
+        embed = discord.Embed(title="Contest Calendar",
+                              timestamp=datetime.utcnow(),
+                              colour=cmn.colours.good)
+        embed.set_footer(text=ctx.author.name,
+                         icon_url=str(ctx.author.avatar_url))
+
+        embed.description = ("*We are currently rewriting the old, Chrome-based `contests` command. In the meantime, "
+                             "use [the website](https://www.contestcalendar.com/weeklycont.php).*")
+        await ctx.send(embed=embed)
+
 
 def setup(bot: commands.Bot):
     bot.add_cog(HamCog(bot))
