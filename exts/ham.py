@@ -75,7 +75,7 @@ class HamCog(commands.Cog):
                              icon_url=str(ctx.author.avatar_url))
         await ctx.send(embed=embed)
 
-    @commands.command(name="prefixes", aliases=["vanity", "pfx", "vanities", "prefix"], category=cmn.cat.ref)
+    @commands.command(name="prefixes", aliases=["vanity", "pfx", "vanities", "prefix"])
     async def _vanity_prefixes(self, ctx: commands.Context, country: str = None):
         '''Lists valid prefixes for countries.'''
         if country is None:
