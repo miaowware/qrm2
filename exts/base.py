@@ -183,7 +183,8 @@ def parse_changelog():
                 heading = line.lstrip('#').strip()
                 changelog[ver][heading] = []
             elif ver != '' and heading != '':
-                changelog[ver][heading].append(line.lstrip('-').strip())
+                if line.startswith('-'):
+                    changelog[ver][heading].append(line.lstrip('-').strip())
     return changelog
 
 
