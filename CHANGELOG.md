@@ -31,5 +31,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleaned up code to comply with the PEP8 Standard
 - Issue in morse and unmorse commands where spaces were not interpreted correctly
 
+## v1.0.0 - 2019-07-31 [YANKED]
+
 [Unreleased]: https://github.com/classabbyamp/discord-qrm2/compare/v2.0.0...HEAD
 [v2.0.0]: https://github.com/classabbyamp/discord-qrm2/releases/tag/v2.0.0

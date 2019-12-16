@@ -175,10 +175,11 @@ def parse_changelog():
                 continue
             if re.match(r'##[^#]', line):
                 ver_match = re.match(r'\[(.+)\](?: - )?(\d{4}-\d{2}-\d{2})?', line.lstrip('#').strip())
-                ver = ver_match.group(1)
-                changelog[ver] = dict()
-                if ver_match.group(2):
-                    changelog[ver]['date'] = ver_match.group(2)
+                if ver_match is not None:
+                    ver = ver_match.group(1)
+                    changelog[ver] = dict()
+                    if ver_match.group(2):
+                        changelog[ver]['date'] = ver_match.group(2)
             elif re.match(r'###[^#]', line):
                 heading = line.lstrip('#').strip()
                 changelog[ver][heading] = []
