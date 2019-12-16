@@ -7,10 +7,8 @@ This file is part of discord-qrm2 and is released under the terms of the GNU
 General Public License, version 2.
 """
 from collections import OrderedDict
-from datetime import datetime
 from io import BytesIO
 
-import discord
 from discord.ext import commands, tasks
 
 import aiohttp

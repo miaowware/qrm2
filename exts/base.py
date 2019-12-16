@@ -7,7 +7,6 @@ This file is part of discord-qrm2 and is released under the terms of the GNU
 General Public License, version 2.
 """
 
-from datetime import datetime
 import re
 from collections import OrderedDict
 import random

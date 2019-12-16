@@ -13,9 +13,6 @@ KE8FGB: assigned once, no restrictions
 NA2AAA: unassigned, no records
 """
 
-from datetime import datetime
-
-import discord
 import discord.ext.commands as commands
 
 from bs4 import BeautifulSoup
