@@ -20,13 +20,11 @@ us_calls = OrderedDict([('**Group A** (Extra Only)', ('**Any:** K, N, W (1x2)\n'
                                                       '**Alaska:** AL, KL, NL, WL (2x1)\n'
                                                       '**Caribbean:** KP, NP, WP (2x1)\n'
                                                       '**Pacific:** AH, KH, NH, WH (2x1)')),
-                        ('**Group B** (Advanced and Extra Only)', ('**Any:** K, N, W (1x2)\n'
-                                                                   '    AA-AL, KA-KZ, NA-NZ, WA-WZ (2x1)\n'
-                                                                   '    AA-AL (2x2)\n'
+                        ('**Group B** (Advanced and Extra Only)', ('**Any:** KA-KZ, NA-NZ, WA-WZ (2x2)\n'
                                                                    '*Except*\n'
-                                                                   '**Alaska:** AL, KL, NL, WL (2x1)\n'
-                                                                   '**Caribbean:** KP, NP, WP (2x1)\n'
-                                                                   '**Pacific:** AH, KH, NH, WH (2x1)')),
+                                                                   '**Alaska:** AL (2x2)\n'
+                                                                   '**Caribbean:** KP (2x2)\n'
+                                                                   '**Pacific:** AH (2x2)')),
                         ('**Group C** (Technician, General, Advanced, Extra Only)', ('**Any Region:** K, N, W (1x3)\n'
                                                                                      '*Except*\n'
                                                                                      '**Alaska:** KL, NL, WL (2x2)\n'
@@ -48,10 +46,10 @@ us_calls = OrderedDict([('**Group A** (Extra Only)', ('**Any:** K, N, W (1x2)\n'
                                              'now Republic of the Marshall Islands (V73)\n'
                                              '- Any suffix SOS or QRA-QUZ\n'
                                              '- Any 2x3 with X as the first suffix letter\n'
-                                             '- Any 2x3 with AF, KF, NF, or WF prefix and suffix EMA\n'
-                                             '- Any 2x3 with AA-AL, NA-NZ, WC, WK, WM, WR, or WT prefix\n'
+                                             '- Any 2x3 with AF, KF, NF, or WF prefix and suffix EMA: FEMA\n'
+                                             '- Any 2x3 with AA-AL, NA-NZ, WC, WK, WM, WR, or WT prefix: "Group X"\n'
                                              '- Any 2x1, 2x2, or 2x3 with KP, NP, WP prefix and 0, 6, 7, 8, 9 number\n'
-                                             '- Any 1x1 callsign'))])
+                                             '- Any 1x1 callsign: Special Event'))])
 
 # format: country: (title, description, text)
 options = {'us': (us_calls_title, us_calls_desc, us_calls)}
