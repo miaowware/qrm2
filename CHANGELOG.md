@@ -3,10 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [v2.0.0] - 2019-12-15
+## [Unreleased](https://github.com/classabbyamp/discord-qrm2/compare/v2.0.0...HEAD)
+## [v2.0.0](https://github.com/classabbyamp/discord-qrm2/releases/tag/v2.0.0) - 2019-12-16
 ### Added
-- Global info, secrets, and options are now stored in their own files, using [0x5c/quick-bot-no-pain](https://github.com/0x5c/quick-bot-no-pain)
-- Common functions, checks, and data are now stored in their own file
+- Global info, secrets, and options are now stored in their own files, based on [0x5c/quick-bot-no-pain](https://github.com/0x5c/quick-bot-no-pain)
 - Rich lookup for AE7Q.com (callsigns only, more to come)
 - Rich lookup for QRZ.com, if a QRZ subscription is present
 - Timestamp and requester username and avatar are now shown on embeds
