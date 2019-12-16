@@ -6,7 +6,7 @@ An independent rewrite of qrmbot-discord.
 
 ## Running
 
-### Docker
+### With Docker
 
 See [README-DOCKER.md](./README-DOCKER.md)
 
@@ -30,4 +30,3 @@ Copyright (C) 2019 Abigail Gold, 0x5c
 
 This program is released under the terms of the GNU General Public License,
 version 2. See `COPYING` for full license text.
-
