@@ -139,7 +139,7 @@ class BaseCog(commands.Cog):
 
     @commands.command(name="changelog", aliases=["clog"])
     async def _changelog(self, ctx: commands.Context):
-        """Show what has changed in recent bot versions."""
+        """Show what has changed in the most recent bot version."""
         embed = discord.Embed(title="qrm Changelog",
                               description=("For a full listing, visit [Github](https://"
                                            "github.com/classabbyamp/discord-qrm2/blob/master/CHANGELOG.md)."),
@@ -153,12 +153,12 @@ class BaseCog(commands.Cog):
         for ver, log in changelog.items():
             if ver.lower() != 'unreleased':
                 if 'date' in log:
-                    header = f'**{ver}** ({log["date"]})'
+                    embed.description += f'\n\n**{ver}** ({log["date"]})'
                 else:
-                    header = f'**{ver}**'
-                embed.add_field(name=header, value=await format_changelog(log), inline=False)
+                    embed.description += f'\n\n**{ver}**'
+                embed = await format_changelog(log, embed)
                 vers += 1
-            if vers >= 2:
+            if vers >= 1:
                 break
 
         await ctx.send(embed=embed)
@@ -187,14 +187,14 @@ def parse_changelog():
     return changelog
 
 
-async def format_changelog(log: dict):
-    formatted = ''
+async def format_changelog(log: dict, embed: discord.Embed):
     for header, lines in log.items():
+        formatted = ''
         if header != 'date':
-            formatted += f'**{header}**\n'
             for line in lines:
                 formatted += f'- {line}\n'
-    return formatted
+            embed.add_field(name=f'**{header}**', value=formatted, inline=False)
+    return embed
 
 
 def setup(bot: commands.Bot):
