@@ -109,6 +109,6 @@ This methods is not very nice to use.
     $ docker run -d --rm --mount type=bind,src=$(pwd)/data,dst=/app/data --name qrm2 [image]
     ```
 
-    Whereas `[image]` is either of:
+    Where `[image]` is either of:
     - `discord-qrm2:local-latest` if you are building your own.
     - `classabbyamp/discord-qrm2:latest` if you want to use the prebuilt image.
