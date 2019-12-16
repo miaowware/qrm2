@@ -74,9 +74,8 @@ async def _extctl(ctx: commands.Context):
 @_extctl.command(name="list")
 async def _extctl_list(ctx: commands.Context):
     """Lists Extensions."""
-    embed = discord.Embed(title="Loaded Extensions",
-                          colour=cmn.colours.neutral,
-                          timestamp=datetime.utcnow())
+    embed = cmn.embed_factory(ctx)
+    embed.title = "Loaded Extensions"
     embed.description = "\n".join(["‣ " + x.split(".")[1] for x in bot.extensions.keys()])
     await ctx.send(embed=embed)
 

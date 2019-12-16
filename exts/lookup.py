@@ -43,10 +43,8 @@ class LookupCog(commands.Cog):
         with ctx.typing():
             query = query.upper()
             full_query = query
-            embed = discord.Embed(title=f'DXCC Info for ',
-                                  timestamp=datetime.utcnow())
-            embed.set_footer(text=f'{ctx.author.name}',
-                             icon_url=str(ctx.author.avatar_url))
+            embed = cmn.embed_factory(ctx)
+            embed.title = f'DXCC Info for '
             embed.description = f'*Last Updated: {self.cty.formatted_version}*'
             embed.colour = cmn.colours.bad
             while query:

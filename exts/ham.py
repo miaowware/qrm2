@@ -30,16 +30,14 @@ class HamCog(commands.Cog):
         '''Look up a Q Code.'''
         with ctx.typing():
             qcode = qcode.upper()
+            embed = cmn.embed_factory(ctx)
             if qcode in self.qcodes:
-                embed = discord.Embed(title=qcode, description=self.qcodes[qcode],
-                                      colour=cmn.colours.good,
-                                      timestamp=datetime.utcnow())
+                embed.title = qcode
+                embed.description = self.qcodes[qcode]
+                embed.colour = cmn.colours.good
             else:
-                embed = discord.Embed(title=f'Q Code {qcode} not found',
-                                      colour=cmn.colours.bad,
-                                      timestamp=datetime.utcnow())
-            embed.set_footer(text=ctx.author.name,
-                             icon_url=str(ctx.author.avatar_url))
+                embed.title = f'Q Code {qcode} not found'
+                embed.colour = cmn.colours.bad
         await ctx.send(embed=embed)
 
     @commands.command(name="phonetics", aliases=['ph', 'phoneticize', 'phoneticise', 'phone'], category=cmn.cat.fun)
@@ -53,12 +51,10 @@ class HamCog(commands.Cog):
                 else:
                     result += char
                 result += ' '
-            embed = discord.Embed(title=f'Phonetics for {msg}',
-                                  description=result.title(),
-                                  colour=cmn.colours.good,
-                                  timestamp=datetime.utcnow())
-            embed.set_footer(text=ctx.author.name,
-                             icon_url=str(ctx.author.avatar_url))
+            embed = cmn.embed_factory(ctx)
+            embed.title = f'Phonetics for {msg}'
+            embed.description = result.title()
+            embed.colour = cmn.colours.good
         await ctx.send(embed=embed)
 
     @commands.command(name="utc", aliases=['z'], category=cmn.cat.ref)
@@ -67,12 +63,10 @@ class HamCog(commands.Cog):
         with ctx.typing():
             now = datetime.utcnow()
             result = '**' + now.strftime('%Y-%m-%d %H:%M') + 'Z**'
-            embed = discord.Embed(title='The current time is:',
-                                  description=result,
-                                  colour=cmn.colours.good,
-                                  timestamp=datetime.utcnow())
-            embed.set_footer(text=ctx.author.name,
-                             icon_url=str(ctx.author.avatar_url))
+            embed = cmn.embed_factory(ctx)
+            embed.title = 'The current time is:'
+            embed.description = result
+            embed.colour = cmn.colours.good
         await ctx.send(embed=embed)
 
     @commands.command(name="prefixes", aliases=["vanity", "pfx", "vanities", "prefix"])
@@ -81,37 +75,27 @@ class HamCog(commands.Cog):
         if country is None:
             await ctx.send_help(ctx.command)
             return
+        embed = cmn.embed_factory(ctx)
         if country.lower() not in callsign_info.options:
-            embed = discord.Embed(title=f'{country} not found!',
-                                  description=f'Valid countries: {", ".join(callsign_info.options.keys())}',
-                                  colour=cmn.colours.bad,
-                                  timestamp=datetime.utcnow())
-            embed.set_footer(text=ctx.author.name,
-                             icon_url=str(ctx.author.avatar_url))
-            await ctx.send(embed=embed)
-            return
-        embed = discord.Embed(title=callsign_info.options[country.lower()][0],
-                              description=callsign_info.options[country.lower()][1],
-                              colour=cmn.colours.good,
-                              timestamp=datetime.utcnow())
-        embed.set_footer(text=ctx.author.name,
-                         icon_url=str(ctx.author.avatar_url))
+            embed.title = f'{country} not found!',
+            embed.description = f'Valid countries: {", ".join(callsign_info.options.keys())}',
+            embed.colour = cmn.colours.bad
+        else:
+            embed.title = callsign_info.options[country.lower()][0]
+            embed.description = callsign_info.options[country.lower()][1]
+            embed.colour = cmn.colours.good
 
-        for name, val in callsign_info.options[country.lower()][2].items():
-            embed.add_field(name=name, value=val, inline=False)
-
+            for name, val in callsign_info.options[country.lower()][2].items():
+                embed.add_field(name=name, value=val, inline=False)
         await ctx.send(embed=embed)
 
     @commands.command(name="contests", aliases=["cc", "tests"], category=cmn.cat.ref)
     async def _contests(self, ctx: commands.Context):
-        embed = discord.Embed(title="Contest Calendar",
-                              timestamp=datetime.utcnow(),
-                              colour=cmn.colours.good)
-        embed.set_footer(text=ctx.author.name,
-                         icon_url=str(ctx.author.avatar_url))
-
+        embed = cmn.embed_factory(ctx)
+        embed.title = "Contest Calendar"
         embed.description = ("*We are currently rewriting the old, Chrome-based `contests` command. In the meantime, "
                              "use [the website](https://www.contestcalendar.com/weeklycont.php).*")
+        embed.colour = cmn.colours.good
         await ctx.send(embed=embed)
 
 

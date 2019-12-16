@@ -53,12 +53,10 @@ class QRZCog(commands.Cog):
                 await self._qrz_lookup(ctx, callsign)
                 return
             if 'Not found' in resp_session['Error']:
-                embed = discord.Embed(title=f"QRZ Data for {callsign.upper()}",
-                                      colour=cmn.colours.bad,
-                                      description='No data found!',
-                                      timestamp=datetime.utcnow())
-                embed.set_footer(text=ctx.author.name,
-                                 icon_url=str(ctx.author.avatar_url))
+                embed = cmn.embed_factory(ctx)
+                embed.title = f"QRZ Data for {callsign.upper()}"
+                embed.colour = cmn.colours.bad
+                embed.description = 'No data found!'
                 await ctx.send(embed=embed)
                 return
             raise ValueError(resp_session['Error'])
@@ -67,12 +65,10 @@ class QRZCog(commands.Cog):
                                        namespaces={'x': 'http://xmldata.qrz.com'})
         resp_data = {el.tag.split('}')[1]: el.text for el in resp_xml_data[0].getiterator()}
 
-        embed = discord.Embed(title=f"QRZ Data for {resp_data['call']}",
-                              colour=cmn.colours.good,
-                              url=f'http://www.qrz.com/db/{resp_data["call"]}',
-                              timestamp=datetime.utcnow())
-        embed.set_footer(text=ctx.author.name,
-                         icon_url=str(ctx.author.avatar_url))
+        embed = cmn.embed_factory(ctx)
+        embed.title = f"QRZ Data for {resp_data['call']}"
+        embed.colour = cmn.colours.good
+        embed.url = f'http://www.qrz.com/db/{resp_data["call"]}'
         if 'image' in resp_data:
             embed.set_thumbnail(url=resp_data['image'])
 

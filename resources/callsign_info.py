@@ -11,7 +11,7 @@ from collections import OrderedDict
 
 
 us_calls_title = "Valid US Vanity Callsigns"
-us_calls_desc = ('#x# is the number of letters in the prefix and suffix of a callsign.'
+us_calls_desc = ('#x# is the number of letters in the prefix and suffix of a callsign. '
                  'E.g., WY4RC would be a 2x2 callsign, with prefix WY and suffix RC.')
 us_calls = OrderedDict([('**Group A** (Extra Only)', ('**Any:** K, N, W (1x2)\n'
                                                       '    AA-AL, KA-KZ, NA-NZ, WA-WZ (2x1)\n'
