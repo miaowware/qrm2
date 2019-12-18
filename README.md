@@ -1,5 +1,7 @@
 # qrm, a Bot for Discord
 
+[![Discord](https://img.shields.io/discord/656888365886734340?color=7289DA&label=Discord)](https://discordapp.com/invite/zakrCD)
+
 A discord bot with ham radio functionalities.
 
 An independent rewrite of qrmbot-discord.
