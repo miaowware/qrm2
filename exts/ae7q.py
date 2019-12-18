@@ -13,9 +13,6 @@ KE8FGB: assigned once, no restrictions
 NA2AAA: unassigned, no records
 """
 
-from datetime import datetime
-
-import discord
 import discord.ext.commands as commands
 
 from bs4 import BeautifulSoup
@@ -62,12 +59,10 @@ class AE7QCog(commands.Cog):
             rows = None
 
         if rows is None:
-            embed = discord.Embed(title=f"AE7Q History for {callsign}",
-                                  colour=cmn.colours.bad,
-                                  url=f"{base_url}{callsign}",
-                                  timestamp=datetime.utcnow())
-            embed.set_footer(text=ctx.author.name,
-                             icon_url=str(ctx.author.avatar_url))
+            embed = cmn.embed_factory(ctx)
+            embed.title = f"AE7Q History for {callsign}"
+            embed.colour = cmn.colours.bad
+            embed.url = f"{base_url}{callsign}"
             embed.description = desc
             embed.description += f'\nNo records found for `{callsign}`'
             await ctx.send(embed=embed)
@@ -92,13 +87,10 @@ class AE7QCog(commands.Cog):
             if len(row_cells) > 1:
                 table_contents += [row_cells]
 
-        embed = discord.Embed(title=f"AE7Q Records for {callsign}",
-                              colour=cmn.colours.good,
-                              url=f"{base_url}{callsign}",
-                              timestamp=datetime.utcnow())
-
-        embed.set_footer(text=ctx.author.name,
-                         icon_url=str(ctx.author.avatar_url))
+        embed = cmn.embed_factory(ctx)
+        embed.title = f"AE7Q Records for {callsign}"
+        embed.colour = cmn.colours.good
+        embed.url = f"{base_url}{callsign}"
 
         for row in table_contents[0:3]:
             header = f'**{row[0]}** ({row[1]})'

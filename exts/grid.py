@@ -8,9 +8,7 @@ General Public License, version 2.
 """
 
 import math
-from datetime import datetime
 
-import discord
 import discord.ext.commands as commands
 
 import common as cmn
@@ -37,21 +35,17 @@ with negative being latitude South and longitude West.'''
                     grid += chr(ord('a') + int((lonf - (int(lonf/2)*2)) / (5/60)))
                     grid += chr(ord('a') + int((latf - (int(latf/1)*1)) / (2.5/60)))
                     grid += "**"
-                    embed = discord.Embed(title=f'Maidenhead Grid Locator for {float(lat):.6f}, {float(lon):.6f}',
-                                          description=grid,
-                                          colour=cmn.colours.good,
-                                          timestamp=datetime.utcnow())
-                    embed.set_footer(text=ctx.author.name,
-                                     icon_url=str(ctx.author.avatar_url))
+                    embed = cmn.embed_factory(ctx)
+                    embed.title = f'Maidenhead Grid Locator for {float(lat):.6f}, {float(lon):.6f}'
+                    embed.description = grid
+                    embed.colour = cmn.colours.good
                 else:
                     raise ValueError('Out of range.')
             except ValueError as err:
-                msg = f'Error generating grid square for {lat}, {lon}.'
-                embed = discord.Embed(title=msg, description=str(err),
-                                      colour=cmn.colours.bad,
-                                      timestamp=datetime.utcnow())
-                embed.set_footer(text=ctx.author.name,
-                                 icon_url=str(ctx.author.avatar_url))
+                embed = cmn.embed_factory(ctx)
+                embed.title = f'Error generating grid square for {lat}, {lon}.'
+                embed.description = str(err)
+                embed.colour = cmn.colours.bad
         await ctx.send(embed=embed)
 
     @commands.command(name="ungrid", aliases=['loc'], category=cmn.cat.maps)
@@ -64,28 +58,21 @@ If two grid squares are given, the distance and azimuth between them is calculat
                     grid = grid.upper()
                     loc = get_coords(grid)
 
-                    if len(grid) >= 6:
-                        embed = discord.Embed(title=f'Latitude and Longitude for {grid}',
-                                              description=f'**{loc[0]:.5f}, {loc[1]:.5f}**',
-                                              colour=cmn.colours.good,
-                                              url=f'https://www.openstreetmap.org/#map=13/{loc[0]:.5f}/{loc[1]:.5f}',
-                                              timestamp=datetime.utcnow())
+                    embed = cmn.embed_factory(ctx)
+                    embed.title = f'Latitude and Longitude for {grid}'
+                    embed.colour = cmn.colours.good
 
+                    if len(grid) >= 6:
+                        embed.description = f'**{loc[0]:.5f}, {loc[1]:.5f}**'
+                        embed.url = f'https://www.openstreetmap.org/#map=13/{loc[0]:.5f}/{loc[1]:.5f}'
                     else:
-                        embed = discord.Embed(title=f'Latitude and Longitude for {grid}',
-                                              description=f'**{loc[0]:.1f}, {loc[1]:.1f}**',
-                                              colour=cmn.colours.good,
-                                              url=f'https://www.openstreetmap.org/#map=10/{loc[0]:.1f}/{loc[1]:.1f}',
-                                              timestamp=datetime.utcnow())
-                    embed.set_footer(text=ctx.author.name,
-                                     icon_url=str(ctx.author.avatar_url))
+                        embed.description = f'**{loc[0]:.1f}, {loc[1]:.1f}**'
+                        embed.url = f'https://www.openstreetmap.org/#map=10/{loc[0]:.1f}/{loc[1]:.1f}'
                 except Exception as e:
-                    msg = f'Error generating latitude and longitude for grid {grid}.'
-                    embed = discord.Embed(title=msg, description=str(e),
-                                          colour=cmn.colours.bad,
-                                          timestamp=datetime.utcnow())
-                    embed.set_footer(text=ctx.author.name,
-                                     icon_url=str(ctx.author.avatar_url))
+                    embed = cmn.embed_factory(ctx)
+                    embed.title = f'Error generating latitude and longitude for grid {grid}.'
+                    embed.description = str(e)
+                    embed.colour = cmn.colours.bad
             else:
                 radius = 6371
                 try:
@@ -110,20 +97,15 @@ If two grid squares are given, the distance and azimuth between them is calculat
                         math.cos(math.radians(loc2[1] - loc[1]))
                     bearing = (math.degrees(math.atan2(y_dist, x_dist)) + 360) % 360
 
-                    des = f'**Distance:** {d:.1f} km ({d_mi:.1f} mi)\n**Bearing:** {bearing:.1f}°'
-                    embed = discord.Embed(title=f'Great Circle Distance and Bearing from {grid} to {grid2}',
-                                          description=des,
-                                          colour=cmn.colours.good,
-                                          timestamp=datetime.utcnow())
-                    embed.set_footer(text=ctx.author.name,
-                                     icon_url=str(ctx.author.avatar_url))
+                    embed = cmn.embed_factory(ctx)
+                    embed.title = f'Great Circle Distance and Bearing from {grid} to {grid2}'
+                    embed.description = f'**Distance:** {d:.1f} km ({d_mi:.1f} mi)\n**Bearing:** {bearing:.1f}°'
+                    embed.colour = cmn.colours.good
                 except Exception as e:
-                    msg = f'Error generating great circle distance and bearing from {grid} and {grid2}.'
-                    embed = discord.Embed(title=msg, description=str(e),
-                                          colour=cmn.colours.bad,
-                                          timestamp=datetime.utcnow())
-                    embed.set_footer(text=ctx.author.name,
-                                     icon_url=str(ctx.author.avatar_url))
+                    embed = cmn.embed_factory(ctx)
+                    embed.title = f'Error generating great circle distance and bearing from {grid} and {grid2}.'
+                    embed.description = str(e)
+                    embed.colour = cmn.colours.bad
         await ctx.send(embed=embed)
 
 
