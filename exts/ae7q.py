@@ -37,11 +37,16 @@ class AE7QCog(commands.Cog):
         callsign = callsign.upper()
         desc = ''
         base_url = "http://ae7q.com/query/data/CallHistory.php?CALL="
+        embed = cmn.embed_factory(ctx)
 
         async with aiohttp.ClientSession() as session:
             async with session.get(base_url + callsign) as resp:
                 if resp.status != 200:
-                    return await ctx.send('Could not load AE7Q')
+                    embed.title = "Error in AE7Q call command"
+                    embed.description = 'Could not load AE7Q'
+                    embed.colour = cmn.colours.bad
+                    await ctx.send(embed=embed)
+                    return
                 page = await resp.text()
 
         soup = BeautifulSoup(page, features="html.parser")
@@ -59,7 +64,6 @@ class AE7QCog(commands.Cog):
             rows = None
 
         if rows is None:
-            embed = cmn.embed_factory(ctx)
             embed.title = f"AE7Q History for {callsign}"
             embed.colour = cmn.colours.bad
             embed.url = f"{base_url}{callsign}"

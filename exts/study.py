@@ -30,6 +30,7 @@ class StudyCog(commands.Cog):
         gen_pool = 'E3_2019'
         extra_pool = 'E4_2016'
 
+        embed = cmn.embed_factory(ctx)
         with ctx.typing():
             selected_pool = None
             try:
@@ -49,15 +50,22 @@ class StudyCog(commands.Cog):
             if (level is None) or (level == 'all'):  # no pool given or user wants all, so pick a random pool
                 selected_pool = random.choice([tech_pool, gen_pool, extra_pool])
             if (level is not None) and (selected_pool is None):  # unrecognized pool given by user
-                await ctx.send('The question pool you gave was unrecognized. ' +
-                               'There are many ways to call up certain question pools - try ?rq t, g, or e. ' +
-                               '(Note that only the US question pools are available).')
+                embed.title = 'Error in HamStudy command'
+                embed.description = ('The question pool you gave was unrecognized. '
+                                     'There are many ways to call up certain question pools - try ?rq t, g, or e. '
+                                     '\n\nNote that currently only the US question pools are available.')
+                embed.colour = cmn.colours.bad
+                await ctx.send(embed=embed)
                 return
 
             async with aiohttp.ClientSession() as session:
                 async with session.get(f'https://hamstudy.org/pools/{selected_pool}') as resp:
                     if resp.status != 200:
-                        return await ctx.send('Could not load questions...')
+                        embed.title = 'Error in HamStudy command'
+                        embed.description = 'Could not load questions'
+                        embed.colour = cmn.colours.bad
+                        await ctx.send(embed=embed)
+                        return
                     pool = json.loads(await resp.read())['pool']
 
             # Select a question
@@ -65,7 +73,6 @@ class StudyCog(commands.Cog):
             pool_questions = random.choice(pool_section)['questions']
             question = random.choice(pool_questions)
 
-            embed = cmn.embed_factory(ctx)
             embed.title = question['id']
             embed.description = self.source
             embed.colour = cmn.colours.good
