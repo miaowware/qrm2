@@ -143,7 +143,7 @@ async def _ensure_activity_time():
     try:
         tz = pytz.timezone(opt.status_tz)
     except pytz.exceptions.UnknownTimeZoneError:
-        await bot.change_presence(activity=discord.Game(name=status))
+        await bot.change_presence(activity=discord.Game(name="with invalid timezones."))
         return
 
     now = datetime.now(tz=tz).time()
