@@ -31,3 +31,7 @@ exts = ['ae7q', 'base', 'fun', 'grid', 'ham', 'image', 'lookup', 'morse', 'qrz',
 
 # The text to put in the "playing" status.
 game = 'with lids on 7.200'
+
+# Emoji IDs and keywords for emoji reactions
+# Use the format {emoji_id (int): ('tuple', 'of', 'lowercase', 'keywords')}
+msg_reacts = {}
