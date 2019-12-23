@@ -32,11 +32,11 @@ exts = ['ae7q', 'base', 'fun', 'grid', 'ham', 'image', 'lookup', 'morse', 'qrz',
 # Timezone for the status (string)
 status_tz = 'US/Eastern'
 # The text to put in the "playing" status, with start and stop times
-statuses = [('with lids on 3.840', (00,00), (6,00)),
-            ('with lids on 7.200', (6,00), (10,00)),
-            ('with lids on 14.313', (10,00), (18,00)),
-            ('with lids on 7.200', (18,00), (20,00)),
-            ('with lids on 3.840', (20,00), (23,59))]
+statuses = [('with lids on 3.840', (00, 00), (6, 00)),
+            ('with lids on 7.200', (6, 00), (10, 00)),
+            ('with lids on 14.313', (10, 00), (18, 00)),
+            ('with lids on 7.200', (18, 00), (20, 00)),
+            ('with lids on 3.840', (20, 00), (23, 59))]
 # The text to put in the "playing" status otherwise
 status_default = 'with lids on the air'
 
