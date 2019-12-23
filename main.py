@@ -156,11 +156,13 @@ async def _ensure_activity_time():
 
     await bot.change_presence(activity=discord.Game(name=status))
 
+
 @tasks.loop(minutes=5)
 async def _ensure_activity_random():
     status = random.choice(opt.statuses)
 
     await bot.change_presence(activity=discord.Game(name=status))
+
 
 @tasks.loop(minutes=5)
 async def _ensure_activity_fixed():
