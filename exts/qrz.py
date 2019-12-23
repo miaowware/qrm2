@@ -71,7 +71,6 @@ class QRZCog(commands.Cog):
             embed.set_thumbnail(url=resp_data['image'])
 
         data = qrz_process_info(resp_data)
-        print(data)
 
         for title, val in data.items():
             if val is not None:
