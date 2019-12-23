@@ -12,8 +12,6 @@ import json
 
 import discord.ext.commands as commands
 
-import aiohttp
-
 import common as cmn
 
 
@@ -22,6 +20,7 @@ class StudyCog(commands.Cog):
         self.bot = bot
         self.lastq = dict()
         self.source = 'Data courtesy of [HamStudy.org](https://hamstudy.org/)'
+        self.session = bot.qrm.session
 
     @commands.command(name="hamstudy", aliases=['rq', 'randomquestion', 'randomq'], category=cmn.cat.study)
     async def _random_question(self, ctx: commands.Context, level: str = None):
@@ -58,15 +57,14 @@ class StudyCog(commands.Cog):
                 await ctx.send(embed=embed)
                 return
 
-            async with aiohttp.ClientSession() as session:
-                async with session.get(f'https://hamstudy.org/pools/{selected_pool}') as resp:
-                    if resp.status != 200:
-                        embed.title = 'Error in HamStudy command'
-                        embed.description = 'Could not load questions'
-                        embed.colour = cmn.colours.bad
-                        await ctx.send(embed=embed)
-                        return
-                    pool = json.loads(await resp.read())['pool']
+            async with self.session.get(f'https://hamstudy.org/pools/{selected_pool}') as resp:
+                if resp.status != 200:
+                    embed.title = 'Error in HamStudy command'
+                    embed.description = 'Could not load questions'
+                    embed.colour = cmn.colours.bad
+                    await ctx.send(embed=embed)
+                    return
+                pool = json.loads(await resp.read())['pool']
 
             # Select a question
             pool_section = random.choice(pool)['sections']

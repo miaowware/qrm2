@@ -12,14 +12,13 @@ import io
 import discord
 import discord.ext.commands as commands
 
-import aiohttp
-
 import common as cmn
 
 
 class ImageCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        self.session = bot.qrm.session
 
     @commands.command(name="bandplan", aliases=['plan', 'bands'], category=cmn.cat.ref)
     async def _bandplan(self, ctx: commands.Context, region: str = ''):
@@ -58,14 +57,13 @@ class ImageCog(commands.Cog):
             embed = cmn.embed_factory(ctx)
             embed.title = 'Current Greyline Conditions'
             embed.colour = cmn.colours.good
-            async with aiohttp.ClientSession() as session:
-                async with session.get(gl_url) as resp:
-                    if resp.status != 200:
-                        embed.description = 'Could not download file...'
-                        embed.colour = cmn.colours.bad
-                    else:
-                        data = io.BytesIO(await resp.read())
-                        embed.set_image(url=f'attachment://greyline.jpg')
+            async with self.session.get(gl_url) as resp:
+                if resp.status != 200:
+                    embed.description = 'Could not download file...'
+                    embed.colour = cmn.colours.bad
+                else:
+                    data = io.BytesIO(await resp.read())
+                    embed.set_image(url=f'attachment://greyline.jpg')
         await ctx.send(embed=embed, file=discord.File(data, 'greyline.jpg'))
 
     @commands.command(name="map", category=cmn.cat.maps)

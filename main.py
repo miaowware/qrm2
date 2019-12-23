@@ -10,8 +10,10 @@ General Public License, version 2.
 
 from datetime import time, datetime
 import random
+from types import SimpleNamespace
 
 import pytz
+import aiohttp
 
 import discord
 from discord.ext import commands, tasks
@@ -37,6 +39,9 @@ bot = commands.Bot(command_prefix=opt.prefix,
                    description=info.description,
                    help_command=commands.MinimalHelpCommand())
 
+bot.qrm = SimpleNamespace()
+bot.qrm.session = aiohttp.ClientSession(headers={'User-Agent': f'discord-qrm2/{info.release}'})
+
 
 # --- Commands ---
 
@@ -44,6 +49,7 @@ bot = commands.Bot(command_prefix=opt.prefix,
 @commands.check(cmn.check_if_owner)
 async def _restart_bot(ctx: commands.Context):
     """Restarts the bot."""
+    await bot.qrm.session.close()
     global exit_code
     await cmn.add_react(ctx.message, cmn.emojis.good)
     print(f"[**] Restarting! Requested by {ctx.author}.")
@@ -55,6 +61,7 @@ async def _restart_bot(ctx: commands.Context):
 @commands.check(cmn.check_if_owner)
 async def _shutdown_bot(ctx: commands.Context):
     """Shuts down the bot."""
+    await bot.qrm.session.close()
     global exit_code
     await cmn.add_react(ctx.message, cmn.emojis.good)
     print(f"[**] Shutting down! Requested by {ctx.author}.")
