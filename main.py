@@ -136,7 +136,6 @@ async def _ensure_activity():
     try:
         tz = pytz.timezone(opt.status_tz)
     except pytz.exceptions.UnknownTimeZoneError:
-        print(f'[!!] UnknownTimeZoneError: {opt.status_tz}')
         await bot.change_presence(activity=discord.Game(name=status))
         return
 
