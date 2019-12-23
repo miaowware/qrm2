@@ -139,6 +139,9 @@ def qrz_process_info(data: dict):
         state = ''
     address = data.get('addr1', '') + '\n' + data.get('addr2', '') + \
         state + ' ' + data.get('zip', '')
+    address = address.strip()
+    if address == '':
+        address = None
     if 'eqsl' in data:
         eqsl = 'Yes' if data['eqsl'] == 1 else 'No'
     else:
