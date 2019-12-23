@@ -8,12 +8,14 @@ This file is part of discord-qrm2 and is released under the terms of the GNU
 General Public License, version 2.
 """
 
+from datetime import time, datetime
+
 import discord
 from discord.ext import commands, tasks
+import pytz
 
 import common as cmn
 import info
-
 import data.options as opt
 import data.keys as keys
 
@@ -129,7 +131,24 @@ async def on_message(message):
 
 @tasks.loop(minutes=5)
 async def _ensure_activity():
-    await bot.change_presence(activity=discord.Game(name=opt.game))
+    status = opt.status_default
+
+    try:
+        tz = pytz.timezone(opt.status_tz)
+    except pytz.exceptions.UnknownTimeZoneError:
+        print(f'[!!] UnknownTimeZoneError: {opt.status_tz}')
+        await bot.change_presence(activity=discord.Game(name=status))
+        return
+
+    now = datetime.now(tz=tz).time()
+
+    for sts in opt.statuses:
+        start_time = time(hour=sts[1][0], minute=sts[1][1], tzinfo=tz)
+        end_time = time(hour=sts[2][0], minute=sts[2][1], tzinfo=tz)
+        if start_time < now <= end_time:
+            status = sts[0]
+
+    await bot.change_presence(activity=discord.Game(name=status))
 
 
 @_ensure_activity.before_loop
