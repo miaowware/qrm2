@@ -21,7 +21,7 @@ import data.keys as keys
 class QRZCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.session = aiohttp.ClientSession()
+        self.session = bot.qrm.session
         self._qrz_session_init.start()
 
     @commands.command(name="call", aliases=["qrz"], category=cmn.cat.lookup)

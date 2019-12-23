@@ -24,7 +24,7 @@ import discord.ext.commands as commands
 import data.options as opt
 
 
-__all__ = ["colours", "cat", "emojis", "error_embed_factory", "add_react", "check_if_owner"]
+__all__ = ["colours", "cat", "emojis", "embed_factory", "error_embed_factory", "add_react", "check_if_owner"]
 
 
 # --- Common values ---

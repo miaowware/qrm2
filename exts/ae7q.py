@@ -16,7 +16,6 @@ NA2AAA: unassigned, no records
 import discord.ext.commands as commands
 
 from bs4 import BeautifulSoup
-import aiohttp
 
 import common as cmn
 
@@ -24,6 +23,7 @@ import common as cmn
 class AE7QCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        self.session = bot.qrm.session
 
     @commands.group(name="ae7q", aliases=["ae"], category=cmn.cat.lookup)
     async def _ae7q_lookup(self, ctx: commands.Context):
@@ -39,15 +39,14 @@ class AE7QCog(commands.Cog):
         base_url = "http://ae7q.com/query/data/CallHistory.php?CALL="
         embed = cmn.embed_factory(ctx)
 
-        async with aiohttp.ClientSession() as session:
-            async with session.get(base_url + callsign) as resp:
-                if resp.status != 200:
-                    embed.title = "Error in AE7Q call command"
-                    embed.description = 'Could not load AE7Q'
-                    embed.colour = cmn.colours.bad
-                    await ctx.send(embed=embed)
-                    return
-                page = await resp.text()
+        async with self.session.get(base_url + callsign) as resp:
+            if resp.status != 200:
+                embed.title = "Error in AE7Q call command"
+                embed.description = 'Could not load AE7Q'
+                embed.colour = cmn.colours.bad
+                await ctx.send(embed=embed)
+                return
+            page = await resp.text()
 
         soup = BeautifulSoup(page, features="html.parser")
         tables = soup.select("table.Database")
