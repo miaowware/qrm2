@@ -71,6 +71,7 @@ class QRZCog(commands.Cog):
             embed.set_thumbnail(url=resp_data['image'])
 
         data = qrz_process_info(resp_data)
+        print(data)
 
         for title, val in data.items():
             if val is not None:
@@ -139,6 +140,9 @@ def qrz_process_info(data: dict):
         state = ''
     address = data.get('addr1', '') + '\n' + data.get('addr2', '') + \
         state + ' ' + data.get('zip', '')
+    address = address.strip()
+    if address == '':
+        address = None
     if 'eqsl' in data:
         eqsl = 'Yes' if data['eqsl'] == 1 else 'No'
     else:
