@@ -11,9 +11,10 @@ General Public License, version 2.
 from datetime import time, datetime
 import random
 
+import pytz
+
 import discord
 from discord.ext import commands, tasks
-import pytz
 
 import common as cmn
 import info

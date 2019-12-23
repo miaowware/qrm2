@@ -36,6 +36,7 @@ status_mode = "fixed"
 statuses = ["with lids on the air", "with fire"]
 
 # Timezone for the status (string)
+# See https://pythonhosted.org/pytz/ for more info
 status_tz = 'US/Eastern'
 # The text to put in the "playing" status, with start and stop times
 time_statuses = [('with lids on 3.840', (00, 00), (6, 00)),
