@@ -42,8 +42,8 @@ bot = commands.Bot(command_prefix=opt.prefix,
 bot.qrm = SimpleNamespace()
 bot.qrm.session = aiohttp.ClientSession(headers={'User-Agent': f'discord-qrm2/{info.release}'})
 
-# --- Commands ---
 
+# --- Commands ---
 
 @bot.command(name="restart", hidden=True)
 @commands.check(cmn.check_if_owner)
