@@ -115,6 +115,16 @@ async def on_ready():
     print("------")
 
 
+@bot.event
+async def on_message(message):
+    msg = message.content.lower()
+    for emoji, keywords in opt.msg_reacts.items():
+        if any([keyword in msg for keyword in keywords]):
+            await message.add_reaction(discord.utils.find(lambda x: x.id == emoji, bot.emojis))
+
+    await bot.process_commands(message)
+
+
 # --- Tasks ---
 
 @tasks.loop(minutes=5)
