@@ -13,8 +13,6 @@ import re
 import discord
 import discord.ext.commands as commands
 
-import aiohttp
-
 import common as cmn
 
 
@@ -23,6 +21,7 @@ class WeatherCog(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        self.session = bot.qrm.session
 
     @commands.command(name="bandconditions", aliases=['cond', 'condx', 'conditions'], category=cmn.cat.weather)
     async def _band_conditions(self, ctx: commands.Context):
@@ -31,14 +30,13 @@ class WeatherCog(commands.Cog):
             embed = cmn.embed_factory(ctx)
             embed.title = 'Current Solar Conditions'
             embed.colour = cmn.colours.good
-            async with aiohttp.ClientSession() as session:
-                async with session.get('http://www.hamqsl.com/solarsun.php') as resp:
-                    if resp.status != 200:
-                        embed.description = 'Could not download file...'
-                        embed.colour = cmn.colours.bad
-                    else:
-                        data = io.BytesIO(await resp.read())
-                        embed.set_image(url=f'attachment://condx.png')
+            async with self.session.get('http://www.hamqsl.com/solarsun.php') as resp:
+                if resp.status != 200:
+                    embed.description = 'Could not download file...'
+                    embed.colour = cmn.colours.bad
+                else:
+                    data = io.BytesIO(await resp.read())
+                    embed.set_image(url=f'attachment://condx.png')
         await ctx.send(embed=embed, file=discord.File(data, 'condx.png'))
 
     @commands.group(name="weather", aliases=['wttr'], category=cmn.cat.weather)
@@ -81,14 +79,13 @@ See help for weather command for possible location types. Add a `-c` or `-f` to 
             embed.colour = cmn.colours.good
 
             loc = loc.replace(' ', '+')
-            async with aiohttp.ClientSession() as session:
-                async with session.get(f'http://wttr.in/{loc}_{units}pnFQ.png') as resp:
-                    if resp.status != 200:
-                        embed.description = 'Could not download file...'
-                        embed.colour = cmn.colours.bad
-                    else:
-                        data = io.BytesIO(await resp.read())
-                        embed.set_image(url=f'attachment://wttr_forecast.png')
+            async with self.session.get(f'http://wttr.in/{loc}_{units}pnFQ.png') as resp:
+                if resp.status != 200:
+                    embed.description = 'Could not download file...'
+                    embed.colour = cmn.colours.bad
+                else:
+                    data = io.BytesIO(await resp.read())
+                    embed.set_image(url=f'attachment://wttr_forecast.png')
         await ctx.send(embed=embed, file=discord.File(data, f'wttr_forecast.png'))
 
     @_weather_conditions.command(name='now', aliases=['n'], category=cmn.cat.weather)
@@ -115,14 +112,13 @@ See help for weather command for possible location types. Add a `-c` or `-f` to 
             embed.colour = cmn.colours.good
 
             loc = loc.replace(' ', '+')
-            async with aiohttp.ClientSession() as session:
-                async with session.get(f'http://wttr.in/{loc}_0{units}pnFQ.png') as resp:
-                    if resp.status != 200:
-                        embed.description = 'Could not download file...'
-                        embed.colour = cmn.colours.bad
-                    else:
-                        data = io.BytesIO(await resp.read())
-                        embed.set_image(url=f'attachment://wttr_now.png')
+            async with self.session.get(f'http://wttr.in/{loc}_0{units}pnFQ.png') as resp:
+                if resp.status != 200:
+                    embed.description = 'Could not download file...'
+                    embed.colour = cmn.colours.bad
+                else:
+                    data = io.BytesIO(await resp.read())
+                    embed.set_image(url=f'attachment://wttr_now.png')
         await ctx.send(embed=embed, file=discord.File(data, 'wttr_now.png'))
 
 

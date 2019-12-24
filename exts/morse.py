@@ -62,6 +62,7 @@ class MorseCog(commands.Cog):
     @commands.command(name="cwweight", aliases=["weight", 'cww'], category=cmn.cat.ref)
     async def _weight(self, ctx: commands.Context, *, msg: str):
         '''Calculates the CW Weight of a callsign or message.'''
+        embed = cmn.embed_factory(ctx)
         with ctx.typing():
             msg = msg.upper()
             weight = 0
@@ -70,13 +71,13 @@ class MorseCog(commands.Cog):
                     cw_char = self.ascii2morse[char].replace('-', '==')
                     weight += len(cw_char) * 2 + 2
                 except KeyError:
-                    res = f'Unknown character {char} in callsign'
-                    await ctx.send(res)
+                    embed.title = 'Error in calculation of CW weight'
+                    embed.description = f'Unknown character {char} in callsign'
+                    embed.colour = cmn.colours.bad
+                    await ctx.send(embed=embed)
                     return
-            res = f'The CW weight is **{weight}**'
-            embed = cmn.embed_factory(ctx)
             embed.title = f'CW Weight of {msg}'
-            embed.description = res
+            embed.description = f'The CW weight is **{weight}**'
             embed.colour = cmn.colours.good
         await ctx.send(embed=embed)
 

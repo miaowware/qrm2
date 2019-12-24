@@ -8,12 +8,18 @@ This file is part of discord-qrm2 and is released under the terms of the GNU
 General Public License, version 2.
 """
 
+from datetime import time, datetime
+import random
+from types import SimpleNamespace
+
+import pytz
+import aiohttp
+
 import discord
 from discord.ext import commands, tasks
 
 import common as cmn
 import info
-
 import data.options as opt
 import data.keys as keys
 
@@ -33,6 +39,9 @@ bot = commands.Bot(command_prefix=opt.prefix,
                    description=info.description,
                    help_command=commands.MinimalHelpCommand())
 
+bot.qrm = SimpleNamespace()
+bot.qrm.session = aiohttp.ClientSession(headers={'User-Agent': f'discord-qrm2/{info.release}'})
+
 
 # --- Commands ---
 
@@ -40,6 +49,7 @@ bot = commands.Bot(command_prefix=opt.prefix,
 @commands.check(cmn.check_if_owner)
 async def _restart_bot(ctx: commands.Context):
     """Restarts the bot."""
+    await bot.qrm.session.close()
     global exit_code
     await cmn.add_react(ctx.message, cmn.emojis.good)
     print(f"[**] Restarting! Requested by {ctx.author}.")
@@ -51,6 +61,7 @@ async def _restart_bot(ctx: commands.Context):
 @commands.check(cmn.check_if_owner)
 async def _shutdown_bot(ctx: commands.Context):
     """Shuts down the bot."""
+    await bot.qrm.session.close()
     global exit_code
     await cmn.add_react(ctx.message, cmn.emojis.good)
     print(f"[**] Shutting down! Requested by {ctx.author}.")
@@ -117,26 +128,65 @@ async def _extctl_unload(ctx: commands.Context, extension: str):
 async def on_ready():
     print(f"Logged in as: {bot.user} - {bot.user.id}")
     print("------")
+    if opt.status_mode == "time":
+        _ensure_activity_time.start()
+    elif opt.status_mode == "random":
+        _ensure_activity_random.start()
+    else:
+        _ensure_activity_fixed.start()
+
+
+@bot.event
+async def on_message(message):
+    msg = message.content.lower()
+    for emoji, keywords in opt.msg_reacts.items():
+        if any([keyword in msg for keyword in keywords]):
+            await message.add_reaction(discord.utils.find(lambda x: x.id == emoji, bot.emojis))
+
+    await bot.process_commands(message)
 
 
 # --- Tasks ---
 
 @tasks.loop(minutes=5)
-async def _ensure_activity():
-    await bot.change_presence(activity=discord.Game(name=opt.game))
+async def _ensure_activity_time():
+    status = opt.statuses[0]
+
+    try:
+        tz = pytz.timezone(opt.status_tz)
+    except pytz.exceptions.UnknownTimeZoneError:
+        await bot.change_presence(activity=discord.Game(name="with invalid timezones."))
+        return
+
+    now = datetime.now(tz=tz).time()
+
+    for sts in opt.time_statuses:
+        start_time = time(hour=sts[1][0], minute=sts[1][1], tzinfo=tz)
+        end_time = time(hour=sts[2][0], minute=sts[2][1], tzinfo=tz)
+        if start_time < now <= end_time:
+            status = sts[0]
+
+    await bot.change_presence(activity=discord.Game(name=status))
 
 
-@_ensure_activity.before_loop
-async def _before_ensure_activity():
-    await bot.wait_until_ready()
+@tasks.loop(minutes=5)
+async def _ensure_activity_random():
+    status = random.choice(opt.statuses)
+
+    await bot.change_presence(activity=discord.Game(name=status))
+
+
+@tasks.loop(minutes=5)
+async def _ensure_activity_fixed():
+    status = opt.statuses[0]
+
+    await bot.change_presence(activity=discord.Game(name=status))
 
 
 # --- Run ---
 
 for ext in opt.exts:
     bot.load_extension(ext_dir + '.' + ext)
-
-_ensure_activity.start()
 
 
 try:

@@ -21,7 +21,7 @@ import data.keys as keys
 class QRZCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.session = aiohttp.ClientSession()
+        self.session = bot.qrm.session
         self._qrz_session_init.start()
 
     @commands.command(name="call", aliases=["qrz"], category=cmn.cat.lookup)
@@ -139,6 +139,9 @@ def qrz_process_info(data: dict):
         state = ''
     address = data.get('addr1', '') + '\n' + data.get('addr2', '') + \
         state + ' ' + data.get('zip', '')
+    address = address.strip()
+    if address == '':
+        address = None
     if 'eqsl' in data:
         eqsl = 'Yes' if data['eqsl'] == 1 else 'No'
     else:

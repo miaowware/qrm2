@@ -12,8 +12,6 @@ import json
 
 import discord.ext.commands as commands
 
-import aiohttp
-
 import common as cmn
 
 
@@ -22,6 +20,7 @@ class StudyCog(commands.Cog):
         self.bot = bot
         self.lastq = dict()
         self.source = 'Data courtesy of [HamStudy.org](https://hamstudy.org/)'
+        self.session = bot.qrm.session
 
     @commands.command(name="hamstudy", aliases=['rq', 'randomquestion', 'randomq'], category=cmn.cat.study)
     async def _random_question(self, ctx: commands.Context, level: str = None):
@@ -30,6 +29,7 @@ class StudyCog(commands.Cog):
         gen_pool = 'E3_2019'
         extra_pool = 'E4_2016'
 
+        embed = cmn.embed_factory(ctx)
         with ctx.typing():
             selected_pool = None
             try:
@@ -49,36 +49,41 @@ class StudyCog(commands.Cog):
             if (level is None) or (level == 'all'):  # no pool given or user wants all, so pick a random pool
                 selected_pool = random.choice([tech_pool, gen_pool, extra_pool])
             if (level is not None) and (selected_pool is None):  # unrecognized pool given by user
-                await ctx.send('The question pool you gave was unrecognized. ' +
-                               'There are many ways to call up certain question pools - try ?rq t, g, or e. ' +
-                               '(Note that only the US question pools are available).')
+                embed.title = 'Error in HamStudy command'
+                embed.description = ('The question pool you gave was unrecognized. '
+                                     'There are many ways to call up certain question pools - try ?rq t, g, or e. '
+                                     '\n\nNote that currently only the US question pools are available.')
+                embed.colour = cmn.colours.bad
+                await ctx.send(embed=embed)
                 return
 
-            async with aiohttp.ClientSession() as session:
-                async with session.get(f'https://hamstudy.org/pools/{selected_pool}') as resp:
-                    if resp.status != 200:
-                        return await ctx.send('Could not load questions...')
-                    pool = json.loads(await resp.read())['pool']
+            async with self.session.get(f'https://hamstudy.org/pools/{selected_pool}') as resp:
+                if resp.status != 200:
+                    embed.title = 'Error in HamStudy command'
+                    embed.description = 'Could not load questions'
+                    embed.colour = cmn.colours.bad
+                    await ctx.send(embed=embed)
+                    return
+                pool = json.loads(await resp.read())['pool']
 
             # Select a question
             pool_section = random.choice(pool)['sections']
             pool_questions = random.choice(pool_section)['questions']
             question = random.choice(pool_questions)
 
-            embed = cmn.embed_factory(ctx)
             embed.title = question['id']
             embed.description = self.source
             embed.colour = cmn.colours.good
-            embed = embed.add_field(name='Question:', value=question['text'], inline=False)
-            embed = embed.add_field(name='Answers:', value='**A:** ' + question['answers']['A'] +
-                                    '\n**B:** ' + question['answers']['B'] +
-                                    '\n**C:** ' + question['answers']['C'] +
-                                    '\n**D:** ' + question['answers']['D'],
-                                    inline=False)
-            embed = embed.add_field(name='Answer:', value='Type _?rqa_ for answer', inline=False)
+            embed.add_field(name='Question:', value=question['text'], inline=False)
+            embed.add_field(name='Answers:', value='**A:** ' + question['answers']['A'] +
+                            '\n**B:** ' + question['answers']['B'] +
+                            '\n**C:** ' + question['answers']['C'] +
+                            '\n**D:** ' + question['answers']['D'],
+                            inline=False)
+            embed.add_field(name='Answer:', value='Type _?rqa_ for answer', inline=False)
             if 'image' in question:
                 image_url = f'https://hamstudy.org/_1330011/images/{selected_pool.split("_",1)[1]}/{question["image"]}'
-                embed = embed.set_image(url=image_url)
+                embed.set_image(url=image_url)
             self.lastq[ctx.message.channel.id] = (question['id'], question['answer'])
         await ctx.send(embed=embed)
 

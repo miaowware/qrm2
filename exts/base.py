@@ -99,10 +99,10 @@ class BaseCog(commands.Cog):
         embed.title = "About qrm"
         embed.description = info.description
 
-        embed = embed.add_field(name="Authors", value=", ".join(info.authors))
-        embed = embed.add_field(name="License", value=info.license)
-        embed = embed.add_field(name="Version", value=f'v{info.release}')
-        embed = embed.add_field(name="Contributing", value=info.contributing, inline=False)
+        embed.add_field(name="Authors", value=", ".join(info.authors))
+        embed.add_field(name="License", value=info.license)
+        embed.add_field(name="Version", value=f'v{info.release}')
+        embed.add_field(name="Contributing", value=info.contributing, inline=False)
         embed.set_thumbnail(url=str(self.bot.user.avatar_url))
         await ctx.send(embed=embed)
 
