@@ -79,8 +79,6 @@ class ImageCog(commands.Cog):
                 embed.set_image(url='attachment://' + metadata.filename)
                 await ctx.send(embed=embed, file=img)
 
-
-
     @commands.command(name="grayline", aliases=['greyline', 'grey', 'gray', 'gl'], category=cmn.cat.maps)
     async def _grayline(self, ctx: commands.Context):
         '''Posts a map of the current greyline, where HF propagation is the best.'''
