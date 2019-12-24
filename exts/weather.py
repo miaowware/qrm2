@@ -86,7 +86,7 @@ See help for weather command for possible location types. Add a `-c` or `-f` to 
                 else:
                     data = io.BytesIO(await resp.read())
                     embed.set_image(url=f'attachment://wttr_forecast.png')
-        await ctx.send(embed=embed, file=discord.File(data, f'wttr_forecast.png'))
+        await ctx.send(embed=embed, file=discord.File(data, 'wttr_forecast.png'))
 
     @_weather_conditions.command(name='now', aliases=['n'], category=cmn.cat.weather)
     async def _weather_conditions_now(self, ctx: commands.Context, *, location: str):
