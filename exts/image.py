@@ -18,34 +18,64 @@ import common as cmn
 class ImageCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        self.bandcharts = cmn.ImagesGroup(cmn.paths.bandcharts / "meta.json")
+        self.maps = cmn.ImagesGroup(cmn.paths.maps / "meta.json")
         self.session = bot.qrm.session
 
     @commands.command(name="bandplan", aliases=['plan', 'bands'], category=cmn.cat.ref)
     async def _bandplan(self, ctx: commands.Context, region: str = ''):
         '''Posts an image of Frequency Allocations.'''
-        name = {'cn': 'Chinese',
-                'ca': 'Canadian',
-                'nl': 'Dutch',
-                'us': 'US',
-                'mx': 'Mexican'}
         arg = region.lower()
 
         with ctx.typing():
             embed = cmn.embed_factory(ctx)
-            if arg not in name:
+            if arg not in self.bandcharts:
                 desc = 'Possible arguments are:\n'
-                for abbrev, title in name.items():
-                    desc += f'`{abbrev}`: {title}\n'
+                for key, img in self.bandcharts.items():
+                    desc += f'`{key}`: {img.name}{("  " + img.emoji if img.emoji else "")}\n'
                 embed.title = f'Bandplan Not Found!'
                 embed.description = desc
                 embed.colour = cmn.colours.bad
                 await ctx.send(embed=embed)
             else:
-                img = discord.File(f"resources/images/bandchart/{arg}bandchart.png",
-                                   filename=f'{arg}bandchart.png')
-                embed.title = f'{name[arg]} Amateur Radio Bands'
+                metadata: cmn.ImageMetadata = self.bandcharts[arg]
+                img = discord.File(cmn.paths.bandcharts / metadata.filename,
+                                   filename=metadata.filename)
+                if metadata.description:
+                    embed.description = metadata.description
+                if metadata.source:
+                    embed.add_field(name="Source", value=metadata.source)
+                embed.title = metadata.long_name + ("  " + metadata.emoji if metadata.emoji else "")
                 embed.colour = cmn.colours.good
-                embed.set_image(url=f'attachment://{arg}bandchart.png')
+                embed.set_image(url='attachment://' + metadata.filename)
+                await ctx.send(embed=embed, file=img)
+
+    @commands.command(name="map", category=cmn.cat.maps)
+    async def _map(self, ctx: commands.Context, map_id: str = ''):
+        '''Posts an image of a ham-relevant map.'''
+        arg = map_id.lower()
+
+        with ctx.typing():
+            embed = cmn.embed_factory(ctx)
+            if arg not in self.maps:
+                desc = 'Possible arguments are:\n'
+                for key, img in self.maps.items():
+                    desc += f'`{key}`: {img.name}{("  " + img.emoji if img.emoji else "")}\n'
+                embed.title = 'Map Not Found!'
+                embed.description = desc
+                embed.colour = cmn.colours.bad
+                await ctx.send(embed=embed)
+            else:
+                metadata: cmn.ImageMetadata = self.maps[arg]
+                img = discord.File(cmn.paths.maps / metadata.filename,
+                                   filename=metadata.filename)
+                if metadata.description:
+                    embed.description = metadata.description
+                if metadata.source:
+                    embed.add_field(name="Source", value=metadata.source)
+                embed.title = metadata.long_name + ("  " + metadata.emoji if metadata.emoji else "")
+                embed.colour = cmn.colours.good
+                embed.set_image(url='attachment://' + metadata.filename)
                 await ctx.send(embed=embed, file=img)
 
     @commands.command(name="grayline", aliases=['greyline', 'grey', 'gray', 'gl'], category=cmn.cat.maps)
@@ -65,35 +95,6 @@ class ImageCog(commands.Cog):
                     data = io.BytesIO(await resp.read())
                     embed.set_image(url=f'attachment://greyline.jpg')
         await ctx.send(embed=embed, file=discord.File(data, 'greyline.jpg'))
-
-    @commands.command(name="map", category=cmn.cat.maps)
-    async def _map(self, ctx: commands.Context, map_id: str = ''):
-        '''Posts an image of a ham-relevant map.'''
-        map_titles = {"cq": 'Worldwide CQ Zones Map',
-                      "itu": 'Worldwide ITU Zones Map',
-                      "arrl": 'ARRL/RAC Section Map',
-                      "rac":  'ARRL/RAC Section Map',
-                      "cn": 'Chinese Callsign Areas',
-                      "us": 'US Callsign Areas'}
-
-        arg = map_id.lower()
-        with ctx.typing():
-            embed = cmn.embed_factory(ctx)
-            if arg not in map_titles:
-                desc = 'Possible arguments are:\n'
-                for abbrev, title in map_titles.items():
-                    desc += f'`{abbrev}`: {title}\n'
-                embed.title = 'Map Not Found!'
-                embed.description = desc
-                embed.colour = cmn.colours.bad
-                await ctx.send(embed=embed)
-            else:
-                img = discord.File(f"resources/images/map/{arg}map.png",
-                                   filename=f'{arg}map.png')
-                embed.title = f'{map_titles[arg]}'
-                embed.colour = cmn.colours.good
-                embed.set_image(url=f'attachment://{arg}map.png')
-                await ctx.send(embed=embed, file=img)
 
 
 def setup(bot: commands.Bot):

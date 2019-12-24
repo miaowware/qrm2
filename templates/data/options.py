@@ -38,6 +38,7 @@ statuses = ["with lids on the air", "with fire"]
 # Timezone for the status (string)
 # See https://pythonhosted.org/pytz/ for more info
 status_tz = 'US/Eastern'
+
 # The text to put in the "playing" status, with start and stop times
 time_statuses = [('with lids on 3.840', (00, 00), (6, 00)),
                  ('with lids on 7.200', (6, 00), (10, 00)),
@@ -48,3 +49,6 @@ time_statuses = [('with lids on 3.840', (00, 00), (6, 00)),
 # Emoji IDs and keywords for emoji reactions
 # Use the format {emoji_id (int): ('tuple', 'of', 'lowercase', 'keywords')}
 msg_reacts = {}
+
+# A :pika: emote's ID, None for no emote :c
+pika = 658733876176355338

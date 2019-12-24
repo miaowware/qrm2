@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+### Added
+- Flag emojis to commands with countries.
+- Image attribution and description to "image" commands.
+- New key in options.py: pika.
+
 
 ## [v2.0.0] - 2019-12-16
 ### Added
@@ -31,7 +36,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Cleaned up code to comply with the PEP8 Standard
 - Issue in morse and unmorse commands where spaces were not interpreted correctly
 
+
 ## v1.0.0 - 2019-07-31 [YANKED]
+
 
 [Unreleased]: https://github.com/classabbyamp/discord-qrm2/compare/v2.0.0...HEAD
 [v2.0.0]: https://github.com/classabbyamp/discord-qrm2/releases/tag/v2.0.0

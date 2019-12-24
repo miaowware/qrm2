@@ -1,0 +1,6 @@
+{
+    "arrl": ["arrl-rac.png", "ARRL Sections", "ARRL Sections", "", "", "🇺🇸"],
+    "rac": ["arrl-rac.png", "RAC Sections", "RAC Sections", "", "", "🇨🇦"],
+    "cn": ["cn.png", "China's Prefixes", "Map of prefix regions in China", "", "CRAC", "🇨🇳"],
+    "us": ["us.png", "USA's Prefixes", "Map of prefix regions in the USA", "", "*[ARRL WAS Map](https://www.arrl.org/was-forms)*  [[PDF]](http://www.arrl.org/files/file/Awards%20Application%20Forms/WASmap_Color.pdf)", "🇺🇸"]
+}
