@@ -9,8 +9,6 @@ General Public License, version 2.
 
 import io
 
-import aiohttp
-
 import discord
 import discord.ext.commands as commands
 
