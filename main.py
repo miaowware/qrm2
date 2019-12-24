@@ -87,8 +87,12 @@ async def _extctl_load(ctx: commands.Context, extension: str):
         await ctx.send(embed=embed)
 
 
-@_extctl.command(name="reload")
+@_extctl.command(name="reload", aliases=["relaod"])
 async def _extctl_reload(ctx: commands.Context, extension: str):
+    if ctx.invoked_with == "relaod":
+        pika = bot.get_emoji(opt.pika)
+        if pika:
+            await cmn.add_react(ctx.message, pika)
     try:
         bot.reload_extension(ext_dir + "." + extension)
         await cmn.add_react(ctx.message, cmn.emojis.good)

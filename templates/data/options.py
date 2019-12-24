@@ -31,3 +31,6 @@ exts = ['ae7q', 'base', 'fun', 'grid', 'ham', 'image', 'lookup', 'morse', 'qrz',
 
 # The text to put in the "playing" status.
 game = 'with lids on 7.200'
+
+# A :pika: emote's ID, None for no emote :c
+pika = 658733876176355338
