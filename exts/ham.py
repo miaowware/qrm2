@@ -6,23 +6,20 @@ Copyright (C) 2019 Abigail Gold, 0x5c
 This file is part of discord-qrm2 and is released under the terms of the GNU
 General Public License, version 2.
 """
-import json
-import random
+
 from datetime import datetime
 
 import discord.ext.commands as commands
 
 import common as cmn
 from resources import callsign_info
+from resources import phonetics
+from resources import qcodes
 
 
 class HamCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        with open('resources/qcodes.json') as qcode_file:
-            self.qcodes = json.load(qcode_file)
-        with open('resources/words') as words_file:
-            self.words = words_file.read().lower().splitlines()
 
     @commands.command(name="qcode", aliases=['q'], category=cmn.cat.ref)
     async def _qcode_lookup(self, ctx: commands.Context, qcode: str):
@@ -30,23 +27,23 @@ class HamCog(commands.Cog):
         with ctx.typing():
             qcode = qcode.upper()
             embed = cmn.embed_factory(ctx)
-            if qcode in self.qcodes:
+            if qcode in qcodes.qcodes:
                 embed.title = qcode
-                embed.description = self.qcodes[qcode]
+                embed.description = qcodes.qcodes[qcode]
                 embed.colour = cmn.colours.good
             else:
                 embed.title = f'Q Code {qcode} not found'
                 embed.colour = cmn.colours.bad
         await ctx.send(embed=embed)
 
-    @commands.command(name="phonetics", aliases=['ph', 'phoneticize', 'phoneticise', 'phone'], category=cmn.cat.fun)
+    @commands.command(name="phonetics", aliases=['ph', 'phoneticize', 'phoneticise', 'phone'], category=cmn.cat.ref)
     async def _phonetics_lookup(self, ctx: commands.Context, *, msg: str):
         '''Get phonetics for a word or phrase.'''
         with ctx.typing():
             result = ''
             for char in msg.lower():
                 if char.isalpha():
-                    result += random.choice([word for word in self.words if word[0] == char])
+                    result += phonetics.phonetics[char]
                 else:
                     result += char
                 result += ' '
