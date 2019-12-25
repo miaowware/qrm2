@@ -6,6 +6,7 @@ Copyright (C) 2019 Abigail Gold, 0x5c
 This file is part of discord-qrmbot and is released under the terms of the GNU
 General Public License, version 2.
 """
+# flake8: noqa
 qcodes = {"QAB": "May I have clearance (for ...) from ... (place) to ... (place) at flight level/altitude ... ? / You are cleared (or ... is cleared) by ... from ... (place) to ... (place) at flight level/altitude ...",
           "QAF": "Will you advise me when you are (were) at (over) ... (place)? / I am (was) at (over) ... (place) (at ... hours) at flight level/altitude ...",
           "QAG": "Arrange your flight in order to arrive over ... (place) at ... hours.",
