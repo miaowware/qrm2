@@ -1,6 +1,6 @@
 # qrm, a Bot for Discord
 
-[![Discord](https://discordapp.com/api/guilds/656888365886734340/widget.png?style=shield)](https://discord.gg/Ntbg3J4)
+[![Discord](https://discordapp.com/api/guilds/656888365886734340/widget.png?style=shield)](https://discord.gg/SwyjdDN)
 
 A discord bot with ham radio functionalities.
 
