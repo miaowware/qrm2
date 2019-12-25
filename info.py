@@ -25,3 +25,4 @@ description = """A bot with various useful ham radio-related functions, written 
 license = "Released under the GNU General Public License v2"
 contributing = "Check out the source on GitHub, contributions welcome: https://github.com/classabbyamp/discord-qrm2"
 release = '2.0.0'
+bot_server = 'https://discord.gg/Ntbg3J4'
