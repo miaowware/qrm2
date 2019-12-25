@@ -78,8 +78,7 @@ class StudyCog(commands.Cog):
             embed.add_field(name='Answers:', value='**A:** ' + question['answers']['A'] +
                             '\n**B:** ' + question['answers']['B'] +
                             '\n**C:** ' + question['answers']['C'] +
-                            '\n**D:** ' + question['answers']['D'],
-                            inline=False)
+                            '\n**D:** ' + question['answers']['D'], inline=False)
             embed.add_field(name='Answer:', value='Type _?rqa_ for answer', inline=False)
             if 'image' in question:
                 image_url = f'https://hamstudy.org/_1330011/images/{selected_pool.split("_",1)[1]}/{question["image"]}'

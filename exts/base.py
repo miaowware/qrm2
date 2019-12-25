@@ -141,8 +141,7 @@ class BaseCog(commands.Cog):
     @commands.command(name="echo", aliases=["e"], hidden=True)
     @commands.check(cmn.check_if_owner)
     async def _echo(self, ctx: commands.Context, channel: commands.TextChannelConverter, *, msg: str):
-        """Send a message in a channel as qrm. Only works within a server or DM to server,
-        not between servers."""
+        """Send a message in a channel as qrm. Only works within a server or DM to server, not between servers."""
         await channel.send(msg)
 
 
