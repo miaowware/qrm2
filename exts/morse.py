@@ -7,19 +7,15 @@ This file is part of discord-qrm2 and is released under the terms of the GNU
 General Public License, version 2.
 """
 
-import json
-
 import discord.ext.commands as commands
 
 import common as cmn
+from resources import morse
 
 
 class MorseCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        with open('resources/morse.json') as morse_file:
-            self.ascii2morse = json.load(morse_file)
-            self.morse2ascii = {v: k for k, v in self.ascii2morse.items()}
 
     @commands.command(name="morse", aliases=['cw'], category=cmn.cat.ref)
     async def _morse(self, ctx: commands.Context, *, msg: str):
@@ -28,13 +24,13 @@ class MorseCog(commands.Cog):
             result = ''
             for char in msg.upper():
                 try:
-                    result += self.ascii2morse[char]
+                    result += morse.morse[char]
                 except KeyError:
                     result += '<?>'
                 result += ' '
             embed = cmn.embed_factory(ctx)
             embed.title = f'Morse Code for {msg}'
-            embed.description = result
+            embed.description = '**' + result + '**'
             embed.colour = cmn.colours.good
         await ctx.send(embed=embed)
 
@@ -49,7 +45,7 @@ class MorseCog(commands.Cog):
             for word in msg:
                 for char in word:
                     try:
-                        result += self.morse2ascii[char]
+                        result += morse.ascii[char]
                     except KeyError:
                         result += '<?>'
                 result += ' '
@@ -68,7 +64,7 @@ class MorseCog(commands.Cog):
             weight = 0
             for char in msg:
                 try:
-                    cw_char = self.ascii2morse[char].replace('-', '==')
+                    cw_char = morse.morse[char].replace('-', '==')
                     weight += len(cw_char) * 2 + 2
                 except KeyError:
                     embed.title = 'Error in calculation of CW weight'
