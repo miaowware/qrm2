@@ -97,19 +97,18 @@ class AE7QCog(commands.Cog):
 
         for row in table_contents[0:3]:
             header = f'**{row[0]}** ({row[1]})'
-            body = f'Class: *{row[2]}*\n'
-            body += f'Region: *{row[3]}*\n'
-            body += f'Status: *{row[4]}*\n'
-            body += f'Granted: *{row[5]}*\n'
-            body += f'Effective: *{row[6]}*\n'
-            body += f'Cancelled: *{row[7]}*\n'
-            body += f'Expires: *{row[8]}*'
+            body = (f'Class: *{row[2]}*\n'
+                    f'Region: *{row[3]}*\n'
+                    f'Status: *{row[4]}*\n'
+                    f'Granted: *{row[5]}*\n'
+                    f'Effective: *{row[6]}*\n'
+                    f'Cancelled: *{row[7]}*\n'
+                    f'Expires: *{row[8]}*')
             embed.add_field(name=header, value=body, inline=False)
 
         embed.description = desc
         if len(table_contents) > 3:
-            embed.description += f'\nRecords 1 to 3 of {len(table_contents)}.'
-            embed.description += ' See ae7q.com for more...'
+            embed.description += f'\nRecords 1 to 3 of {len(table_contents)}. See ae7q.com for more...'
 
         await ctx.send(embed=embed)
 

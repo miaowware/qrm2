@@ -133,8 +133,7 @@ def qrz_process_info(data: dict):
         state = f', {data["state"]}'
     else:
         state = ''
-    address = data.get('addr1', '') + '\n' + data.get('addr2', '') + \
-        state + ' ' + data.get('zip', '')
+    address = data.get('addr1', '') + '\n' + data.get('addr2', '') + state + ' ' + data.get('zip', '')
     address = address.strip()
     if address == '':
         address = None

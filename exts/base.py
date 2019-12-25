@@ -22,8 +22,7 @@ import common as cmn
 
 class QrmHelpCommand(commands.HelpCommand):
     def __init__(self):
-        super().__init__(command_attrs={'help': 'Shows help about qrm or a command',
-                                        'aliases': ['h']})
+        super().__init__(command_attrs={'help': 'Shows help about qrm or a command', 'aliases': ['h']})
 
     def get_bot_mapping(self):
         bot = self.context.bot
