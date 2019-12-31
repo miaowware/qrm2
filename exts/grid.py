@@ -83,18 +83,21 @@ If two grid squares are given, the distance and azimuth between them is calculat
                     # Haversine formula
                     d_lat = math.radians(loc2[0] - loc[0])
                     d_lon = math.radians(loc2[1] - loc[1])
-                    a = math.sin(d_lat/2) ** 2
-                    a += math.cos(math.radians(loc[0])) * math.cos(math.radians(loc2[0]))
-                    a *= math.sin(d_lon/2) ** 2
+                    a = (math.sin(d_lat/2) ** 2
+                         + math.cos(math.radians(loc[0]))
+                         * math.cos(math.radians(loc2[0]))
+                         * math.sin(d_lon/2) ** 2)
                     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
                     d = radius * c
                     d_mi = 0.6213712 * d
 
                     # Bearing
                     y_dist = math.sin(math.radians(loc2[1]-loc[1])) * math.cos(math.radians(loc2[0]))
-                    x_dist = math.cos(math.radians(loc[0])) * math.sin(math.radians(loc2[0]))
-                    x_dist -= math.sin(math.radians(loc[0])) * math.cos(math.radians(loc2[0]))
-                    x_dist *= math.cos(math.radians(loc2[1] - loc[1]))
+                    x_dist = (math.cos(math.radians(loc[0]))
+                              * math.sin(math.radians(loc2[0]))
+                              - math.sin(math.radians(loc[0]))
+                              * math.cos(math.radians(loc2[0]))
+                              * math.cos(math.radians(loc2[1] - loc[1])))
                     bearing = (math.degrees(math.atan2(y_dist, x_dist)) + 360) % 360
 
                     embed = cmn.embed_factory(ctx)
