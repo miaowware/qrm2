@@ -40,7 +40,8 @@ class QRZCog(commands.Cog):
         async with self.session.get(url) as resp:
             if resp.status != 200:
                 raise ConnectionError(f'Unable to connect to QRZ (HTTP Error {resp.status})')
-            resp_xml = etree.parse(BytesIO(await resp.read())).getroot()
+            with BytesIO(await resp.read()) as resp_file:
+                resp_xml = etree.parse(resp_file).getroot()
 
         resp_xml_session = resp_xml.xpath('/x:QRZDatabase/x:Session',
                                           namespaces={'x': 'http://xmldata.qrz.com'})
@@ -99,7 +100,8 @@ async def qrz_login(user: str, passwd: str, session: aiohttp.ClientSession):
     async with session.get(url) as resp:
         if resp.status != 200:
             raise ConnectionError(f'Unable to connect to QRZ (HTTP Error {resp.status})')
-        resp_xml = etree.parse(BytesIO(await resp.read())).getroot()
+        with BytesIO(await resp.read()) as resp_file:
+            resp_xml = etree.parse(resp_file).getroot()
 
     resp_xml_session = resp_xml.xpath('/x:QRZDatabase/x:Session',
                                       namespaces={'x': 'http://xmldata.qrz.com'})
@@ -116,7 +118,8 @@ async def qrz_test_session(key: str, session: aiohttp.ClientSession):
     async with session.get(url) as resp:
         if resp.status != 200:
             raise ConnectionError(f'Unable to connect to QRZ (HTTP Error {resp.status})')
-        resp_xml = etree.parse(BytesIO(await resp.read())).getroot()
+        with BytesIO(await resp.read()) as resp_file:
+            resp_xml = etree.parse(resp_file).getroot()
 
     resp_xml_session = resp_xml.xpath('/x:QRZDatabase/x:Session',
                                       namespaces={'x': 'http://xmldata.qrz.com'})
