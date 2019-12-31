@@ -22,8 +22,7 @@ import common as cmn
 
 class QrmHelpCommand(commands.HelpCommand):
     def __init__(self):
-        super().__init__(command_attrs={'help': 'Shows help about qrm or a command',
-                                        'aliases': ['h']})
+        super().__init__(command_attrs={'help': 'Shows help about qrm or a command', 'aliases': ['h']})
 
     def get_bot_mapping(self):
         bot = self.context.bot
@@ -142,8 +141,7 @@ class BaseCog(commands.Cog):
     @commands.command(name="echo", aliases=["e"], hidden=True)
     @commands.check(cmn.check_if_owner)
     async def _echo(self, ctx: commands.Context, channel: commands.TextChannelConverter, *, msg: str):
-        """Send a message in a channel as qrm. Only works within a server or DM to server,
-        not between servers."""
+        """Send a message in a channel as qrm. Only works within a server or DM to server, not between servers."""
         await channel.send(msg)
 
 

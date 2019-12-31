@@ -42,8 +42,7 @@ class QRZCog(commands.Cog):
                 raise ConnectionError(f'Unable to connect to QRZ (HTTP Error {resp.status})')
             resp_xml = etree.parse(BytesIO(await resp.read())).getroot()
 
-        resp_xml_session = resp_xml.xpath('/x:QRZDatabase/x:Session',
-                                          namespaces={'x': 'http://xmldata.qrz.com'})
+        resp_xml_session = resp_xml.xpath('/x:QRZDatabase/x:Session', namespaces={'x': 'http://xmldata.qrz.com'})
         resp_session = {el.tag.split('}')[1]: el.text for el in resp_xml_session[0].getiterator()}
         if 'Error' in resp_session:
             if 'Session Timeout' in resp_session['Error']:
@@ -59,8 +58,7 @@ class QRZCog(commands.Cog):
                 return
             raise ValueError(resp_session['Error'])
 
-        resp_xml_data = resp_xml.xpath('/x:QRZDatabase/x:Callsign',
-                                       namespaces={'x': 'http://xmldata.qrz.com'})
+        resp_xml_data = resp_xml.xpath('/x:QRZDatabase/x:Callsign', namespaces={'x': 'http://xmldata.qrz.com'})
         resp_data = {el.tag.split('}')[1]: el.text for el in resp_xml_data[0].getiterator()}
 
         embed = cmn.embed_factory(ctx)
@@ -101,8 +99,7 @@ async def qrz_login(user: str, passwd: str, session: aiohttp.ClientSession):
             raise ConnectionError(f'Unable to connect to QRZ (HTTP Error {resp.status})')
         resp_xml = etree.parse(BytesIO(await resp.read())).getroot()
 
-    resp_xml_session = resp_xml.xpath('/x:QRZDatabase/x:Session',
-                                      namespaces={'x': 'http://xmldata.qrz.com'})
+    resp_xml_session = resp_xml.xpath('/x:QRZDatabase/x:Session', namespaces={'x': 'http://xmldata.qrz.com'})
     resp_session = {el.tag.split('}')[1]: el.text for el in resp_xml_session[0].getiterator()}
     if 'Error' in resp_session:
         raise ConnectionError(resp_session['Error'])
@@ -118,8 +115,7 @@ async def qrz_test_session(key: str, session: aiohttp.ClientSession):
             raise ConnectionError(f'Unable to connect to QRZ (HTTP Error {resp.status})')
         resp_xml = etree.parse(BytesIO(await resp.read())).getroot()
 
-    resp_xml_session = resp_xml.xpath('/x:QRZDatabase/x:Session',
-                                      namespaces={'x': 'http://xmldata.qrz.com'})
+    resp_xml_session = resp_xml.xpath('/x:QRZDatabase/x:Session', namespaces={'x': 'http://xmldata.qrz.com'})
     resp_session = {el.tag.split('}')[1]: el.text for el in resp_xml_session[0].getiterator()}
     if 'Error' in resp_session:
         raise ConnectionError(resp_session['Error'])
@@ -137,8 +133,7 @@ def qrz_process_info(data: dict):
         state = f', {data["state"]}'
     else:
         state = ''
-    address = data.get('addr1', '') + '\n' + data.get('addr2', '') + \
-        state + ' ' + data.get('zip', '')
+    address = data.get('addr1', '') + '\n' + data.get('addr2', '') + state + ' ' + data.get('zip', '')
     address = address.strip()
     if address == '':
         address = None
@@ -174,8 +169,7 @@ def qrz_process_info(data: dict):
                         ('CQ Zone', data.get('cqzone', None)),
                         ('ITU Zone', data.get('ituzone', None)),
                         ('IOTA Designator', data.get('iota', None)),
-                        ('Born', data.get('born', None)),
-                        ])
+                        ('Born', data.get('born', None))])
 
 
 def setup(bot):

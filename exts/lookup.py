@@ -48,15 +48,11 @@ class LookupCog(commands.Cog):
             while query:
                 if query in self.cty.keys():
                     data = self.cty[query]
-                    embed.add_field(name="Entity",
-                                    value=data['entity'])\
-                         .add_field(name="CQ Zone",
-                                    value=data['cq'])\
-                         .add_field(name="ITU Zone",
-                                    value=data['itu'])\
-                         .add_field(name="Continent",
-                                    value=data['continent'])\
-                         .add_field(name="Time Zone",
+                    embed.add_field(name="Entity", value=data['entity'])
+                    embed.add_field(name="CQ Zone", value=data['cq'])
+                    embed.add_field(name="ITU Zone", value=data['itu'])
+                    embed.add_field(name="Continent", value=data['continent'])
+                    embed.add_field(name="Time Zone",
                                     value=f'+{data["tz"]}' if data['tz'] > 0 else str(data['tz']))
                     embed.title += query
                     embed.colour = cmn.colours.good
