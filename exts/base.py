@@ -120,25 +120,38 @@ class BaseCog(commands.Cog):
         await ctx.send(content, embed=embed)
 
     @commands.command(name="changelog", aliases=["clog"])
-    async def _changelog(self, ctx: commands.Context):
+    async def _changelog(self, ctx: commands.Context, version: str = 'latest'):
         """Show what has changed in the most recent bot version."""
         embed = cmn.embed_factory(ctx)
         embed.title = "qrm Changelog"
         embed.description = ("For a full listing, visit [Github](https://"
                              "github.com/classabbyamp/discord-qrm2/blob/master/CHANGELOG.md).")
         changelog = self.changelog
+        vers = list(changelog.keys())
+        vers.remove("Unreleased")
 
-        vers = 0
-        for ver, log in changelog.items():
-            if ver.lower() != 'unreleased':
-                if 'date' in log:
-                    embed.description += f'\n\n**{ver}** ({log["date"]})'
-                else:
-                    embed.description += f'\n\n**{ver}**'
-                embed = await format_changelog(log, embed)
-                vers += 1
-            if vers >= 1:
-                break
+        version = version.lower()
+
+        if version == 'latest':
+            version = info.release
+        if version == 'unreleased':
+            version = 'Unreleased'
+
+        try:
+            log = changelog[version]
+        except KeyError:
+            embed.title += ": Version Not Found"
+            embed.description += '\n\n**Valid versions:** latest, '
+            embed.description += ', '.join(vers)
+            embed.colour = cmn.colours.bad
+            await ctx.send(embed=embed)
+            return
+
+        if 'date' in log:
+            embed.description += f'\n\n**v{version}** ({log["date"]})'
+        else:
+            embed.description += f'\n\n**v{version}**'
+        embed = await format_changelog(log, embed)
 
         await ctx.send(embed=embed)
 

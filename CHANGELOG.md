@@ -5,9 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ## [Unreleased]
+### Changed
+- changelog command to accept a version as argument.
 
 
-## [v2.1.0] - 2020-01-04
+## [2.1.0] - 2020-01-04
 ### Added
 - New NATO "phonetics" command.
 - Flag emojis to commands with countries.
@@ -18,14 +20,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Command linking to the issue tracker.
 - New key in options.py: pika.
 ### Changed
-- The "phonetics" command is not called "funetics".
+- The "phonetics" command is now called "funetics".
 - All commands now respond in embeds.
 - Playing status can now change on a schedule or randomly from a list.
 ### Fixed
 - Fixed incorrect information in the `prefixes` command.
 
 
-## [v2.0.0] - 2019-12-16
+## [2.0.0] - 2019-12-16
 ### Added
 - Rich lookup for AE7Q.com (callsigns only, more to come)
 - Rich lookup for QRZ.com, if a QRZ subscription is present
@@ -52,9 +54,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Issue in morse and unmorse commands where spaces were not interpreted correctly
 
 
-## v1.0.0 - 2019-07-31 [YANKED]
+## 1.0.0 - 2019-07-31 [YANKED]
 
 
 [Unreleased]: https://github.com/classabbyamp/discord-qrm2/compare/v2.1.0...HEAD
-[v2.1.0]: https://github.com/classabbyamp/discord-qrm2/releases/tag/v2.1.0
-[v2.0.0]: https://github.com/classabbyamp/discord-qrm2/releases/tag/v2.0.0
+[2.1.0]: https://github.com/classabbyamp/discord-qrm2/releases/tag/v2.1.0
+[2.0.0]: https://github.com/classabbyamp/discord-qrm2/releases/tag/v2.0.0
