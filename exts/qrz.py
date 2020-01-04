@@ -167,6 +167,7 @@ def qrz_process_info(data: dict):
                         ('Aliases', data.get('aliases', None)),
                         ('Previous Callsign', data.get('p_call', None)),
                         ('License Class', data.get('class', None)),
+                        ('Trustee', data.get('trustee', None)),
                         ('eQSL?', eqsl),
                         ('Paper QSL?', mqsl),
                         ('LotW?', lotw),
