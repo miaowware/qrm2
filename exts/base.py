@@ -142,6 +142,20 @@ class BaseCog(commands.Cog):
 
         await ctx.send(embed=embed)
 
+    @commands.command(name="issue")
+    async def _issue(self, ctx: commands.Context):
+        """Shows how to create an issue for the bot."""
+        embed = cmn.embed_factory(ctx)
+        embed.title = "Found a bug? Have a feature request?"
+        embed.description = ("Submit an issue on the [issue tracker]"
+                             "(https://github.com/classabbyamp/discord-qrm2/issues)!")
+        await ctx.send(embed=embed)
+
+    @commands.command(name="bruce", hidden=True)
+    async def _b_issue(self, ctx: commands.Context):
+        """Shows how to create an issue for the bot."""
+        await ctx.invoke(self._issue)
+
     @commands.command(name="echo", aliases=["e"], hidden=True)
     @commands.check(cmn.check_if_owner)
     async def _echo(self, ctx: commands.Context, channel: commands.TextChannelConverter, *, msg: str):
