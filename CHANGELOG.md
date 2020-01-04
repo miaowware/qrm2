@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 - Flag emojis to commands with countries.
 - Image attribution and description to "image" commands.
+- Better user-facing command error handling.
 - New key in options.py: pika.
 
 

@@ -106,14 +106,18 @@ class BaseCog(commands.Cog):
         embed.set_thumbnail(url=str(self.bot.user.avatar_url))
         await ctx.send(embed=embed)
 
-    @commands.command(name="ping")
+    @commands.command(name="ping", aliases=['beep'])
     async def _ping(self, ctx: commands.Context):
         """Show the current latency to the discord endpoint."""
-        content = ctx.message.author.mention if random.random() < 0.05 else ''
         embed = cmn.embed_factory(ctx)
-        embed.title = "**Pong!**"
+        content = ''
+        if ctx.invoked_with == "beep":
+            embed.title = "**Boop!**"
+        else:
+            content = ctx.message.author.mention if random.random() < 0.05 else ''
+            embed.title = "🏓 **Pong!**"
         embed.description = f'Current ping is {self.bot.latency*1000:.1f} ms'
-        await ctx.send(content=content, embed=embed)
+        await ctx.send(content, embed=embed)
 
     @commands.command(name="changelog", aliases=["clog"])
     async def _changelog(self, ctx: commands.Context):
@@ -137,6 +141,20 @@ class BaseCog(commands.Cog):
                 break
 
         await ctx.send(embed=embed)
+
+    @commands.command(name="issue")
+    async def _issue(self, ctx: commands.Context):
+        """Shows how to create an issue for the bot."""
+        embed = cmn.embed_factory(ctx)
+        embed.title = "Found a bug? Have a feature request?"
+        embed.description = ("Submit an issue on the [issue tracker]"
+                             "(https://github.com/classabbyamp/discord-qrm2/issues)!")
+        await ctx.send(embed=embed)
+
+    @commands.command(name="bruce", hidden=True)
+    async def _b_issue(self, ctx: commands.Context):
+        """Shows how to create an issue for the bot."""
+        await ctx.invoke(self._issue)
 
     @commands.command(name="echo", aliases=["e"], hidden=True)
     @commands.check(cmn.check_if_owner)
