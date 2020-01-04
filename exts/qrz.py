@@ -25,9 +25,11 @@ class QRZCog(commands.Cog):
         self._qrz_session_init.start()
 
     @commands.command(name="call", aliases=["qrz"], category=cmn.cat.lookup)
-    async def _qrz_lookup(self, ctx: commands.Context, callsign: str):
-        '''Look up a callsign on [QRZ.com](https://www.qrz.com/).'''
-        if keys.qrz_user == '' or keys.qrz_pass == '':
+    async def _qrz_lookup(self, ctx: commands.Context, callsign: str, *flags):
+        '''Look up a callsign on [QRZ.com](https://www.qrz.com/). Add `--link` to only link the QRZ page.'''
+        flags = [f.lower() for f in flags]
+
+        if keys.qrz_user == '' or keys.qrz_pass == '' or '--link' in flags:
             await ctx.send(f'http://qrz.com/db/{callsign}')
             return
 
