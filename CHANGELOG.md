@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ## [Unreleased]
+### Changed
+- The qrz command can now link to a QRZ page instead of embedding the data with the `--link` flag.
 
 
 ## [v2.1.0] - 2020-01-04
