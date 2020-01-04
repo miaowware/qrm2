@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 ### Changed
-- changelog command to accept a version as argument.
+- Changelog command to accept a version as argument.
 
 
 ## [2.1.0] - 2020-01-04

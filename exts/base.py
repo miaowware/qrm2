@@ -121,7 +121,7 @@ class BaseCog(commands.Cog):
 
     @commands.command(name="changelog", aliases=["clog"])
     async def _changelog(self, ctx: commands.Context, version: str = 'latest'):
-        """Show what has changed in the most recent bot version."""
+        """Show what has changed in a bot version."""
         embed = cmn.embed_factory(ctx)
         embed.title = "qrm Changelog"
         embed.description = ("For a full listing, visit [Github](https://"
