@@ -11,6 +11,8 @@ KN8U: active, restricted
 AB2EE: expired, restricted
 KE8FGB: assigned once, no restrictions
 NA2AAA: unassigned, no records
+KC4USA: reserved but has call history
+WF4EMA: "
 """
 
 import discord.ext.commands as commands
@@ -62,7 +64,9 @@ class AE7QCog(commands.Cog):
                 desc = desc.replace(callsign, f'`{callsign}`')
             rows = None
 
-        if rows is None:
+        first_header = ''.join(rows[0].find_all("th")[0].strings)
+
+        if rows is None or first_header != 'Entity Name':
             embed.title = f"AE7Q History for {callsign}"
             embed.colour = cmn.colours.bad
             embed.url = f"{base_url}{callsign}"
@@ -74,6 +78,9 @@ class AE7QCog(commands.Cog):
         table_contents = []  # store your table here
         for tr in rows:
             if rows.index(tr) == 0:
+                # first_header = ''.join(tr.find_all("th")[0].strings)
+                # if first_header == 'Entity Name':
+                #     print('yooooo')
                 continue
             row_cells = []
             for td in tr.find_all('td'):
@@ -86,7 +93,7 @@ class AE7QCog(commands.Cog):
                         row_cells.append(row_cells[-1])
             for i, cell in enumerate(row_cells):
                 if cell == '"':
-                    cell = table_contents[-1][i]
+                    row_cells[i] = table_contents[-1][i]
             if len(row_cells) > 1:
                 table_contents += [row_cells]
 

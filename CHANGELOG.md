@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 - Changelog command to accept a version as argument.
 - The qrz command can now link to a QRZ page instead of embedding the data with the `--link` flag.
+### Fixed
+- Fixed ditto marks (") appearing in the ae7q call command.
+- Fixed issue where incorrect table was parsed in ae7q call command.
 
 
 ## [2.1.0] - 2020-01-04
