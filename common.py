@@ -42,8 +42,12 @@ cat = SimpleNamespace(lookup='Information Lookup',
                       study='Exam Study',
                       weather='Land and Space Weather')
 
-emojis = SimpleNamespace(good='✅',
-                         bad='❌')
+emojis = SimpleNamespace(check_mark='✅',
+                         x='❌',
+                         warning='⚠️',
+                         question='❓',
+                         no_entry='⛔',
+                         bangbang='‼️')
 
 paths = SimpleNamespace(data=Path("./data/"),
                         resources=Path("./resources/"),
@@ -106,7 +110,7 @@ def error_embed_factory(ctx: commands.Context, exception: Exception, debug_mode:
     else:
         fmtd_ex = traceback.format_exception_only(exception.__class__, exception)
     embed = embed_factory(ctx)
-    embed.title = "Error"
+    embed.title = "⚠️ Error"
     embed.description = "```\n" + '\n'.join(fmtd_ex) + "```"
     embed.colour = colours.bad
     return embed
@@ -124,5 +128,4 @@ async def add_react(msg: discord.Message, react: str):
 async def check_if_owner(ctx: commands.Context):
     if ctx.author.id in opt.owners_uids:
         return True
-    await add_react(ctx.message, emojis.bad)
-    return False
+    raise commands.NotOwner

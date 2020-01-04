@@ -8,6 +8,9 @@ This file is part of discord-qrm2 and is released under the terms of the GNU
 General Public License, version 2.
 """
 
+
+import sys
+import traceback
 from datetime import time, datetime
 import random
 from types import SimpleNamespace
@@ -42,6 +45,8 @@ bot = commands.Bot(command_prefix=opt.prefix,
 bot.qrm = SimpleNamespace()
 bot.qrm.session = aiohttp.ClientSession(headers={'User-Agent': f'discord-qrm2/{info.release}'})
 
+bot.qrm.debug_mode = debug_mode
+
 
 # --- Commands ---
 
@@ -51,7 +56,7 @@ async def _restart_bot(ctx: commands.Context):
     """Restarts the bot."""
     await bot.qrm.session.close()
     global exit_code
-    await cmn.add_react(ctx.message, cmn.emojis.good)
+    await cmn.add_react(ctx.message, cmn.emojis.check_mark)
     print(f"[**] Restarting! Requested by {ctx.author}.")
     exit_code = 42  # Signals to the wrapper script that the bot needs to be restarted.
     await bot.logout()
@@ -63,7 +68,7 @@ async def _shutdown_bot(ctx: commands.Context):
     """Shuts down the bot."""
     await bot.qrm.session.close()
     global exit_code
-    await cmn.add_react(ctx.message, cmn.emojis.good)
+    await cmn.add_react(ctx.message, cmn.emojis.check_mark)
     print(f"[**] Shutting down! Requested by {ctx.author}.")
     exit_code = 0  # Signals to the wrapper script that the bot should not be restarted.
     await bot.logout()
@@ -92,9 +97,9 @@ async def _extctl_list(ctx: commands.Context):
 async def _extctl_load(ctx: commands.Context, extension: str):
     try:
         bot.load_extension(ext_dir + "." + extension)
-        await cmn.add_react(ctx.message, cmn.emojis.good)
+        await cmn.add_react(ctx.message, cmn.emojis.check_mark)
     except commands.ExtensionError as ex:
-        embed = cmn.error_embed_factory(ctx, ex, debug_mode)
+        embed = cmn.error_embed_factory(ctx, ex, bot.qrm.debug_mode)
         await ctx.send(embed=embed)
 
 
@@ -106,9 +111,9 @@ async def _extctl_reload(ctx: commands.Context, extension: str):
             await cmn.add_react(ctx.message, pika)
     try:
         bot.reload_extension(ext_dir + "." + extension)
-        await cmn.add_react(ctx.message, cmn.emojis.good)
+        await cmn.add_react(ctx.message, cmn.emojis.check_mark)
     except commands.ExtensionError as ex:
-        embed = cmn.error_embed_factory(ctx, ex, debug_mode)
+        embed = cmn.error_embed_factory(ctx, ex, bot.qrm.debug_mode)
         await ctx.send(embed=embed)
 
 
@@ -116,9 +121,9 @@ async def _extctl_reload(ctx: commands.Context, extension: str):
 async def _extctl_unload(ctx: commands.Context, extension: str):
     try:
         bot.unload_extension(ext_dir + "." + extension)
-        await cmn.add_react(ctx.message, cmn.emojis.good)
+        await cmn.add_react(ctx.message, cmn.emojis.check_mark)
     except commands.ExtensionError as ex:
-        embed = cmn.error_embed_factory(ctx, ex, debug_mode)
+        embed = cmn.error_embed_factory(ctx, ex, bot.qrm.debug_mode)
         await ctx.send(embed=embed)
 
 
@@ -144,6 +149,37 @@ async def on_message(message):
             await message.add_reaction(discord.utils.find(lambda x: x.id == emoji, bot.emojis))
 
     await bot.process_commands(message)
+
+
+@bot.event
+async def on_command_error(ctx: commands.Context, err: commands.CommandError):
+    if isinstance(err, commands.UserInputError):
+        await cmn.add_react(ctx.message, cmn.emojis.warning)
+        await ctx.send_help(ctx.command)
+    elif isinstance(err, commands.CommandNotFound) and not ctx.invoked_with.startswith("?"):
+        await cmn.add_react(ctx.message, cmn.emojis.question)
+    elif isinstance(err, commands.CheckFailure):
+        # Add handling of other subclasses of CheckFailure as needed.
+        if isinstance(err, commands.NotOwner):
+            await cmn.add_react(ctx.message, cmn.emojis.no_entry)
+        else:
+            await cmn.add_react(ctx.message, cmn.emojis.x)
+    elif isinstance(err, commands.DisabledCommand):
+        await cmn.add_react(ctx.message, cmn.emojis.bangbang)
+    elif isinstance(err, (commands.CommandInvokeError, commands.ConversionError)):
+        # Emulating discord.py's default beaviour.
+        print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
+        traceback.print_exception(type(err), err, err.__traceback__, file=sys.stderr)
+
+        embed = cmn.error_embed_factory(ctx, err.original, bot.qrm.debug_mode)
+        embed.description += f"\n`{type(err).__name__}`"
+        await cmn.add_react(ctx.message, cmn.emojis.warning)
+        await ctx.send(embed=embed)
+    else:
+        # Emulating discord.py's default beaviour. (safest bet)
+        print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
+        traceback.print_exception(type(err), err, err.__traceback__, file=sys.stderr)
+        await cmn.add_react(ctx.message, cmn.emojis.warning)
 
 
 # --- Tasks ---
@@ -194,19 +230,19 @@ try:
 
 except discord.LoginFailure as ex:
     # Miscellaneous authentications errors: borked token and co
-    if debug_mode:
+    if bot.qrm.debug_mode:
         raise
     raise SystemExit("Error: Failed to authenticate: {}".format(ex))
 
 except discord.ConnectionClosed as ex:
     # When the connection to the gateway (websocket) is closed
-    if debug_mode:
+    if bot.qrm.debug_mode:
         raise
     raise SystemExit("Error: Discord gateway connection closed: [Code {}] {}".format(ex.code, ex.reason))
 
 except ConnectionResetError as ex:
     # More generic connection reset error
-    if debug_mode:
+    if bot.qrm.debug_mode:
         raise
     raise SystemExit("ConnectionResetError: {}".format(ex))
 
