@@ -5,10 +5,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 ### Added
+- New NATO "phonetics" command.
 - Flag emojis to commands with countries.
 - Image attribution and description to "image" commands.
 - Better user-facing command error handling.
+- Reacts with emojis upon specific keywords.
+- Official server to info command.
+- Command linking to the issue tracker.
 - New key in options.py: pika.
+### Changed
+- The "phonetics" command is not called "funetics".
+- All commands now respond in embeds.
+- Playing status can now change on a schedule or randomly from a list.
+### Fixed
+- Fixed incorrect information in the `prefixes` command.
 
 
 ## [v2.0.0] - 2019-12-16
