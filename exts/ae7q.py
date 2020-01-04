@@ -86,7 +86,7 @@ class AE7QCog(commands.Cog):
                         row_cells.append(row_cells[-1])
             for i, cell in enumerate(row_cells):
                 if cell == '"':
-                    cell = table_contents[-1][i]
+                    row_cells[i] = table_contents[-1][i]
             if len(row_cells) > 1:
                 table_contents += [row_cells]
 
