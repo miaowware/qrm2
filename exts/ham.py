@@ -65,7 +65,7 @@ class HamCog(commands.Cog):
             embed.colour = cmn.colours.good
         await ctx.send(embed=embed)
 
-    @commands.command(name="prefixes", aliases=["vanity", "pfx", "vanities", "prefix"])
+    @commands.command(name="prefixes", aliases=["vanity", "pfx", "vanities", "prefix"], category=cmn.cat.ref)
     async def _vanity_prefixes(self, ctx: commands.Context, country: str = None):
         '''Lists valid prefixes for countries.'''
         if country is None:
