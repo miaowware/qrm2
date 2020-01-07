@@ -10,6 +10,8 @@ General Public License, version 2.
 import random
 import json
 
+import aiohttp
+
 import discord.ext.commands as commands
 
 import common as cmn
@@ -20,7 +22,7 @@ class StudyCog(commands.Cog):
         self.bot = bot
         self.lastq = dict()
         self.source = 'Data courtesy of [HamStudy.org](https://hamstudy.org/)'
-        self.session = bot.qrm.session
+        self.session = aiohttp.ClientSession(connector=bot.qrm.connector)
 
     @commands.command(name="hamstudy", aliases=['rq', 'randomquestion', 'randomq'], category=cmn.cat.study)
     async def _random_question(self, ctx: commands.Context, level: str = None):

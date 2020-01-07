@@ -10,6 +10,8 @@ General Public License, version 2.
 import io
 import re
 
+import aiohttp
+
 import discord
 import discord.ext.commands as commands
 
@@ -21,7 +23,7 @@ class WeatherCog(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.session = bot.qrm.session
+        self.session = aiohttp.ClientSession(connector=bot.qrm.connector)
 
     @commands.command(name="bandconditions", aliases=['cond', 'condx', 'conditions'], category=cmn.cat.weather)
     async def _band_conditions(self, ctx: commands.Context):
