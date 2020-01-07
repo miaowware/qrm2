@@ -34,7 +34,7 @@ class AE7QCog(commands.Cog):
 
     @_ae7q_lookup.command(name="call", aliases=["c"], category=cmn.cat.lookup)
     async def _ae7q_call(self, ctx: commands.Context, callsign: str):
-        '''Look up the history for a callsign on [ae7q.com](http://ae7q.com/).'''
+        '''Look up the history of a callsign on [ae7q.com](http://ae7q.com/).'''
         callsign = callsign.upper()
         desc = ''
         base_url = "http://ae7q.com/query/data/CallHistory.php?CALL="
@@ -66,7 +66,7 @@ class AE7QCog(commands.Cog):
         first_header = ''.join(table_headers[0].strings) if len(table_headers) > 0 else None
 
         # catch if the wrong table was selected
-        if first_header != 'Entity Name':
+        if first_header is None or first_header != 'Entity Name':
             embed.title = f"AE7Q History for {callsign}"
             embed.colour = cmn.colours.bad
             embed.url = base_url + callsign
@@ -75,16 +75,16 @@ class AE7QCog(commands.Cog):
             await ctx.send(embed=embed)
             return
 
-        table = await process_table(table)
+        table = await process_table(table[1:])
 
         embed = cmn.embed_factory(ctx)
-        embed.title = f"AE7Q Records for {callsign}"
+        embed.title = f"AE7Q History for {callsign}"
         embed.colour = cmn.colours.good
         embed.url = base_url + callsign
 
         # add the first three rows of the table to the embed
         for row in table[0:3]:
-            header = f'**{row[0]}** ({row[1]})' # **Name** (Applicant Type)
+            header = f'**{row[0]}** ({row[1]})'     # **Name** (Applicant Type)
             body = (f'Class: *{row[2]}*\n'
                     f'Region: *{row[3]}*\n'
                     f'Status: *{row[4]}*\n'
@@ -101,30 +101,103 @@ class AE7QCog(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    # TODO: write commands for other AE7Q response types?
-    # @_ae7q_lookup.command(name="trustee")
-    # async def _ae7q_trustee(self, ctx: commands.Context, callsign: str):
-    #     pass
+    @_ae7q_lookup.command(name="trustee", aliases=["t"], category=cmn.cat.lookup)
+    async def _ae7q_trustee(self, ctx: commands.Context, callsign: str):
+        '''Look up the licenses for which a licensee is trustee on [ae7q.com](http://ae7q.com/).'''
+        callsign = callsign.upper()
+        desc = ''
+        base_url = "http://ae7q.com/query/data/CallHistory.php?CALL="
+        embed = cmn.embed_factory(ctx)
 
-    # @_ae7q_lookup.command(name="applications", aliases=['apps'])
-    # async def _ae7q_applications(self, ctx: commands.Context, callsign: str):
-    #     pass
+        async with self.session.get(base_url + callsign) as resp:
+            if resp.status != 200:
+                embed.title = "Error in AE7Q trustee command"
+                embed.description = 'Could not load AE7Q'
+                embed.colour = cmn.colours.bad
+                await ctx.send(embed=embed)
+                return
+            page = await resp.text()
 
-    # @_ae7q_lookup.command(name="frn")
-    # async def _ae7q_frn(self, ctx: commands.Context, frn: str):
-    #     base_url = "http://ae7q.com/query/data/FrnHistory.php?FRN="
-    #     pass
+        soup = BeautifulSoup(page, features="html.parser")
+        tables = [[row for row in table.find_all("tr")] for table in soup.select("table.Database")]
 
-    # @_ae7q_lookup.command(name="licensee", aliases=["lic"])
-    # async def _ae7q_licensee(self, ctx: commands.Context, frn: str):
-    #     base_url = "http://ae7q.com/query/data/LicenseeIdHistory.php?ID="
-    #     pass
+        try:
+            table = tables[2] if len(tables[0][0]) == 1 else tables[1]
+        except IndexError:
+            embed.title = f"AE7Q Trustee History for {callsign}"
+            embed.colour = cmn.colours.bad
+            embed.url = base_url + callsign
+            embed.description = desc
+            embed.description += f'\nNo records found for `{callsign}`'
+            await ctx.send(embed=embed)
+            return
+
+        table_headers = table[0].find_all("th")
+        first_header = ''.join(table_headers[0].strings) if len(table_headers) > 0 else None
+
+        # catch if the wrong table was selected
+        if first_header is None or not first_header.startswith("With"):
+            embed.title = f"AE7Q Trustee History for {callsign}"
+            embed.colour = cmn.colours.bad
+            embed.url = base_url + callsign
+            embed.description = desc
+            embed.description += f'\nNo records found for `{callsign}`'
+            await ctx.send(embed=embed)
+            return
+
+        table = await process_table(table[2:])
+
+        embed = cmn.embed_factory(ctx)
+        embed.title = f"AE7Q Trustee History for {callsign}"
+        embed.colour = cmn.colours.good
+        embed.url = base_url + callsign
+
+        # add the first three rows of the table to the embed
+        for row in table[0:3]:
+            header = f'**{row[0]}** ({row[3]})'     # **Name** (Applicant Type)
+            body = (f'Name: *{row[2]}*\n'
+                    f'Region: *{row[1]}*\n'
+                    f'Status: *{row[4]}*\n'
+                    f'Granted: *{row[5]}*\n'
+                    f'Effective: *{row[6]}*\n'
+                    f'Cancelled: *{row[7]}*\n'
+                    f'Expires: *{row[8]}*')
+            embed.add_field(name=header, value=body, inline=False)
+
+        if len(table) > 3:
+            desc += f'\nRecords 1 to 3 of {len(table)}. See ae7q.com for more...'
+
+        embed.description = desc
+
+        await ctx.send(embed=embed)
+
+    @_ae7q_lookup.command(name="applications", aliases=["a"], category=cmn.cat.lookup)
+    async def _ae7q_applications(self, ctx: commands.Context, callsign: str):
+        '''Look up the applications for a callsign on [ae7q.com](http://ae7q.com/).'''
+
+    @_ae7q_lookup.command(name="frn", aliases=["f"], category=cmn.cat.lookup)
+    async def _ae7q_frn(self, ctx: commands.Context, frn: str):
+        '''Look up the history of an FRN on [ae7q.com](http://ae7q.com/).'''
+        base_url = "http://ae7q.com/query/data/FrnHistory.php?FRN="
+        """
+        NOTES:
+        - 2 tables: callsign history and application history
+        - If not found: no tables
+        """
+        pass
+
+    @_ae7q_lookup.command(name="licensee", aliases=["l"], category=cmn.cat.lookup)
+    async def _ae7q_licensee(self, ctx: commands.Context, frn: str):
+        '''Look up the history of a licensee ID on [ae7q.com](http://ae7q.com/).'''
+        base_url = "http://ae7q.com/query/data/LicenseeIdHistory.php?ID="
+        # notes: same as FRN but with different input
+        pass
 
 
 async def process_table(table: list):
-    """Processes tables (including headers) and returns the processed table"""
+    """Processes tables (*not* including headers) and returns the processed table"""
     table_contents = []
-    for tr in table[1:]:
+    for tr in table:
         row = []
         for td in tr.find_all('td'):
             cell_val = td.getText().strip()
