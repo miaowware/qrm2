@@ -9,6 +9,8 @@ General Public License, version 2.
 
 import io
 
+import aiohttp
+
 import discord
 import discord.ext.commands as commands
 
@@ -20,7 +22,7 @@ class ImageCog(commands.Cog):
         self.bot = bot
         self.bandcharts = cmn.ImagesGroup(cmn.paths.bandcharts / "meta.json")
         self.maps = cmn.ImagesGroup(cmn.paths.maps / "meta.json")
-        self.session = bot.qrm.session
+        self.session = aiohttp.ClientSession(connector=bot.qrm.connector)
 
     @commands.command(name="bandplan", aliases=['plan', 'bands'], category=cmn.cat.ref)
     async def _bandplan(self, ctx: commands.Context, region: str = ''):

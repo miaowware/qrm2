@@ -17,6 +17,7 @@ WF4EMA: "
 
 import discord.ext.commands as commands
 
+import aiohttp
 from bs4 import BeautifulSoup
 
 import common as cmn
@@ -25,7 +26,7 @@ import common as cmn
 class AE7QCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.session = bot.qrm.session
+        self.session = aiohttp.ClientSession(connector=bot.qrm.connector)
 
     @commands.group(name="ae7q", aliases=["ae"], category=cmn.cat.lookup)
     async def _ae7q_lookup(self, ctx: commands.Context):
