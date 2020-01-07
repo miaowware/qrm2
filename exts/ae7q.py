@@ -10,9 +10,8 @@ Test callsigns:
 KN8U: active, restricted
 AB2EE: expired, restricted
 KE8FGB: assigned once, no restrictions
-NA2AAA: unassigned, no records
-KC4USA: reserved but has call history
-WF4EMA: "
+KV4AAA: unassigned, no records
+KC4USA: reserved, no call history, *but* has application history
 """
 
 import discord.ext.commands as commands
@@ -33,7 +32,7 @@ class AE7QCog(commands.Cog):
         if ctx.invoked_subcommand is None:
             await ctx.send_help(ctx.command)
 
-    @_ae7q_lookup.command(name="call", category=cmn.cat.lookup)
+    @_ae7q_lookup.command(name="call", aliases=["c"], category=cmn.cat.lookup)
     async def _ae7q_call(self, ctx: commands.Context, callsign: str):
         '''Look up the history for a callsign on [ae7q.com](http://ae7q.com/).'''
         callsign = callsign.upper()
@@ -51,59 +50,41 @@ class AE7QCog(commands.Cog):
             page = await resp.text()
 
         soup = BeautifulSoup(page, features="html.parser")
-        tables = soup.select("table.Database")
+        tables = [[row for row in table.find_all("tr")] for table in soup.select("table.Database")]
 
-        for table in tables:
-            rows = table.find_all("tr")
-            if len(rows) > 1 and len(rows[0]) > 1:
-                break
-            if desc == '':
-                for row in rows:
-                    desc += " ".join(row.getText().split())
-                    desc += '\n'
-                desc = desc.replace(callsign, f'`{callsign}`')
-            rows = None
+        table = tables[0]
 
-        first_header = ''.join(rows[0].find_all("th")[0].strings)
+        # find the first table in the page, and use it to make a description
+        if len(table[0]) == 1:
+            for row in table:
+                desc += " ".join(row.getText().split())
+                desc += '\n'
+            desc = desc.replace(callsign, f'`{callsign}`')
+            table = tables[1]
 
-        if rows is None or first_header != 'Entity Name':
+        table_headers = table[0].find_all("th")
+        first_header = ''.join(table_headers[0].strings) if len(table_headers) > 0 else None
+
+        # catch if the wrong table was selected
+        if first_header != 'Entity Name':
             embed.title = f"AE7Q History for {callsign}"
             embed.colour = cmn.colours.bad
-            embed.url = f"{base_url}{callsign}"
+            embed.url = base_url + callsign
             embed.description = desc
             embed.description += f'\nNo records found for `{callsign}`'
             await ctx.send(embed=embed)
             return
 
-        table_contents = []  # store your table here
-        for tr in rows:
-            if rows.index(tr) == 0:
-                # first_header = ''.join(tr.find_all("th")[0].strings)
-                # if first_header == 'Entity Name':
-                #     print('yooooo')
-                continue
-            row_cells = []
-            for td in tr.find_all('td'):
-                if td.getText().strip() != '':
-                    row_cells.append(td.getText().strip())
-                else:
-                    row_cells.append('-')
-                if 'colspan' in td.attrs and int(td.attrs['colspan']) > 1:
-                    for i in range(int(td.attrs['colspan']) - 1):
-                        row_cells.append(row_cells[-1])
-            for i, cell in enumerate(row_cells):
-                if cell == '"':
-                    row_cells[i] = table_contents[-1][i]
-            if len(row_cells) > 1:
-                table_contents += [row_cells]
+        table = await process_table(table)
 
         embed = cmn.embed_factory(ctx)
         embed.title = f"AE7Q Records for {callsign}"
         embed.colour = cmn.colours.good
-        embed.url = f"{base_url}{callsign}"
+        embed.url = base_url + callsign
 
-        for row in table_contents[0:3]:
-            header = f'**{row[0]}** ({row[1]})'
+        # add the first three rows of the table to the embed
+        for row in table[0:3]:
+            header = f'**{row[0]}** ({row[1]})' # **Name** (Applicant Type)
             body = (f'Class: *{row[2]}*\n'
                     f'Region: *{row[3]}*\n'
                     f'Status: *{row[4]}*\n'
@@ -113,9 +94,10 @@ class AE7QCog(commands.Cog):
                     f'Expires: *{row[8]}*')
             embed.add_field(name=header, value=body, inline=False)
 
+        if len(table) > 3:
+            desc += f'\nRecords 1 to 3 of {len(table)}. See ae7q.com for more...'
+
         embed.description = desc
-        if len(table_contents) > 3:
-            embed.description += f'\nRecords 1 to 3 of {len(table_contents)}. See ae7q.com for more...'
 
         await ctx.send(embed=embed)
 
@@ -137,6 +119,29 @@ class AE7QCog(commands.Cog):
     # async def _ae7q_licensee(self, ctx: commands.Context, frn: str):
     #     base_url = "http://ae7q.com/query/data/LicenseeIdHistory.php?ID="
     #     pass
+
+
+async def process_table(table: list):
+    """Processes tables (including headers) and returns the processed table"""
+    table_contents = []
+    for tr in table[1:]:
+        row = []
+        for td in tr.find_all('td'):
+            cell_val = td.getText().strip()
+            row.append(cell_val if cell_val else '-')
+
+            # take care of columns that span multiple rows by copying the contents rightward
+            if 'colspan' in td.attrs and int(td.attrs['colspan']) > 1:
+                for i in range(int(td.attrs['colspan']) - 1):
+                    row.append(row[-1])
+
+        # get rid of ditto marks by copying the contents from the previous row
+        for i, cell in enumerate(row):
+            if cell == "\"":
+                row[i] = table_contents[-1][i]
+        # add row to table
+        table_contents += [row]
+    return table_contents
 
 
 def setup(bot: commands.Bot):
