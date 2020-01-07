@@ -28,7 +28,7 @@ $ run.sh
 
 ## Copyright
 
-Copyright (C) 2019 Abigail Gold, 0x5c
+Copyright (C) 2019-2020 Abigail Gold, 0x5c
 
 This program is released under the terms of the GNU General Public License,
 version 2. See `COPYING` for full license text.
