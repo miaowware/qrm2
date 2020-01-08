@@ -1,13 +1,15 @@
 """
 Image extension for qrm
 ---
-Copyright (C) 2019 Abigail Gold, 0x5c
+Copyright (C) 2019-2020 Abigail Gold, 0x5c
 
 This file is part of discord-qrm2 and is released under the terms of the GNU
 General Public License, version 2.
 """
 
 import io
+
+import aiohttp
 
 import discord
 import discord.ext.commands as commands
@@ -20,7 +22,7 @@ class ImageCog(commands.Cog):
         self.bot = bot
         self.bandcharts = cmn.ImagesGroup(cmn.paths.bandcharts / "meta.json")
         self.maps = cmn.ImagesGroup(cmn.paths.maps / "meta.json")
-        self.session = bot.qrm.session
+        self.session = aiohttp.ClientSession(connector=bot.qrm.connector)
 
     @commands.command(name="bandplan", aliases=['plan', 'bands'], category=cmn.cat.ref)
     async def _bandplan(self, ctx: commands.Context, region: str = ''):

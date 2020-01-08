@@ -1,7 +1,7 @@
 """
 Study extension for qrm
 ---
-Copyright (C) 2019 Abigail Gold, 0x5c
+Copyright (C) 2019-2020 Abigail Gold, 0x5c
 
 This file is part of discord-qrm2 and is released under the terms of the GNU
 General Public License, version 2.
@@ -9,6 +9,8 @@ General Public License, version 2.
 
 import random
 import json
+
+import aiohttp
 
 import discord.ext.commands as commands
 
@@ -20,7 +22,7 @@ class StudyCog(commands.Cog):
         self.bot = bot
         self.lastq = dict()
         self.source = 'Data courtesy of [HamStudy.org](https://hamstudy.org/)'
-        self.session = bot.qrm.session
+        self.session = aiohttp.ClientSession(connector=bot.qrm.connector)
 
     @commands.command(name="hamstudy", aliases=['rq', 'randomquestion', 'randomq'], category=cmn.cat.study)
     async def _random_question(self, ctx: commands.Context, level: str = None):

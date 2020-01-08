@@ -1,23 +1,19 @@
 """
 Common tools for the bot.
 ---
-Copyright (C) 2019 Abigail Gold, 0x5c
+Copyright (C) 2019-2020 Abigail Gold, 0x5c
 
 This file is part of discord-qrm2 and is released under the terms of the GNU
 General Public License, version 2.
----
-
-`colours`: Colours used by embeds.
-
-`cat`: Category names for the HelpCommand.
 """
 
 
 import collections
 import json
+import re
 import traceback
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 from types import SimpleNamespace
 
 import discord
@@ -26,7 +22,8 @@ import discord.ext.commands as commands
 import data.options as opt
 
 
-__all__ = ["colours", "cat", "emojis", "embed_factory", "error_embed_factory", "add_react", "check_if_owner"]
+__all__ = ["colours", "cat", "emojis", "paths", "ImageMetadata", "ImagesGroup",
+           "embed_factory", "error_embed_factory", "add_react", "check_if_owner"]
 
 
 # --- Common values ---
@@ -92,6 +89,29 @@ class ImagesGroup(collections.abc.Mapping):
     # str(): Simply return what it would be for the underlaying dict
     def __str__(self):
         return str(self._images)
+
+
+# --- Converters ---
+
+class GlobalChannelConverter(commands.IDConverter):
+    """Converter to get any bot-acessible channel by ID/mention (global), or name (in current guild only)."""
+    async def convert(self, ctx: commands.Context, argument: str):
+        bot = ctx.bot
+        guild = ctx.guild
+        match = self._get_id_match(argument) or re.match(r'<#([0-9]+)>$', argument)
+        result = None
+        if match is None:
+            # not a mention/ID
+            if guild:
+                result = discord.utils.get(guild.text_channels, name=argument)
+            else:
+                raise commands.BadArgument(f"""Channel named "{argument}" not found in this guild.""")
+        else:
+            channel_id = int(match.group(1))
+            result = bot.get_channel(channel_id)
+        if not isinstance(result, (discord.TextChannel, discord.abc.PrivateChannel)):
+            raise commands.BadArgument(f"""Channel "{argument}" not found.""")
+        return result
 
 
 # --- Helper functions ---

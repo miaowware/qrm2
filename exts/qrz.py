@@ -1,7 +1,7 @@
 """
 QRZ extension for qrm
 ---
-Copyright (C) 2019 Abigail Gold, 0x5c
+Copyright (C) 2019-2020 Abigail Gold, 0x5c
 
 This file is part of discord-qrm2 and is released under the terms of the GNU
 General Public License, version 2.
@@ -21,7 +21,7 @@ import data.keys as keys
 class QRZCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.session = bot.qrm.session
+        self.session = aiohttp.ClientSession(connector=bot.qrm.connector)
         self._qrz_session_init.start()
 
     @commands.command(name="call", aliases=["qrz"], category=cmn.cat.lookup)

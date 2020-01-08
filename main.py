@@ -2,7 +2,7 @@
 """
 qrm, a bot for Discord
 ---
-Copyright (C) 2019 Abigail Gold, 0x5c
+Copyright (C) 2019-2020 Abigail Gold, 0x5c
 
 This file is part of discord-qrm2 and is released under the terms of the GNU
 General Public License, version 2.
@@ -11,17 +11,19 @@ General Public License, version 2.
 
 import sys
 import traceback
+import asyncio
 from datetime import time, datetime
 import random
 from types import SimpleNamespace
 
 import pytz
-import aiohttp
 
 import discord
 from discord.ext import commands, tasks
 
+import utils.connector as conn
 import common as cmn
+
 import info
 import data.options as opt
 import data.keys as keys
@@ -38,13 +40,21 @@ debug_mode = opt.debug  # Separate assignement in-case we define an override (te
 
 # --- Bot setup ---
 
+# Loop/aiohttp stuff
+loop = asyncio.get_event_loop()
+connector = loop.run_until_complete(conn.new_connector())
+
 bot = commands.Bot(command_prefix=opt.prefix,
                    description=info.description,
-                   help_command=commands.MinimalHelpCommand())
+                   help_command=commands.MinimalHelpCommand(),
+                   loop=loop,
+                   connector=connector)
 
+# Simple way to access bot-wide stuff in extensions.
 bot.qrm = SimpleNamespace()
-bot.qrm.session = aiohttp.ClientSession(headers={'User-Agent': f'discord-qrm2/{info.release}'})
 
+# Let's store stuff here.
+bot.qrm.connector = connector
 bot.qrm.debug_mode = debug_mode
 
 
@@ -54,7 +64,6 @@ bot.qrm.debug_mode = debug_mode
 @commands.check(cmn.check_if_owner)
 async def _restart_bot(ctx: commands.Context):
     """Restarts the bot."""
-    await bot.qrm.session.close()
     global exit_code
     await cmn.add_react(ctx.message, cmn.emojis.check_mark)
     print(f"[**] Restarting! Requested by {ctx.author}.")
@@ -66,7 +75,6 @@ async def _restart_bot(ctx: commands.Context):
 @commands.check(cmn.check_if_owner)
 async def _shutdown_bot(ctx: commands.Context):
     """Shuts down the bot."""
-    await bot.qrm.session.close()
     global exit_code
     await cmn.add_react(ctx.message, cmn.emojis.check_mark)
     print(f"[**] Shutting down! Requested by {ctx.author}.")
@@ -74,7 +82,7 @@ async def _shutdown_bot(ctx: commands.Context):
     await bot.logout()
 
 
-@bot.group(name="extctl", hidden=True)
+@bot.group(name="extctl", aliases=["ex"], hidden=True)
 @commands.check(cmn.check_if_owner)
 async def _extctl(ctx: commands.Context):
     """Extension control commands.
@@ -84,7 +92,7 @@ async def _extctl(ctx: commands.Context):
         await ctx.invoke(cmd)
 
 
-@_extctl.command(name="list")
+@_extctl.command(name="list", aliases=["ls"])
 async def _extctl_list(ctx: commands.Context):
     """Lists Extensions."""
     embed = cmn.embed_factory(ctx)
@@ -93,7 +101,7 @@ async def _extctl_list(ctx: commands.Context):
     await ctx.send(embed=embed)
 
 
-@_extctl.command(name="load")
+@_extctl.command(name="load", aliases=["ld"])
 async def _extctl_load(ctx: commands.Context, extension: str):
     try:
         bot.load_extension(ext_dir + "." + extension)
@@ -103,7 +111,7 @@ async def _extctl_load(ctx: commands.Context, extension: str):
         await ctx.send(embed=embed)
 
 
-@_extctl.command(name="reload", aliases=["relaod"])
+@_extctl.command(name="reload", aliases=["rl", "r", "relaod"])
 async def _extctl_reload(ctx: commands.Context, extension: str):
     if ctx.invoked_with == "relaod":
         pika = bot.get_emoji(opt.pika)
@@ -117,7 +125,7 @@ async def _extctl_reload(ctx: commands.Context, extension: str):
         await ctx.send(embed=embed)
 
 
-@_extctl.command(name="unload")
+@_extctl.command(name="unload", aliases=["ul"])
 async def _extctl_unload(ctx: commands.Context, extension: str):
     try:
         bot.unload_extension(ext_dir + "." + extension)
@@ -245,6 +253,7 @@ except ConnectionResetError as ex:
     if bot.qrm.debug_mode:
         raise
     raise SystemExit("ConnectionResetError: {}".format(ex))
+
 
 # --- Exit ---
 # Codes for the wrapper shell script:

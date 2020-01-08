@@ -1,7 +1,7 @@
 """
 ae7q extension for qrm
 ---
-Copyright (C) 2019 Abigail Gold, 0x5c
+Copyright (C) 2019-2020 Abigail Gold, 0x5c
 
 This file is part of discord-qrm2 and is released under the terms of the GNU
 General Public License, version 2.
@@ -16,6 +16,7 @@ KC4USA: reserved, no call history, *but* has application history
 
 import discord.ext.commands as commands
 
+import aiohttp
 from bs4 import BeautifulSoup
 
 import common as cmn
@@ -24,7 +25,7 @@ import common as cmn
 class AE7QCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.session = bot.qrm.session
+        self.session = aiohttp.ClientSession(connector=bot.qrm.connector)
 
     @commands.group(name="ae7q", aliases=["ae"], category=cmn.cat.lookup)
     async def _ae7q_lookup(self, ctx: commands.Context):
