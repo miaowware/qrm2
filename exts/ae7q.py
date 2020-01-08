@@ -247,13 +247,11 @@ class AE7QCog(commands.Cog):
     @_ae7q_lookup.command(name="frn", aliases=["f"], category=cmn.cat.lookup)
     async def _ae7q_frn(self, ctx: commands.Context, frn: str):
         '''Look up the history of an FRN on [ae7q.com](http://ae7q.com/).'''
-        base_url = "http://ae7q.com/query/data/FrnHistory.php?FRN="
         """
         NOTES:
         - 2 tables: callsign history and application history
         - If not found: no tables
         """
-        desc = ''
         base_url = "http://ae7q.com/query/data/FrnHistory.php?FRN="
         embed = cmn.embed_factory(ctx)
 
@@ -269,8 +267,15 @@ class AE7QCog(commands.Cog):
         soup = BeautifulSoup(page, features="html.parser")
         tables = [[row for row in table.find_all("tr")] for table in soup.select("table.Database")]
 
-        table = tables[0]
+        if not len(tables):
+            embed.title = f"AE7Q History for FRN {frn}"
+            embed.colour = cmn.colours.bad
+            embed.url = base_url + frn
+            embed.description = f'No records found for FRN `{frn}`'
+            await ctx.send(embed=embed)
+            return
 
+        table = tables[0]
 
         table_headers = table[0].find_all("th")
         first_header = ''.join(table_headers[0].strings) if len(table_headers) > 0 else None
@@ -294,7 +299,8 @@ class AE7QCog(commands.Cog):
         # add the first three rows of the table to the embed
         for row in table[0:3]:
             header = f'**{row[0]}** ({row[3]})'     # **Callsign** (Applicant Type)
-            body = (f'Class: *{row[4]}*\n'
+            body = (f'Name: *{row[2]}*\n'
+                    f'Class: *{row[4]}*\n'
                     f'Region: *{row[1]}*\n'
                     f'Status: *{row[5]}*\n'
                     f'Granted: *{row[6]}*\n'
@@ -309,11 +315,70 @@ class AE7QCog(commands.Cog):
         await ctx.send(embed=embed)
 
     @_ae7q_lookup.command(name="licensee", aliases=["l"], category=cmn.cat.lookup)
-    async def _ae7q_licensee(self, ctx: commands.Context, frn: str):
+    async def _ae7q_licensee(self, ctx: commands.Context, licensee_id: str):
         '''Look up the history of a licensee ID on [ae7q.com](http://ae7q.com/).'''
+        licensee_id = licensee_id.upper()
         base_url = "http://ae7q.com/query/data/LicenseeIdHistory.php?ID="
-        # notes: same as FRN but with different input
-        pass
+        embed = cmn.embed_factory(ctx)
+
+        async with self.session.get(base_url + licensee_id) as resp:
+            if resp.status != 200:
+                embed.title = "Error in AE7Q licensee command"
+                embed.description = 'Could not load AE7Q'
+                embed.colour = cmn.colours.bad
+                await ctx.send(embed=embed)
+                return
+            page = await resp.text()
+
+        soup = BeautifulSoup(page, features="html.parser")
+        tables = [[row for row in table.find_all("tr")] for table in soup.select("table.Database")]
+
+        if not len(tables):
+            embed.title = f"AE7Q History for Licensee {licensee_id}"
+            embed.colour = cmn.colours.bad
+            embed.url = base_url + licensee_id
+            embed.description = f'No records found for Licensee `{licensee_id}`'
+            await ctx.send(embed=embed)
+            return
+
+        table = tables[0]
+
+        table_headers = table[0].find_all("th")
+        first_header = ''.join(table_headers[0].strings) if len(table_headers) > 0 else None
+
+        # catch if the wrong table was selected
+        if first_header is None or not first_header.startswith('With FCC'):
+            embed.title = f"AE7Q History for Licensee {licensee_id}"
+            embed.colour = cmn.colours.bad
+            embed.url = base_url + licensee_id
+            embed.description = f'No records found for Licensee `{licensee_id}`'
+            await ctx.send(embed=embed)
+            return
+
+        table = await process_table(table[2:])
+
+        embed = cmn.embed_factory(ctx)
+        embed.title = f"AE7Q History for Licensee {licensee_id}"
+        embed.colour = cmn.colours.good
+        embed.url = base_url + licensee_id
+
+        # add the first three rows of the table to the embed
+        for row in table[0:3]:
+            header = f'**{row[0]}** ({row[3]})'     # **Callsign** (Applicant Type)
+            body = (f'Name: *{row[2]}*\n'
+                    f'Class: *{row[4]}*\n'
+                    f'Region: *{row[1]}*\n'
+                    f'Status: *{row[5]}*\n'
+                    f'Granted: *{row[6]}*\n'
+                    f'Effective: *{row[7]}*\n'
+                    f'Cancelled: *{row[8]}*\n'
+                    f'Expires: *{row[9]}*')
+            embed.add_field(name=header, value=body, inline=False)
+
+        if len(table) > 3:
+            embed.description = f'Records 1 to 3 of {len(table)}. See ae7q.com for more...'
+
+        await ctx.send(embed=embed)
 
 
 async def process_table(table: list):
