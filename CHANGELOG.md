@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 - Added Trustee field to qrz command for club callsigns.
 - Added alias for `ae7q call` command (`ae7q c`).
+- Added ae7q lookup by FRN and Licensee ID, and for trustee records (`ae7q frn, licensee, trustee`).
 ### Changed
 - Changelog command to accept a version as argument.
 - The qrz command can now link to a QRZ page instead of embedding the data with the `--link` flag.
