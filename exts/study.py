@@ -9,6 +9,7 @@ General Public License, version 2.
 
 import random
 import json
+from datetime import datetime
 
 import aiohttp
 
@@ -25,41 +26,115 @@ class StudyCog(commands.Cog):
         self.session = aiohttp.ClientSession(connector=bot.qrm.connector)
 
     @commands.command(name="hamstudy", aliases=['rq', 'randomquestion', 'randomq'], category=cmn.cat.study)
-    async def _random_question(self, ctx: commands.Context, level: str = None):
-        '''Gets a random question from the Technician, General, and/or Extra question pools.'''
-        tech_pool = 'E2_2018'
-        gen_pool = 'E3_2019'
-        extra_pool = 'E4_2016'
-
-        embed = cmn.embed_factory(ctx)
+    async def _random_question(self, ctx: commands.Context, country: str = '', level: str = ''):
+        '''Gets a random question from [HamStudy's](https://hamstudy.org) question pools.'''
         with ctx.typing():
-            selected_pool = None
-            try:
-                level = level.lower()
-            except AttributeError:  # no level given (it's None)
-                pass
+            embed = cmn.embed_factory(ctx)
 
-            if level in ['t', 'technician', 'tech']:
-                selected_pool = tech_pool
+            country = country.lower()
+            level = level.lower()
 
-            if level in ['g', 'gen', 'general']:
-                selected_pool = gen_pool
+            pool_names = {'us': {'technician': 'E2',
+                                 'tech': 'E2',
+                                 't': 'E2',
+                                 'general': 'E3',
+                                 'gen': 'E3',
+                                 'g': 'E3',
+                                 'extra': 'E4',
+                                 'e': 'E4'},
+                          'ca': {'basic': 'CA_B',
+                                 'b': 'CA_B',
+                                 'advanced': 'CA_A',
+                                 'adv': 'CA_A',
+                                 'a': 'CA_A',
+                                 'basic_fr': 'CA_FB',
+                                 'b_fr': 'CA_FB',
+                                 'base': 'CA_FB',
+                                 'advanced_fr': 'CA_FS',
+                                 'adv_fr': 'CA_FS',
+                                 'a_fr': 'CA_FS',
+                                 'supérieure': 'CA_FS',
+                                 'superieure': 'CA_FS',
+                                 's': 'CA_FS'},
+                          'us_c': {'c1': 'C1',
+                                   'comm1': 'C1',
+                                   'c3': 'C3',
+                                   'comm3': 'C3',
+                                   'c6': 'C6',
+                                   'comm6': 'C6',
+                                   'c7': 'C7',
+                                   'comm7': 'C7',
+                                   'c7r': 'C7R',
+                                   'comm7r': 'C7R',
+                                   'c8': 'C8',
+                                   'comm8': 'C8',
+                                   'c9': 'C9',
+                                   'comm9': 'C9'}}
 
-            if level in ['e', 'ae', 'extra']:
-                selected_pool = extra_pool
+            if country in pool_names.keys():
+                if level in pool_names[country].keys():
+                    pool_name = pool_names[country][level]
 
-            if (level is None) or (level == 'all'):  # no pool given or user wants all, so pick a random pool
-                selected_pool = random.choice([tech_pool, gen_pool, extra_pool])
-            if (level is not None) and (selected_pool is None):  # unrecognized pool given by user
-                embed.title = 'Error in HamStudy command'
-                embed.description = ('The question pool you gave was unrecognized. '
-                                     'There are many ways to call up certain question pools - try ?rq t, g, or e. '
-                                     '\n\nNote that currently only the US question pools are available.')
+                elif level in ("random", "r"):
+                    # select a random level in that country
+                    pool_name = random.choice(list(pool_names[country].values()))
+
+                else:
+                    # show list of possible pools
+                    embed.title = "Pool Not Found!"
+                    embed.description = "Possible arguments are:"
+                    embed.colour = cmn.colours.bad
+                    for cty in pool_names:
+                        levels = '`, `'.join(pool_names[cty].keys())
+                        embed.add_field(name=f"**Country: `{cty}`**", value=f"Levels: `{levels}`", inline=False)
+                    await ctx.send(embed=embed)
+                    return
+
+            elif country in ("random", "r"):
+                # select a random country and level
+                country = random.choice(list(pool_names.keys()))
+                pool_name = random.choice(list(pool_names[country].values()))
+
+            else:
+                # show list of possible pools
+                embed.title = "Pool Not Found!"
+                embed.description = "Possible arguments are:"
                 embed.colour = cmn.colours.bad
+                for cty in pool_names:
+                    levels = '`, `'.join(pool_names[cty].keys())
+                    embed.add_field(name=f"**Country: `{cty}`**", value=f"Levels: `{levels}`", inline=False)
                 await ctx.send(embed=embed)
                 return
 
-            async with self.session.get(f'https://hamstudy.org/pools/{selected_pool}') as resp:
+            pools = await self.hamstudy_get_pools()
+
+            pool_matches = [p for p in pools.keys() if p.startswith(pool_name)]
+
+            if len(pool_matches) > 0:
+                if len(pool_matches) == 1:
+                    pool = pool_matches[0]
+                else:
+                    # look at valid_from and expires dates to find the correct one
+                    for p in pool_matches:
+                        valid_from = datetime.fromisoformat(pools[p]["valid_from"][:-1] + "+00:00")
+                        expires = datetime.fromisoformat(pools[p]["expires"][:-1] + "+00:00")
+
+                        if valid_from < datetime.utcnow() < expires:
+                            pool = p
+                            break
+            else:
+                # show list of possible pools
+                embed.title = "Pool Not Found!"
+                embed.description = "Possible arguments are:"
+                embed.colour = cmn.colours.bad
+                for cty in pool_names:
+                    levels = '`, `'.join(pool_names[cty].keys())
+                    embed.add_field(name=f"**Country: `{cty}`**", value=f"Levels: `{levels}`", inline=False)
+                await ctx.send(embed=embed)
+                return
+
+
+            async with self.session.get(f'https://hamstudy.org/pools/{pool}') as resp:
                 if resp.status != 200:
                     embed.title = 'Error in HamStudy command'
                     embed.description = 'Could not load questions'
@@ -83,13 +158,12 @@ class StudyCog(commands.Cog):
                             + '\n**D:** ' + question['answers']['D'], inline=False)
             embed.add_field(name='Answer:', value='Type _?rqa_ for answer', inline=False)
             if 'image' in question:
-                image_url = f'https://hamstudy.org/_1330011/images/{selected_pool.split("_",1)[1]}/{question["image"]}'
+                image_url = f'https://hamstudy.org/_1330011/images/{pool.split("_",1)[1]}/{question["image"]}'
                 embed.set_image(url=image_url)
             self.lastq[ctx.message.channel.id] = (question['id'], question['answer'])
         await ctx.send(embed=embed)
 
-    @commands.command(name="hamstudyanswer", aliases=['rqa', 'randomquestionanswer', 'randomqa', 'hamstudya'],
-                      category=cmn.cat.study)
+    @commands.command(name="hamstudyanswer", aliases=['rqa', 'randomquestionanswer', 'randomqa', 'hamstudya'], category=cmn.cat.study)
     async def _q_answer(self, ctx: commands.Context, answer: str = None):
         '''Returns the answer to question last asked (Optional argument: your answer).'''
         with ctx.typing():
@@ -114,6 +188,21 @@ class StudyCog(commands.Cog):
                 embed.description = f'{self.source}\n\n{result}'
                 embed.colour = cmn.colours.neutral
         await ctx.send(embed=embed)
+
+    async def hamstudy_get_pools(self):
+        async with self.session.get('https://hamstudy.org/pools/') as resp:
+            if resp.status != 200:
+                raise ConnectionError
+            else:
+                pools_dict = json.loads(await resp.read())
+
+        pools_list = []
+        for l in pools_dict.values():
+            pools_list += l
+
+        pools = {p["id"]: p for p in pools_list}
+
+        return pools
 
 
 def setup(bot: commands.Bot):
