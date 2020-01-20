@@ -28,7 +28,7 @@ class WeatherCog(commands.Cog):
     @commands.command(name="bandconditions", aliases=['cond', 'condx', 'conditions'], category=cmn.cat.weather)
     async def _band_conditions(self, ctx: commands.Context):
         '''Posts an image of HF Band Conditions.'''
-        with ctx.typing():
+        async with ctx.typing():
             embed = cmn.embed_factory(ctx)
             embed.title = 'Current Solar Conditions'
             embed.colour = cmn.colours.good
@@ -36,10 +36,11 @@ class WeatherCog(commands.Cog):
                 if resp.status != 200:
                     embed.description = 'Could not download file...'
                     embed.colour = cmn.colours.bad
-                else:
-                    data = io.BytesIO(await resp.read())
-                    embed.set_image(url=f'attachment://condx.png')
-        await ctx.send(embed=embed, file=discord.File(data, 'condx.png'))
+                    await ctx.send(embed=embed)
+                    return
+                data = io.BytesIO(await resp.read())
+            embed.set_image(url=f'attachment://condx.png')
+            await ctx.send(embed=embed, file=discord.File(data, 'condx.png'))
 
     @commands.group(name="weather", aliases=['wttr'], category=cmn.cat.weather)
     async def _weather_conditions(self, ctx: commands.Context):
@@ -61,7 +62,7 @@ class WeatherCog(commands.Cog):
     async def _weather_conditions_forecast(self, ctx: commands.Context, *, location: str):
         '''Posts an image of Local Weather Conditions for the next three days from [wttr.in](http://wttr.in/).
 See help for weather command for possible location types. Add a `-c` or `-f` to use Celcius or Fahrenheit.'''
-        with ctx.typing():
+        async with ctx.typing():
             try:
                 units_arg = re.search(self.wttr_units_regex, location).group(1)
             except AttributeError:
@@ -85,16 +86,17 @@ See help for weather command for possible location types. Add a `-c` or `-f` to 
                 if resp.status != 200:
                     embed.description = 'Could not download file...'
                     embed.colour = cmn.colours.bad
-                else:
-                    data = io.BytesIO(await resp.read())
-                    embed.set_image(url=f'attachment://wttr_forecast.png')
-        await ctx.send(embed=embed, file=discord.File(data, 'wttr_forecast.png'))
+                    await ctx.send(embed=embed)
+                    return
+                data = io.BytesIO(await resp.read())
+            embed.set_image(url=f'attachment://wttr_forecast.png')
+            await ctx.send(embed=embed, file=discord.File(data, 'wttr_forecast.png'))
 
     @_weather_conditions.command(name='now', aliases=['n'], category=cmn.cat.weather)
     async def _weather_conditions_now(self, ctx: commands.Context, *, location: str):
         '''Posts an image of current Local Weather Conditions from [wttr.in](http://wttr.in/).
 See help for weather command for possible location types. Add a `-c` or `-f` to use Celcius or Fahrenheit.'''
-        with ctx.typing():
+        async with ctx.typing():
             try:
                 units_arg = re.search(self.wttr_units_regex, location).group(1)
             except AttributeError:
@@ -118,10 +120,11 @@ See help for weather command for possible location types. Add a `-c` or `-f` to 
                 if resp.status != 200:
                     embed.description = 'Could not download file...'
                     embed.colour = cmn.colours.bad
-                else:
-                    data = io.BytesIO(await resp.read())
-                    embed.set_image(url=f'attachment://wttr_now.png')
-        await ctx.send(embed=embed, file=discord.File(data, 'wttr_now.png'))
+                    await ctx.send(embed=embed)
+                    return
+                data = io.BytesIO(await resp.read())
+            embed.set_image(url=f'attachment://wttr_now.png')
+            await ctx.send(embed=embed, file=discord.File(data, 'wttr_now.png'))
 
 
 def setup(bot: commands.Bot):
