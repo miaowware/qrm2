@@ -164,8 +164,11 @@ async def on_command_error(ctx: commands.Context, err: commands.CommandError):
     if isinstance(err, commands.UserInputError):
         await cmn.add_react(ctx.message, cmn.emojis.warning)
         await ctx.send_help(ctx.command)
-    elif isinstance(err, commands.CommandNotFound) and not ctx.invoked_with.startswith("?"):
-        await cmn.add_react(ctx.message, cmn.emojis.question)
+    elif isinstance(err, commands.CommandNotFound):
+        if ctx.invoked_with.startswith(("?", "!")):
+            return
+        else:
+            await cmn.add_react(ctx.message, cmn.emojis.question)
     elif isinstance(err, commands.CheckFailure):
         # Add handling of other subclasses of CheckFailure as needed.
         if isinstance(err, commands.NotOwner):
