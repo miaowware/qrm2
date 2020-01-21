@@ -152,16 +152,24 @@ class StudyCog(commands.Cog):
             embed.description = self.source
             embed.colour = cmn.colours.good
             embed.add_field(name='Question:', value=question['text'], inline=False)
-            embed.add_field(name='Answers:', value='**A:** ' + question['answers']['A']
-                            + '\n**B:** ' + question['answers']['B']
-                            + '\n**C:** ' + question['answers']['C']
-                            + '\n**D:** ' + question['answers']['D'], inline=False)
+            embed.add_field(name='Answers:',
+                            value=(f"**{cmn.emojis.a}** {question['answers']['A']}"
+                                   f"\n**{cmn.emojis.b}** {question['answers']['B']}"
+                                   f"\n**{cmn.emojis.c}** {question['answers']['C']}"
+                                   f"\n**{cmn.emojis.d}** {question['answers']['D']}"),
+                            inline=False)
             embed.add_field(name='Answer:', value='Type _?rqa_ for answer', inline=False)
             if 'image' in question:
                 image_url = f'https://hamstudy.org/_1330011/images/{pool.split("_",1)[1]}/{question["image"]}'
                 embed.set_image(url=image_url)
             self.lastq[ctx.message.channel.id] = (question['id'], question['answer'])
-        await ctx.send(embed=embed)
+        q_msg = await ctx.send(embed=embed)
+
+        await cmn.add_react(q_msg, cmn.emojis.a)
+        await cmn.add_react(q_msg, cmn.emojis.b)
+        await cmn.add_react(q_msg, cmn.emojis.c)
+        await cmn.add_react(q_msg, cmn.emojis.d)
+
 
     @commands.command(name="hamstudyanswer", aliases=['rqa', 'randomquestionanswer', 'randomqa', 'hamstudya'], category=cmn.cat.study)
     async def _q_answer(self, ctx: commands.Context, answer: str = None):
