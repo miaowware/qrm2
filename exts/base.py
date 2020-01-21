@@ -61,7 +61,8 @@ class QrmHelpCommand(commands.HelpCommand):
                              '. Many commands have shorter aliases.')
 
         for cat, cmds in mapping.items():
-            cmds = list(filter(lambda x: not x.hidden, cmds))
+            if self.context.author.id not in opt.owners_uids:
+                cmds = list(filter(lambda x: not x.hidden, cmds))
             if cmds == []:
                 continue
             names = sorted([cmd.name for cmd in cmds])
@@ -72,18 +73,23 @@ class QrmHelpCommand(commands.HelpCommand):
         await self.context.send(embed=embed)
 
     async def send_command_help(self, command):
-        embed = cmn.embed_factory(self.context)
-        embed.title = self.get_command_signature(command)
-        embed.description = command.help
-        await self.context.send(embed=embed)
+        if not command.hidden or self.context.author.id in opt.owners_uids:
+            embed = cmn.embed_factory(self.context)
+            embed.title = self.get_command_signature(command)
+            embed.description = command.help
+            await self.context.send(embed=embed)
+        else:
+            await cmn.add_react(self.context, cmn.no_entry)
 
     async def send_group_help(self, group):
-        embed = cmn.embed_factory(self.context)
-        embed.title = self.get_command_signature(group)
-        embed.description = group.help
-        for cmd in group.commands:
-            embed.add_field(name=self.get_command_signature(cmd), value=cmd.help, inline=False)
-        await self.context.send(embed=embed)
+        if not group.hidden or self.context.author.id in opt.owners_uids:
+            embed = cmn.embed_factory(self.context)
+            embed.title = self.get_command_signature(group)
+            embed.description = group.help
+            for cmd in group.commands:
+                if not cmd.hidden or self.context.author.id in opt.owners_uids:
+                    embed.add_field(name=self.get_command_signature(cmd), value=cmd.help, inline=False)
+            await self.context.send(embed=embed)
 
 
 class BaseCog(commands.Cog):
