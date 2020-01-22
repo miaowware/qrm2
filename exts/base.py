@@ -1,23 +1,25 @@
 """
 Base extension for qrm
 ---
-Copyright (C) 2019 Abigail Gold, 0x5c
+Copyright (C) 2019-2020 Abigail Gold, 0x5c
 
 This file is part of discord-qrm2 and is released under the terms of the GNU
 General Public License, version 2.
 """
 
+
+import random
 import re
 from collections import OrderedDict
-import random
+from typing import Union
 
 import discord
 import discord.ext.commands as commands
 
 import info
+import common as cmn
 
 import data.options as opt
-import common as cmn
 
 
 class QrmHelpCommand(commands.HelpCommand):
@@ -172,15 +174,15 @@ class BaseCog(commands.Cog):
                              "(https://github.com/classabbyamp/discord-qrm2/issues)!")
         await ctx.send(embed=embed)
 
-    @commands.command(name="bruce")
-    async def _b_issue(self, ctx: commands.Context):
-        """Shows how to create an issue for the bot."""
-        await ctx.invoke(self._issue)
-
     @commands.command(name="echo", aliases=["e"], category=cmn.cat.admin)
     @commands.check(cmn.check_if_owner)
-    async def _echo(self, ctx: commands.Context, channel: commands.TextChannelConverter, *, msg: str):
-        """Send a message in a channel as qrm. Only works within a server or DM to server, not between servers."""
+    async def _echo(self, ctx: commands.Context,
+                    channel: Union[cmn.GlobalChannelConverter, commands.UserConverter], *, msg: str):
+        """Send a message in a channel as qrm. Accepts channel/user IDs/mentions.
+        Channel names are current-guild only.
+        Does not work with the ID of the bot user."""
+        if isinstance(channel, discord.ClientUser):
+            raise commands.BadArgument("Can't send to the bot user!")
         await channel.send(msg)
 
 
