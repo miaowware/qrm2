@@ -40,7 +40,8 @@ cat = SimpleNamespace(lookup='Information Lookup',
                       maps='Mapping',
                       ref='Reference',
                       study='Exam Study',
-                      weather='Land and Space Weather')
+                      weather='Land and Space Weather',
+                      admin='Bot Control')
 
 emojis = SimpleNamespace(check_mark='✅',
                          x='❌',

@@ -50,7 +50,7 @@ bot.qrm.debug_mode = debug_mode
 
 # --- Commands ---
 
-@bot.command(name="restart", hidden=True)
+@bot.command(name="restart", category=cmn.cat.admin)
 @commands.check(cmn.check_if_owner)
 async def _restart_bot(ctx: commands.Context):
     """Restarts the bot."""
@@ -62,7 +62,7 @@ async def _restart_bot(ctx: commands.Context):
     await bot.logout()
 
 
-@bot.command(name="shutdown", hidden=True)
+@bot.command(name="shutdown", category=cmn.cat.admin)
 @commands.check(cmn.check_if_owner)
 async def _shutdown_bot(ctx: commands.Context):
     """Shuts down the bot."""
@@ -74,7 +74,7 @@ async def _shutdown_bot(ctx: commands.Context):
     await bot.logout()
 
 
-@bot.group(name="extctl", hidden=True)
+@bot.group(name="extctl", category=cmn.cat.admin)
 @commands.check(cmn.check_if_owner)
 async def _extctl(ctx: commands.Context):
     """Extension control commands.
@@ -84,7 +84,8 @@ async def _extctl(ctx: commands.Context):
         await ctx.invoke(cmd)
 
 
-@_extctl.command(name="list")
+@_extctl.command(name="list", category=cmn.cat.admin)
+@commands.check(cmn.check_if_owner)
 async def _extctl_list(ctx: commands.Context):
     """Lists Extensions."""
     embed = cmn.embed_factory(ctx)
@@ -93,7 +94,8 @@ async def _extctl_list(ctx: commands.Context):
     await ctx.send(embed=embed)
 
 
-@_extctl.command(name="load")
+@_extctl.command(name="load", category=cmn.cat.admin)
+@commands.check(cmn.check_if_owner)
 async def _extctl_load(ctx: commands.Context, extension: str):
     try:
         bot.load_extension(ext_dir + "." + extension)
@@ -103,7 +105,8 @@ async def _extctl_load(ctx: commands.Context, extension: str):
         await ctx.send(embed=embed)
 
 
-@_extctl.command(name="reload", aliases=["relaod"])
+@_extctl.command(name="reload", aliases=["relaod"], category=cmn.cat.admin)
+@commands.check(cmn.check_if_owner)
 async def _extctl_reload(ctx: commands.Context, extension: str):
     if ctx.invoked_with == "relaod":
         pika = bot.get_emoji(opt.pika)
@@ -117,7 +120,8 @@ async def _extctl_reload(ctx: commands.Context, extension: str):
         await ctx.send(embed=embed)
 
 
-@_extctl.command(name="unload")
+@_extctl.command(name="unload", category=cmn.cat.admin)
+@commands.check(cmn.check_if_owner)
 async def _extctl_unload(ctx: commands.Context, extension: str):
     try:
         bot.unload_extension(ext_dir + "." + extension)

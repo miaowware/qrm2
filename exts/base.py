@@ -23,11 +23,13 @@ import common as cmn
 class QrmHelpCommand(commands.HelpCommand):
     def __init__(self):
         super().__init__(command_attrs={'help': 'Shows help about qrm or a command', 'aliases': ['h']})
+        self.verify_checks = True
 
-    def get_bot_mapping(self):
+    async def get_bot_mapping(self):
         bot = self.context.bot
         mapping = {}
-        for cmd in bot.commands:
+
+        for cmd in await self.filter_commands(bot.commands, sort=True):
             cat = cmd.__original_kwargs__.get('category', None)
             if cat in mapping:
                 mapping[cat].append(cmd)
@@ -35,7 +37,7 @@ class QrmHelpCommand(commands.HelpCommand):
                 mapping[cat] = [cmd]
         return mapping
 
-    def get_command_signature(self, command):
+    async def get_command_signature(self, command):
         parent = command.full_parent_name
         if command.aliases != []:
             aliases = ', '.join(command.aliases)
@@ -59,10 +61,9 @@ class QrmHelpCommand(commands.HelpCommand):
         embed.title = 'qrm Help'
         embed.description = (f'For command-specific help and usage, use `{opt.prefix}help [command name]`'
                              '. Many commands have shorter aliases.')
+        mapping = await mapping
 
         for cat, cmds in mapping.items():
-            if self.context.author.id not in opt.owners_uids:
-                cmds = list(filter(lambda x: not x.hidden, cmds))
             if cmds == []:
                 continue
             names = sorted([cmd.name for cmd in cmds])
@@ -73,23 +74,24 @@ class QrmHelpCommand(commands.HelpCommand):
         await self.context.send(embed=embed)
 
     async def send_command_help(self, command):
-        if not command.hidden or self.context.author.id in opt.owners_uids:
-            embed = cmn.embed_factory(self.context)
-            embed.title = self.get_command_signature(command)
-            embed.description = command.help
-            await self.context.send(embed=embed)
-        else:
-            await cmn.add_react(self.context, cmn.no_entry)
+        if self.verify_checks and not await command.can_run(self.context):
+            raise commands.CheckFailure
+            return
+        embed = cmn.embed_factory(self.context)
+        embed.title = await self.get_command_signature(command)
+        embed.description = command.help
+        await self.context.send(embed=embed)
 
     async def send_group_help(self, group):
-        if not group.hidden or self.context.author.id in opt.owners_uids:
-            embed = cmn.embed_factory(self.context)
-            embed.title = self.get_command_signature(group)
-            embed.description = group.help
-            for cmd in group.commands:
-                if not cmd.hidden or self.context.author.id in opt.owners_uids:
-                    embed.add_field(name=self.get_command_signature(cmd), value=cmd.help, inline=False)
-            await self.context.send(embed=embed)
+        if self.verify_checks and not await group.can_run(self.context):
+            raise commands.CheckFailure
+            return
+        embed = cmn.embed_factory(self.context)
+        embed.title = await self.get_command_signature(group)
+        embed.description = group.help
+        for cmd in await self.filter_commands(group.commands, sort=True):
+            embed.add_field(name=await self.get_command_signature(cmd), value=cmd.help, inline=False)
+        await self.context.send(embed=embed)
 
 
 class BaseCog(commands.Cog):
@@ -170,12 +172,12 @@ class BaseCog(commands.Cog):
                              "(https://github.com/classabbyamp/discord-qrm2/issues)!")
         await ctx.send(embed=embed)
 
-    @commands.command(name="bruce", hidden=True)
+    @commands.command(name="bruce")
     async def _b_issue(self, ctx: commands.Context):
         """Shows how to create an issue for the bot."""
         await ctx.invoke(self._issue)
 
-    @commands.command(name="echo", aliases=["e"], hidden=True)
+    @commands.command(name="echo", aliases=["e"], category=cmn.cat.admin)
     @commands.check(cmn.check_if_owner)
     async def _echo(self, ctx: commands.Context, channel: commands.TextChannelConverter, *, msg: str):
         """Send a message in a channel as qrm. Only works within a server or DM to server, not between servers."""
