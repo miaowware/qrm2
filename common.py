@@ -44,7 +44,11 @@ emojis = SimpleNamespace(check_mark='✅',
                          warning='⚠️',
                          question='❓',
                          no_entry='⛔',
-                         bangbang='‼️')
+                         bangbang='‼️',
+                         a='🇦',
+                         b='🇧',
+                         c='🇨',
+                         d='🇩')
 
 paths = SimpleNamespace(data=Path("./data/"),
                         resources=Path("./resources/"),
