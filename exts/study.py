@@ -53,7 +53,8 @@ class StudyCog(commands.Cog):
                     embed.colour = cmn.colours.bad
                     for cty in study.pool_names:
                         levels = '`, `'.join(study.pool_names[cty].keys())
-                        embed.add_field(name=f"**Country: `{cty}` {study.pool_emojis[cty]}**", value=f"Levels: `{levels}`", inline=False)
+                        embed.add_field(name=f"**Country: `{cty}` {study.pool_emojis[cty]}**",
+                                        value=f"Levels: `{levels}`", inline=False)
                     embed.add_field(name="**Random**", value="To select a random pool or country, use `random` or `r`")
                     await ctx.send(embed=embed)
                     return
@@ -70,7 +71,8 @@ class StudyCog(commands.Cog):
                 embed.colour = cmn.colours.bad
                 for cty in study.pool_names:
                     levels = '`, `'.join(study.pool_names[cty].keys())
-                    embed.add_field(name=f"**Country: `{cty}` {study.pool_emojis[cty]}**", value=f"Levels: `{levels}`", inline=False)
+                    embed.add_field(name=f"**Country: `{cty}` {study.pool_emojis[cty]}**",
+                                    value=f"Levels: `{levels}`", inline=False)
                 embed.add_field(name="**Random**", value="To select a random pool or country, use `random` or `r`")
                 await ctx.send(embed=embed)
                 return
@@ -98,7 +100,8 @@ class StudyCog(commands.Cog):
                 embed.colour = cmn.colours.bad
                 for cty in study.pool_names:
                     levels = '`, `'.join(study.pool_names[cty].keys())
-                    embed.add_field(name=f"**Country: `{cty}` {study.pool_emojis[cty]}**", value=f"Levels: `{levels}`", inline=False)
+                    embed.add_field(name=f"**Country: `{cty}` {study.pool_emojis[cty]}**",
+                                    value=f"Levels: `{levels}`", inline=False)
                 embed.add_field(name="**Random**", value="To select a random pool or country, use `random` or `r`")
                 await ctx.send(embed=embed)
                 return
@@ -129,7 +132,8 @@ class StudyCog(commands.Cog):
                                    f"\n**{cmn.emojis.d}** {question['answers']['D']}"),
                             inline=False)
             embed.add_field(name='To Answer:',
-                            value='Answer with reactions below. If not answered within 10 minutes, the answer will be revealed.',
+                            value=('Answer with reactions below. If not answered within 10 minutes,'
+                                   ' the answer will be revealed.'),
                             inline=False)
             if 'image' in question:
                 image_url = f'https://hamstudy.org/_1330011/images/{pool.split("_",1)[1]}/{question["image"]}'
@@ -143,7 +147,9 @@ class StudyCog(commands.Cog):
         await cmn.add_react(q_msg, cmn.emojis.d)
 
         def check(reaction, user):
-            return user.id != self.bot.user.id and reaction.message.id == q_msg.id and str(reaction.emoji) in self.choices.keys()
+            return (user.id != self.bot.user.id
+                    and reaction.message.id == q_msg.id
+                    and str(reaction.emoji) in self.choices.keys())
 
         try:
             reaction, user = await self.bot.wait_for('reaction_add', timeout=600.0, check=check)
