@@ -44,11 +44,7 @@ class AE7QCog(commands.Cog):
 
             async with self.session.get(base_url + callsign) as resp:
                 if resp.status != 200:
-                    embed.title = "Error in AE7Q call command"
-                    embed.description = 'Could not load AE7Q'
-                    embed.colour = cmn.colours.bad
-                    await ctx.send(embed=embed)
-                    return
+                    raise cmn.BotHTTPError(resp)
                 page = await resp.text()
 
             soup = BeautifulSoup(page, features="html.parser")
@@ -114,11 +110,7 @@ class AE7QCog(commands.Cog):
 
             async with self.session.get(base_url + callsign) as resp:
                 if resp.status != 200:
-                    embed.title = "Error in AE7Q trustee command"
-                    embed.description = 'Could not load AE7Q'
-                    embed.colour = cmn.colours.bad
-                    await ctx.send(embed=embed)
-                    return
+                    raise cmn.BotHTTPError(resp)
                 page = await resp.text()
 
             soup = BeautifulSoup(page, features="html.parser")
@@ -186,11 +178,7 @@ class AE7QCog(commands.Cog):
 
             async with self.session.get(base_url + callsign) as resp:
                 if resp.status != 200:
-                    embed.title = "Error in AE7Q applications command"
-                    embed.description = 'Could not load AE7Q'
-                    embed.colour = cmn.colours.bad
-                    await ctx.send(embed=embed)
-                    return
+                    raise cmn.BotHTTPError(resp)
                 page = await resp.text()
 
             soup = BeautifulSoup(page, features="html.parser")
@@ -245,7 +233,8 @@ class AE7QCog(commands.Cog):
 
             await ctx.send(embed=embed)
         """
-        pass
+        raise NotImplementedError("Application history lookup not yet supported. "
+                                  "Check back in a later version of the bot.")
 
     @_ae7q_lookup.command(name="frn", aliases=["f"], category=cmn.cat.lookup)
     async def _ae7q_frn(self, ctx: commands.Context, frn: str):
@@ -261,11 +250,7 @@ class AE7QCog(commands.Cog):
 
             async with self.session.get(base_url + frn) as resp:
                 if resp.status != 200:
-                    embed.title = "Error in AE7Q frn command"
-                    embed.description = 'Could not load AE7Q'
-                    embed.colour = cmn.colours.bad
-                    await ctx.send(embed=embed)
-                    return
+                    raise cmn.BotHTTPError(resp)
                 page = await resp.text()
 
             soup = BeautifulSoup(page, features="html.parser")
@@ -328,11 +313,7 @@ class AE7QCog(commands.Cog):
 
             async with self.session.get(base_url + licensee_id) as resp:
                 if resp.status != 200:
-                    embed.title = "Error in AE7Q licensee command"
-                    embed.description = 'Could not load AE7Q'
-                    embed.colour = cmn.colours.bad
-                    await ctx.send(embed=embed)
-                    return
+                    raise cmn.BotHTTPError(resp)
                 page = await resp.text()
 
             soup = BeautifulSoup(page, features="html.parser")

@@ -16,6 +16,8 @@ from datetime import datetime
 from pathlib import Path
 from types import SimpleNamespace
 
+import aiohttp
+
 import discord
 import discord.ext.commands as commands
 
@@ -93,6 +95,18 @@ class ImagesGroup(collections.abc.Mapping):
     # str(): Simply return what it would be for the underlaying dict
     def __str__(self):
         return str(self._images)
+
+
+# --- Exceptions ---
+
+class BotHTTPError(Exception):
+    """Raised whan a requests fails (status != 200) in a command."""
+    def __init__(self, response: aiohttp.ClientResponse):
+        msg = f"Request failed: {response.status} {response.reason}"
+        super().__init__(msg)
+        self.response = response
+        self.status = response.status
+        self.reason = response.reason
 
 
 # --- Converters ---

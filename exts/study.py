@@ -110,11 +110,7 @@ class StudyCog(commands.Cog):
 
             async with self.session.get(f'https://hamstudy.org/pools/{pool}') as resp:
                 if resp.status != 200:
-                    embed.title = 'Error in HamStudy command'
-                    embed.description = 'Could not load questions'
-                    embed.colour = cmn.colours.bad
-                    await ctx.send(embed=embed)
-                    return
+                    raise cmn.BotHTTPError(resp)
                 pool = json.loads(await resp.read())['pool']
 
             # Select a question
@@ -172,7 +168,7 @@ class StudyCog(commands.Cog):
     async def hamstudy_get_pools(self):
         async with self.session.get('https://hamstudy.org/pools/') as resp:
             if resp.status != 200:
-                raise ConnectionError
+                raise cmn.BotHTTPError(resp)
             else:
                 pools_dict = json.loads(await resp.read())
 

@@ -24,27 +24,27 @@ class GridCog(commands.Cog):
 with negative being latitude South and longitude West.'''
         with ctx.typing():
             grid = "**"
-            try:
-                latf = float(lat) + 90
-                lonf = float(lon) + 180
-                if 0 <= latf <= 180 and 0 <= lonf <= 360:
-                    grid += chr(ord('A') + int(lonf / 20))
-                    grid += chr(ord('A') + int(latf / 10))
-                    grid += chr(ord('0') + int((lonf % 20)/2))
-                    grid += chr(ord('0') + int((latf % 10)/1))
-                    grid += chr(ord('a') + int((lonf - (int(lonf/2)*2)) / (5/60)))
-                    grid += chr(ord('a') + int((latf - (int(latf/1)*1)) / (2.5/60)))
-                    grid += "**"
-                    embed = cmn.embed_factory(ctx)
-                    embed.title = f'Maidenhead Grid Locator for {float(lat):.6f}, {float(lon):.6f}'
-                    embed.description = grid
-                    embed.colour = cmn.colours.good
-                else:
-                    raise ValueError('Out of range.')
-            except ValueError as err:
+            latf = float(lat) + 90
+            lonf = float(lon) + 180
+            if 0 <= latf <= 180 and 0 <= lonf <= 360:
+                grid += chr(ord('A') + int(lonf / 20))
+                grid += chr(ord('A') + int(latf / 10))
+                grid += chr(ord('0') + int((lonf % 20)/2))
+                grid += chr(ord('0') + int((latf % 10)/1))
+                grid += chr(ord('a') + int((lonf - (int(lonf/2)*2)) / (5/60)))
+                grid += chr(ord('a') + int((latf - (int(latf/1)*1)) / (2.5/60)))
+                grid += "**"
+                embed = cmn.embed_factory(ctx)
+                embed.title = f'Maidenhead Grid Locator for {float(lat):.6f}, {float(lon):.6f}'
+                embed.description = grid
+                embed.colour = cmn.colours.good
+            else:
                 embed = cmn.embed_factory(ctx)
                 embed.title = f'Error generating grid square for {lat}, {lon}.'
-                embed.description = str(err)
+                embed.description = ("Coordinates out of range.\n"
+                                     "The valid ranges are:\n"
+                                     "- Latitude: `-90` to `+90`\n"
+                                     "- Longitude: `-180` to `+180`")
                 embed.colour = cmn.colours.bad
         await ctx.send(embed=embed)
 

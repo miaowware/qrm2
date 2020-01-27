@@ -68,7 +68,7 @@ class MorseCog(commands.Cog):
                     weight += len(cw_char) * 2 + 2
                 except KeyError:
                     embed.title = 'Error in calculation of CW weight'
-                    embed.description = f'Unknown character {char} in callsign'
+                    embed.description = f'Unknown character `{char}` in message'
                     embed.colour = cmn.colours.bad
                     await ctx.send(embed=embed)
                     return
