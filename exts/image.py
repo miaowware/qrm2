@@ -90,10 +90,7 @@ class ImageCog(commands.Cog):
             embed.colour = cmn.colours.good
             async with self.session.get(self.gl_url) as resp:
                 if resp.status != 200:
-                    embed.description = 'Could not download file...'
-                    embed.colour = cmn.colours.bad
-                    await ctx.send(embed=embed)
-                    return
+                    raise cmn.BotHTTPError(resp)
                 data = io.BytesIO(await resp.read())
             embed.set_image(url=f'attachment://greyline.jpg')
             await ctx.send(embed=embed, file=discord.File(data, 'greyline.jpg'))
