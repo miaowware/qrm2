@@ -84,7 +84,7 @@ async def _extctl(ctx: commands.Context):
         await ctx.invoke(cmd)
 
 
-@_extctl.command(name="list", category=cmn.cat.admin)
+@_extctl.command(name="list")
 @commands.check(cmn.check_if_owner)
 async def _extctl_list(ctx: commands.Context):
     """Lists Extensions."""
@@ -94,7 +94,7 @@ async def _extctl_list(ctx: commands.Context):
     await ctx.send(embed=embed)
 
 
-@_extctl.command(name="load", category=cmn.cat.admin)
+@_extctl.command(name="load")
 @commands.check(cmn.check_if_owner)
 async def _extctl_load(ctx: commands.Context, extension: str):
     try:
@@ -105,7 +105,7 @@ async def _extctl_load(ctx: commands.Context, extension: str):
         await ctx.send(embed=embed)
 
 
-@_extctl.command(name="reload", aliases=["relaod"], category=cmn.cat.admin)
+@_extctl.command(name="reload", aliases=["relaod"])
 @commands.check(cmn.check_if_owner)
 async def _extctl_reload(ctx: commands.Context, extension: str):
     if ctx.invoked_with == "relaod":
@@ -120,7 +120,7 @@ async def _extctl_reload(ctx: commands.Context, extension: str):
         await ctx.send(embed=embed)
 
 
-@_extctl.command(name="unload", category=cmn.cat.admin)
+@_extctl.command(name="unload")
 @commands.check(cmn.check_if_owner)
 async def _extctl_unload(ctx: commands.Context, extension: str):
     try:
