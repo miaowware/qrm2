@@ -1,7 +1,7 @@
 """
 Study extension for qrm
 ---
-Copyright (C) 2019 Abigail Gold, 0x5c
+Copyright (C) 2019-2020 Abigail Gold, 0x5c
 
 This file is part of discord-qrm2 and is released under the terms of the GNU
 General Public License, version 2.
@@ -9,55 +9,106 @@ General Public License, version 2.
 
 import random
 import json
+from datetime import datetime
+import asyncio
+
+import aiohttp
 
 import discord.ext.commands as commands
 
 import common as cmn
+from resources import study
 
 
 class StudyCog(commands.Cog):
+    choices = {cmn.emojis.a: 'A', cmn.emojis.b: 'B', cmn.emojis.c: 'C', cmn.emojis.d: 'D'}
+
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.lastq = dict()
         self.source = 'Data courtesy of [HamStudy.org](https://hamstudy.org/)'
-        self.session = bot.qrm.session
+        self.session = aiohttp.ClientSession(connector=bot.qrm.connector)
 
     @commands.command(name="hamstudy", aliases=['rq', 'randomquestion', 'randomq'], category=cmn.cat.study)
-    async def _random_question(self, ctx: commands.Context, level: str = None):
-        '''Gets a random question from the Technician, General, and/or Extra question pools.'''
-        tech_pool = 'E2_2018'
-        gen_pool = 'E3_2019'
-        extra_pool = 'E4_2016'
-
-        embed = cmn.embed_factory(ctx)
+    async def _random_question(self, ctx: commands.Context, country: str = '', level: str = ''):
+        '''Gets a random question from [HamStudy's](https://hamstudy.org) question pools.'''
         with ctx.typing():
-            selected_pool = None
-            try:
-                level = level.lower()
-            except AttributeError:  # no level given (it's None)
-                pass
+            embed = cmn.embed_factory(ctx)
 
-            if level in ['t', 'technician', 'tech']:
-                selected_pool = tech_pool
+            country = country.lower()
+            level = level.lower()
 
-            if level in ['g', 'gen', 'general']:
-                selected_pool = gen_pool
+            if country in study.pool_names.keys():
+                if level in study.pool_names[country].keys():
+                    pool_name = study.pool_names[country][level]
 
-            if level in ['e', 'ae', 'extra']:
-                selected_pool = extra_pool
+                elif level in ("random", "r"):
+                    # select a random level in that country
+                    pool_name = random.choice(list(study.pool_names[country].values()))
 
-            if (level is None) or (level == 'all'):  # no pool given or user wants all, so pick a random pool
-                selected_pool = random.choice([tech_pool, gen_pool, extra_pool])
-            if (level is not None) and (selected_pool is None):  # unrecognized pool given by user
-                embed.title = 'Error in HamStudy command'
-                embed.description = ('The question pool you gave was unrecognized. '
-                                     'There are many ways to call up certain question pools - try ?rq t, g, or e. '
-                                     '\n\nNote that currently only the US question pools are available.')
+                else:
+                    # show list of possible pools
+                    embed.title = "Pool Not Found!"
+                    embed.description = "Possible arguments are:"
+                    embed.colour = cmn.colours.bad
+                    for cty in study.pool_names:
+                        levels = '`, `'.join(study.pool_names[cty].keys())
+                        embed.add_field(name=f"**Country: `{cty}` {study.pool_emojis[cty]}**",
+                                        value=f"Levels: `{levels}`", inline=False)
+                    embed.add_field(name="**Random**", value="To select a random pool or country, use `random` or `r`")
+                    await ctx.send(embed=embed)
+                    return
+
+            elif country in ("random", "r"):
+                # select a random country and level
+                country = random.choice(list(study.pool_names.keys()))
+                pool_name = random.choice(list(study.pool_names[country].values()))
+
+            else:
+                # show list of possible pools
+                embed.title = "Pool Not Found!"
+                embed.description = "Possible arguments are:"
                 embed.colour = cmn.colours.bad
+                for cty in study.pool_names:
+                    levels = '`, `'.join(study.pool_names[cty].keys())
+                    embed.add_field(name=f"**Country: `{cty}` {study.pool_emojis[cty]}**",
+                                    value=f"Levels: `{levels}`", inline=False)
+                embed.add_field(name="**Random**", value="To select a random pool or country, use `random` or `r`")
                 await ctx.send(embed=embed)
                 return
 
-            async with self.session.get(f'https://hamstudy.org/pools/{selected_pool}') as resp:
+            pools = await self.hamstudy_get_pools()
+
+            pool_matches = [p for p in pools.keys() if "_".join(p.split("_")[:-1]) == pool_name]
+
+            if len(pool_matches) > 0:
+                if len(pool_matches) == 1:
+                    pool = pool_matches[0]
+                else:
+                    # look at valid_from and expires dates to find the correct one
+                    for p in pool_matches:
+                        valid_from = datetime.fromisoformat(pools[p]["valid_from"][:-1] + "+00:00")
+                        expires = datetime.fromisoformat(pools[p]["expires"][:-1] + "+00:00")
+
+                        if valid_from < datetime.utcnow() < expires:
+                            pool = p
+                            break
+            else:
+                # show list of possible pools
+                embed.title = "Pool Not Found!"
+                embed.description = "Possible arguments are:"
+                embed.colour = cmn.colours.bad
+                for cty in study.pool_names:
+                    levels = '`, `'.join(study.pool_names[cty].keys())
+                    embed.add_field(name=f"**Country: `{cty}` {study.pool_emojis[cty]}**",
+                                    value=f"Levels: `{levels}`", inline=False)
+                embed.add_field(name="**Random**", value="To select a random pool or country, use `random` or `r`")
+                await ctx.send(embed=embed)
+                return
+
+            pool_meta = pools[pool]
+
+            async with self.session.get(f'https://hamstudy.org/pools/{pool}') as resp:
                 if resp.status != 200:
                     embed.title = 'Error in HamStudy command'
                     embed.description = 'Could not load questions'
@@ -71,47 +122,66 @@ class StudyCog(commands.Cog):
             pool_questions = random.choice(pool_section)['questions']
             question = random.choice(pool_questions)
 
-            embed.title = question['id']
+            embed.title = f"{study.pool_emojis[country]} {pool_meta['class']} {question['id']}"
             embed.description = self.source
-            embed.colour = cmn.colours.good
             embed.add_field(name='Question:', value=question['text'], inline=False)
-            embed.add_field(name='Answers:', value='**A:** ' + question['answers']['A']
-                            + '\n**B:** ' + question['answers']['B']
-                            + '\n**C:** ' + question['answers']['C']
-                            + '\n**D:** ' + question['answers']['D'], inline=False)
-            embed.add_field(name='Answer:', value='Type _?rqa_ for answer', inline=False)
+            embed.add_field(name='Answers:',
+                            value=(f"**{cmn.emojis.a}** {question['answers']['A']}"
+                                   f"\n**{cmn.emojis.b}** {question['answers']['B']}"
+                                   f"\n**{cmn.emojis.c}** {question['answers']['C']}"
+                                   f"\n**{cmn.emojis.d}** {question['answers']['D']}"),
+                            inline=False)
+            embed.add_field(name='To Answer:',
+                            value=('Answer with reactions below. If not answered within 10 minutes,'
+                                   ' the answer will be revealed.'),
+                            inline=False)
             if 'image' in question:
-                image_url = f'https://hamstudy.org/_1330011/images/{selected_pool.split("_",1)[1]}/{question["image"]}'
+                image_url = f'https://hamstudy.org/_1330011/images/{pool.split("_",1)[1]}/{question["image"]}'
                 embed.set_image(url=image_url)
-            self.lastq[ctx.message.channel.id] = (question['id'], question['answer'])
-        await ctx.send(embed=embed)
 
-    @commands.command(name="hamstudyanswer", aliases=['rqa', 'randomquestionanswer', 'randomqa', 'hamstudya'],
-                      category=cmn.cat.study)
-    async def _q_answer(self, ctx: commands.Context, answer: str = None):
-        '''Returns the answer to question last asked (Optional argument: your answer).'''
-        with ctx.typing():
-            correct_ans = self.lastq[ctx.message.channel.id][1]
-            q_num = self.lastq[ctx.message.channel.id][0]
-            embed = cmn.embed_factory(ctx)
-            if answer is not None:
-                answer = answer.upper()
-                if answer == correct_ans:
-                    result = f'Correct! The answer to {q_num} was **{correct_ans}**.'
-                    embed.title = f'{q_num} Answer'
-                    embed.description = f'{self.source}\n\n{result}'
-                    embed.colour = cmn.colours.good
-                else:
-                    result = f'Incorrect. The answer to {q_num} was **{correct_ans}**, not **{answer}**.'
-                    embed.title = f'{q_num} Answer'
-                    embed.description = f'{self.source}\n\n{result}'
-                    embed.colour = cmn.colours.bad
+        q_msg = await ctx.send(embed=embed)
+
+        await cmn.add_react(q_msg, cmn.emojis.a)
+        await cmn.add_react(q_msg, cmn.emojis.b)
+        await cmn.add_react(q_msg, cmn.emojis.c)
+        await cmn.add_react(q_msg, cmn.emojis.d)
+
+        def check(reaction, user):
+            return (user.id != self.bot.user.id
+                    and reaction.message.id == q_msg.id
+                    and str(reaction.emoji) in self.choices.keys())
+
+        try:
+            reaction, user = await self.bot.wait_for('reaction_add', timeout=600.0, check=check)
+        except asyncio.TimeoutError:
+            embed.remove_field(2)
+            embed.add_field(name="Answer:", value=f"Timed out! The correct answer was **{question['answer']}**.")
+            await q_msg.edit(embed=embed)
+        else:
+            if self.choices[str(reaction.emoji)] == question['answer']:
+                embed.remove_field(2)
+                embed.add_field(name="Answer:", value=f"Correct! The answer was **{question['answer']}**.")
+                embed.colour = cmn.colours.good
+                await q_msg.edit(embed=embed)
             else:
-                result = f'The correct answer to {q_num} was **{correct_ans}**.'
-                embed.title = f'{q_num} Answer'
-                embed.description = f'{self.source}\n\n{result}'
-                embed.colour = cmn.colours.neutral
-        await ctx.send(embed=embed)
+                embed.remove_field(2)
+                embed.add_field(name="Answer:", value=f"Incorrect! The correct answer was **{question['answer']}**.")
+                embed.colour = cmn.colours.bad
+                await q_msg.edit(embed=embed)
+
+    async def hamstudy_get_pools(self):
+        async with self.session.get('https://hamstudy.org/pools/') as resp:
+            if resp.status != 200:
+                raise ConnectionError
+            else:
+                pools_dict = json.loads(await resp.read())
+
+        pools = dict()
+        for ls in pools_dict.values():
+            for pool in ls:
+                pools[pool["id"]] = pool
+
+        return pools
 
 
 def setup(bot: commands.Bot):
