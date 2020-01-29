@@ -25,11 +25,13 @@ import data.options as opt
 class QrmHelpCommand(commands.HelpCommand):
     def __init__(self):
         super().__init__(command_attrs={'help': 'Shows help about qrm or a command', 'aliases': ['h']})
+        self.verify_checks = True
 
-    def get_bot_mapping(self):
+    async def get_bot_mapping(self):
         bot = self.context.bot
         mapping = {}
-        for cmd in bot.commands:
+
+        for cmd in await self.filter_commands(bot.commands, sort=True):
             cat = cmd.__original_kwargs__.get('category', None)
             if cat in mapping:
                 mapping[cat].append(cmd)
@@ -37,7 +39,7 @@ class QrmHelpCommand(commands.HelpCommand):
                 mapping[cat] = [cmd]
         return mapping
 
-    def get_command_signature(self, command):
+    async def get_command_signature(self, command):
         parent = command.full_parent_name
         if command.aliases != []:
             aliases = ', '.join(command.aliases)
@@ -61,9 +63,9 @@ class QrmHelpCommand(commands.HelpCommand):
         embed.title = 'qrm Help'
         embed.description = (f'For command-specific help and usage, use `{opt.prefix}help [command name]`'
                              '. Many commands have shorter aliases.')
+        mapping = await mapping
 
         for cat, cmds in mapping.items():
-            cmds = list(filter(lambda x: not x.hidden, cmds))
             if cmds == []:
                 continue
             names = sorted([cmd.name for cmd in cmds])
@@ -74,17 +76,25 @@ class QrmHelpCommand(commands.HelpCommand):
         await self.context.send(embed=embed)
 
     async def send_command_help(self, command):
+        if self.verify_checks:
+            if not await command.can_run(self.context):
+                raise commands.CheckFailure
+            for p in command.parents:
+                if not await p.can_run(self.context):
+                    raise commands.CheckFailure
         embed = cmn.embed_factory(self.context)
-        embed.title = self.get_command_signature(command)
+        embed.title = await self.get_command_signature(command)
         embed.description = command.help
         await self.context.send(embed=embed)
 
     async def send_group_help(self, group):
+        if self.verify_checks and not await group.can_run(self.context):
+            raise commands.CheckFailure
         embed = cmn.embed_factory(self.context)
-        embed.title = self.get_command_signature(group)
+        embed.title = await self.get_command_signature(group)
         embed.description = group.help
-        for cmd in group.commands:
-            embed.add_field(name=self.get_command_signature(cmd), value=cmd.help, inline=False)
+        for cmd in await self.filter_commands(group.commands, sort=True):
+            embed.add_field(name=await self.get_command_signature(cmd), value=cmd.help, inline=False)
         await self.context.send(embed=embed)
 
 
@@ -166,7 +176,7 @@ class BaseCog(commands.Cog):
                              "(https://github.com/classabbyamp/discord-qrm2/issues)!")
         await ctx.send(embed=embed)
 
-    @commands.command(name="echo", aliases=["e"], hidden=True)
+    @commands.command(name="echo", aliases=["e"], category=cmn.cat.admin)
     @commands.check(cmn.check_if_owner)
     async def _echo(self, ctx: commands.Context,
                     channel: Union[cmn.GlobalChannelConverter, commands.UserConverter], *, msg: str):
