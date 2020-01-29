@@ -93,7 +93,6 @@ async def _extctl(ctx: commands.Context):
 
 
 @_extctl.command(name="list", aliases=["ls"])
-@commands.check(cmn.check_if_owner)
 async def _extctl_list(ctx: commands.Context):
     """Lists Extensions."""
     embed = cmn.embed_factory(ctx)
@@ -103,7 +102,6 @@ async def _extctl_list(ctx: commands.Context):
 
 
 @_extctl.command(name="load", aliases=["ld"])
-@commands.check(cmn.check_if_owner)
 async def _extctl_load(ctx: commands.Context, extension: str):
     try:
         bot.load_extension(ext_dir + "." + extension)
@@ -114,7 +112,6 @@ async def _extctl_load(ctx: commands.Context, extension: str):
 
 
 @_extctl.command(name="reload", aliases=["rl", "r", "relaod"])
-@commands.check(cmn.check_if_owner)
 async def _extctl_reload(ctx: commands.Context, extension: str):
     if ctx.invoked_with == "relaod":
         pika = bot.get_emoji(opt.pika)
@@ -129,7 +126,6 @@ async def _extctl_reload(ctx: commands.Context, extension: str):
 
 
 @_extctl.command(name="unload", aliases=["ul"])
-@commands.check(cmn.check_if_owner)
 async def _extctl_unload(ctx: commands.Context, extension: str):
     try:
         bot.unload_extension(ext_dir + "." + extension)

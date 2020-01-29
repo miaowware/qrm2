@@ -76,9 +76,12 @@ class QrmHelpCommand(commands.HelpCommand):
         await self.context.send(embed=embed)
 
     async def send_command_help(self, command):
-        if self.verify_checks and not await command.can_run(self.context):
-            raise commands.CheckFailure
-            return
+        if self.verify_checks:
+            if not await command.can_run(self.context):
+                raise commands.CheckFailure
+            for p in command.parents:
+                if not await p.can_run(self.context):
+                    raise commands.CheckFailure
         embed = cmn.embed_factory(self.context)
         embed.title = await self.get_command_signature(command)
         embed.description = command.help
@@ -87,7 +90,6 @@ class QrmHelpCommand(commands.HelpCommand):
     async def send_group_help(self, group):
         if self.verify_checks and not await group.can_run(self.context):
             raise commands.CheckFailure
-            return
         embed = cmn.embed_factory(self.context)
         embed.title = await self.get_command_signature(group)
         embed.description = group.help
