@@ -30,33 +30,42 @@ __all__ = ["colours", "cat", "emojis", "paths", "ImageMetadata", "ImagesGroup",
 
 # --- Common values ---
 
-colours = SimpleNamespace(good=0x43B581,
-                          neutral=0x7289DA,
-                          bad=0xF04747)
+colours = SimpleNamespace(
+    good=0x43B581,
+    neutral=0x7289DA,
+    bad=0xF04747,
+)
+
 # meow
-cat = SimpleNamespace(lookup="Information Lookup",
-                      fun="Fun",
-                      maps="Mapping",
-                      ref="Reference",
-                      study="Exam Study",
-                      weather="Land and Space Weather",
-                      admin="Bot Control")
+cat = SimpleNamespace(
+    lookup="Information Lookup",
+    fun="Fun",
+    maps="Mapping",
+    ref="Reference",
+    study="Exam Study",
+    weather="Land and Space Weather",
+    admin="Bot Control",
+)
 
-emojis = SimpleNamespace(check_mark="✅",
-                         x="❌",
-                         warning="⚠️",
-                         question="❓",
-                         no_entry="⛔",
-                         bangbang="‼️",
-                         a="🇦",
-                         b="🇧",
-                         c="🇨",
-                         d="🇩")
+emojis = SimpleNamespace(
+    check_mark="✅",
+    x="❌",
+    warning="⚠️",
+    question="❓",
+    no_entry="⛔",
+    bangbang="‼️",
+    a="🇦",
+    b="🇧",
+    c="🇨",
+    d="🇩",
+)
 
-paths = SimpleNamespace(data=Path("./data/"),
-                        resources=Path("./resources/"),
-                        bandcharts=Path("./resources/img/bandcharts/"),
-                        maps=Path("./resources/img/maps/"))
+paths = SimpleNamespace(
+    data=Path("./data/"),
+    resources=Path("./resources/"),
+    bandcharts=Path("./resources/img/bandcharts/"),
+    maps=Path("./resources/img/maps/"),
+)
 
 
 # --- Classes ---
