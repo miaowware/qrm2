@@ -34,24 +34,24 @@ colours = SimpleNamespace(good=0x43B581,
                           neutral=0x7289DA,
                           bad=0xF04747)
 # meow
-cat = SimpleNamespace(lookup='Information Lookup',
-                      fun='Fun',
-                      maps='Mapping',
-                      ref='Reference',
-                      study='Exam Study',
-                      weather='Land and Space Weather',
-                      admin='Bot Control')
+cat = SimpleNamespace(lookup="Information Lookup",
+                      fun="Fun",
+                      maps="Mapping",
+                      ref="Reference",
+                      study="Exam Study",
+                      weather="Land and Space Weather",
+                      admin="Bot Control")
 
-emojis = SimpleNamespace(check_mark='✅',
-                         x='❌',
-                         warning='⚠️',
-                         question='❓',
-                         no_entry='⛔',
-                         bangbang='‼️',
-                         a='🇦',
-                         b='🇧',
-                         c='🇨',
-                         d='🇩')
+emojis = SimpleNamespace(check_mark="✅",
+                         x="❌",
+                         warning="⚠️",
+                         question="❓",
+                         no_entry="⛔",
+                         bangbang="‼️",
+                         a="🇦",
+                         b="🇧",
+                         c="🇨",
+                         d="🇩")
 
 paths = SimpleNamespace(data=Path("./data/"),
                         resources=Path("./resources/"),
@@ -117,7 +117,7 @@ class GlobalChannelConverter(commands.IDConverter):
     async def convert(self, ctx: commands.Context, argument: str):
         bot = ctx.bot
         guild = ctx.guild
-        match = self._get_id_match(argument) or re.match(r'<#([0-9]+)>$', argument)
+        match = self._get_id_match(argument) or re.match(r"<#([0-9]+)>$", argument)
         result = None
         if match is None:
             # not a mention/ID
@@ -150,7 +150,7 @@ def error_embed_factory(ctx: commands.Context, exception: Exception, debug_mode:
         fmtd_ex = traceback.format_exception_only(exception.__class__, exception)
     embed = embed_factory(ctx)
     embed.title = "⚠️ Error"
-    embed.description = "```\n" + '\n'.join(fmtd_ex) + "```"
+    embed.description = "```\n" + "\n".join(fmtd_ex) + "```"
     embed.colour = colours.bad
     return embed
 

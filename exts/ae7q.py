@@ -29,16 +29,16 @@ class AE7QCog(commands.Cog):
 
     @commands.group(name="ae7q", aliases=["ae"], category=cmn.cat.lookup)
     async def _ae7q_lookup(self, ctx: commands.Context):
-        '''Look up a callsign, FRN, or Licensee ID on [ae7q.com](http://ae7q.com/).'''
+        """Look up a callsign, FRN, or Licensee ID on [ae7q.com](http://ae7q.com/)."""
         if ctx.invoked_subcommand is None:
             await ctx.send_help(ctx.command)
 
     @_ae7q_lookup.command(name="call", aliases=["c"], category=cmn.cat.lookup)
     async def _ae7q_call(self, ctx: commands.Context, callsign: str):
-        '''Look up the history of a callsign on [ae7q.com](http://ae7q.com/).'''
+        """Look up the history of a callsign on [ae7q.com](http://ae7q.com/)."""
         with ctx.typing():
             callsign = callsign.upper()
-            desc = ''
+            desc = ""
             base_url = "http://ae7q.com/query/data/CallHistory.php?CALL="
             embed = cmn.embed_factory(ctx)
 
@@ -56,20 +56,20 @@ class AE7QCog(commands.Cog):
             if len(table[0]) == 1:
                 for row in table:
                     desc += " ".join(row.getText().split())
-                    desc += '\n'
-                desc = desc.replace(callsign, f'`{callsign}`')
+                    desc += "\n"
+                desc = desc.replace(callsign, f"`{callsign}`")
                 table = tables[1]
 
             table_headers = table[0].find_all("th")
-            first_header = ''.join(table_headers[0].strings) if len(table_headers) > 0 else None
+            first_header = "".join(table_headers[0].strings) if len(table_headers) > 0 else None
 
             # catch if the wrong table was selected
-            if first_header is None or first_header != 'Entity Name':
+            if first_header is None or first_header != "Entity Name":
                 embed.title = f"AE7Q History for {callsign}"
                 embed.colour = cmn.colours.bad
                 embed.url = base_url + callsign
                 embed.description = desc
-                embed.description += f'\nNo records found for `{callsign}`'
+                embed.description += f"\nNo records found for `{callsign}`"
                 await ctx.send(embed=embed)
                 return
 
@@ -82,18 +82,18 @@ class AE7QCog(commands.Cog):
 
             # add the first three rows of the table to the embed
             for row in table[0:3]:
-                header = f'**{row[0]}** ({row[1]})'     # **Name** (Applicant Type)
-                body = (f'Class: *{row[2]}*\n'
-                        f'Region: *{row[3]}*\n'
-                        f'Status: *{row[4]}*\n'
-                        f'Granted: *{row[5]}*\n'
-                        f'Effective: *{row[6]}*\n'
-                        f'Cancelled: *{row[7]}*\n'
-                        f'Expires: *{row[8]}*')
+                header = f"**{row[0]}** ({row[1]})"     # **Name** (Applicant Type)
+                body = (f"Class: *{row[2]}*\n"
+                        f"Region: *{row[3]}*\n"
+                        f"Status: *{row[4]}*\n"
+                        f"Granted: *{row[5]}*\n"
+                        f"Effective: *{row[6]}*\n"
+                        f"Cancelled: *{row[7]}*\n"
+                        f"Expires: *{row[8]}*")
                 embed.add_field(name=header, value=body, inline=False)
 
             if len(table) > 3:
-                desc += f'\nRecords 1 to 3 of {len(table)}. See ae7q.com for more...'
+                desc += f"\nRecords 1 to 3 of {len(table)}. See ae7q.com for more..."
 
             embed.description = desc
 
@@ -101,10 +101,10 @@ class AE7QCog(commands.Cog):
 
     @_ae7q_lookup.command(name="trustee", aliases=["t"], category=cmn.cat.lookup)
     async def _ae7q_trustee(self, ctx: commands.Context, callsign: str):
-        '''Look up the licenses for which a licensee is trustee on [ae7q.com](http://ae7q.com/).'''
+        """Look up the licenses for which a licensee is trustee on [ae7q.com](http://ae7q.com/)."""
         with ctx.typing():
             callsign = callsign.upper()
-            desc = ''
+            desc = ""
             base_url = "http://ae7q.com/query/data/CallHistory.php?CALL="
             embed = cmn.embed_factory(ctx)
 
@@ -123,12 +123,12 @@ class AE7QCog(commands.Cog):
                 embed.colour = cmn.colours.bad
                 embed.url = base_url + callsign
                 embed.description = desc
-                embed.description += f'\nNo records found for `{callsign}`'
+                embed.description += f"\nNo records found for `{callsign}`"
                 await ctx.send(embed=embed)
                 return
 
             table_headers = table[0].find_all("th")
-            first_header = ''.join(table_headers[0].strings) if len(table_headers) > 0 else None
+            first_header = "".join(table_headers[0].strings) if len(table_headers) > 0 else None
 
             # catch if the wrong table was selected
             if first_header is None or not first_header.startswith("With"):
@@ -136,7 +136,7 @@ class AE7QCog(commands.Cog):
                 embed.colour = cmn.colours.bad
                 embed.url = base_url + callsign
                 embed.description = desc
-                embed.description += f'\nNo records found for `{callsign}`'
+                embed.description += f"\nNo records found for `{callsign}`"
                 await ctx.send(embed=embed)
                 return
 
@@ -149,18 +149,18 @@ class AE7QCog(commands.Cog):
 
             # add the first three rows of the table to the embed
             for row in table[0:3]:
-                header = f'**{row[0]}** ({row[3]})'     # **Name** (Applicant Type)
-                body = (f'Name: *{row[2]}*\n'
-                        f'Region: *{row[1]}*\n'
-                        f'Status: *{row[4]}*\n'
-                        f'Granted: *{row[5]}*\n'
-                        f'Effective: *{row[6]}*\n'
-                        f'Cancelled: *{row[7]}*\n'
-                        f'Expires: *{row[8]}*')
+                header = f"**{row[0]}** ({row[3]})"     # **Name** (Applicant Type)
+                body = (f"Name: *{row[2]}*\n"
+                        f"Region: *{row[1]}*\n"
+                        f"Status: *{row[4]}*\n"
+                        f"Granted: *{row[5]}*\n"
+                        f"Effective: *{row[6]}*\n"
+                        f"Cancelled: *{row[7]}*\n"
+                        f"Expires: *{row[8]}*")
                 embed.add_field(name=header, value=body, inline=False)
 
             if len(table) > 3:
-                desc += f'\nRecords 1 to 3 of {len(table)}. See ae7q.com for more...'
+                desc += f"\nRecords 1 to 3 of {len(table)}. See ae7q.com for more..."
 
             embed.description = desc
 
@@ -168,11 +168,11 @@ class AE7QCog(commands.Cog):
 
     @_ae7q_lookup.command(name="applications", aliases=["a"], category=cmn.cat.lookup)
     async def _ae7q_applications(self, ctx: commands.Context, callsign: str):
-        '''Look up the application history for a callsign on [ae7q.com](http://ae7q.com/).'''
+        """Look up the application history for a callsign on [ae7q.com](http://ae7q.com/)."""
         """
         with ctx.typing():
             callsign = callsign.upper()
-            desc = ''
+            desc = ""
             base_url = "http://ae7q.com/query/data/CallHistory.php?CALL="
             embed = cmn.embed_factory(ctx)
 
@@ -190,14 +190,14 @@ class AE7QCog(commands.Cog):
             if len(table[0]) == 1:
                 for row in table:
                     desc += " ".join(row.getText().split())
-                    desc += '\n'
-                desc = desc.replace(callsign, f'`{callsign}`')
+                    desc += "\n"
+                desc = desc.replace(callsign, f"`{callsign}`")
 
             # select the last table to get applications
             table = tables[-1]
 
             table_headers = table[0].find_all("th")
-            first_header = ''.join(table_headers[0].strings) if len(table_headers) > 0 else None
+            first_header = "".join(table_headers[0].strings) if len(table_headers) > 0 else None
 
             # catch if the wrong table was selected
             if first_header is None or not first_header.startswith("Receipt"):
@@ -205,7 +205,7 @@ class AE7QCog(commands.Cog):
                 embed.colour = cmn.colours.bad
                 embed.url = base_url + callsign
                 embed.description = desc
-                embed.description += f'\nNo records found for `{callsign}`'
+                embed.description += f"\nNo records found for `{callsign}`"
                 await ctx.send(embed=embed)
                 return
 
@@ -218,16 +218,16 @@ class AE7QCog(commands.Cog):
 
             # add the first three rows of the table to the embed
             for row in table[0:3]:
-                header = f'**{row[1]}** ({row[3]})'     # **Name** (Callsign)
-                body = (f'Received: *{row[0]}*\n'
-                        f'Region: *{row[2]}*\n'
-                        f'Purpose: *{row[5]}*\n'
-                        f'Last Action: *{row[7]}*\n'
-                        f'Application Status: *{row[8]}*\n')
+                header = f"**{row[1]}** ({row[3]})"     # **Name** (Callsign)
+                body = (f"Received: *{row[0]}*\n"
+                        f"Region: *{row[2]}*\n"
+                        f"Purpose: *{row[5]}*\n"
+                        f"Last Action: *{row[7]}*\n"
+                        f"Application Status: *{row[8]}*\n")
                 embed.add_field(name=header, value=body, inline=False)
 
             if len(table) > 3:
-                desc += f'\nRecords 1 to 3 of {len(table)}. See ae7q.com for more...'
+                desc += f"\nRecords 1 to 3 of {len(table)}. See ae7q.com for more..."
 
             embed.description = desc
 
@@ -238,7 +238,7 @@ class AE7QCog(commands.Cog):
 
     @_ae7q_lookup.command(name="frn", aliases=["f"], category=cmn.cat.lookup)
     async def _ae7q_frn(self, ctx: commands.Context, frn: str):
-        '''Look up the history of an FRN on [ae7q.com](http://ae7q.com/).'''
+        """Look up the history of an FRN on [ae7q.com](http://ae7q.com/)."""
         """
         NOTES:
         - 2 tables: callsign history and application history
@@ -260,21 +260,21 @@ class AE7QCog(commands.Cog):
                 embed.title = f"AE7Q History for FRN {frn}"
                 embed.colour = cmn.colours.bad
                 embed.url = base_url + frn
-                embed.description = f'No records found for FRN `{frn}`'
+                embed.description = f"No records found for FRN `{frn}`"
                 await ctx.send(embed=embed)
                 return
 
             table = tables[0]
 
             table_headers = table[0].find_all("th")
-            first_header = ''.join(table_headers[0].strings) if len(table_headers) > 0 else None
+            first_header = "".join(table_headers[0].strings) if len(table_headers) > 0 else None
 
             # catch if the wrong table was selected
-            if first_header is None or not first_header.startswith('With Licensee'):
+            if first_header is None or not first_header.startswith("With Licensee"):
                 embed.title = f"AE7Q History for FRN {frn}"
                 embed.colour = cmn.colours.bad
                 embed.url = base_url + frn
-                embed.description = f'No records found for FRN `{frn}`'
+                embed.description = f"No records found for FRN `{frn}`"
                 await ctx.send(embed=embed)
                 return
 
@@ -287,25 +287,25 @@ class AE7QCog(commands.Cog):
 
             # add the first three rows of the table to the embed
             for row in table[0:3]:
-                header = f'**{row[0]}** ({row[3]})'     # **Callsign** (Applicant Type)
-                body = (f'Name: *{row[2]}*\n'
-                        f'Class: *{row[4]}*\n'
-                        f'Region: *{row[1]}*\n'
-                        f'Status: *{row[5]}*\n'
-                        f'Granted: *{row[6]}*\n'
-                        f'Effective: *{row[7]}*\n'
-                        f'Cancelled: *{row[8]}*\n'
-                        f'Expires: *{row[9]}*')
+                header = f"**{row[0]}** ({row[3]})"     # **Callsign** (Applicant Type)
+                body = (f"Name: *{row[2]}*\n"
+                        f"Class: *{row[4]}*\n"
+                        f"Region: *{row[1]}*\n"
+                        f"Status: *{row[5]}*\n"
+                        f"Granted: *{row[6]}*\n"
+                        f"Effective: *{row[7]}*\n"
+                        f"Cancelled: *{row[8]}*\n"
+                        f"Expires: *{row[9]}*")
                 embed.add_field(name=header, value=body, inline=False)
 
             if len(table) > 3:
-                embed.description = f'Records 1 to 3 of {len(table)}. See ae7q.com for more...'
+                embed.description = f"Records 1 to 3 of {len(table)}. See ae7q.com for more..."
 
             await ctx.send(embed=embed)
 
     @_ae7q_lookup.command(name="licensee", aliases=["l"], category=cmn.cat.lookup)
     async def _ae7q_licensee(self, ctx: commands.Context, licensee_id: str):
-        '''Look up the history of a licensee ID on [ae7q.com](http://ae7q.com/).'''
+        """Look up the history of a licensee ID on [ae7q.com](http://ae7q.com/)."""
         with ctx.typing():
             licensee_id = licensee_id.upper()
             base_url = "http://ae7q.com/query/data/LicenseeIdHistory.php?ID="
@@ -323,21 +323,21 @@ class AE7QCog(commands.Cog):
                 embed.title = f"AE7Q History for Licensee {licensee_id}"
                 embed.colour = cmn.colours.bad
                 embed.url = base_url + licensee_id
-                embed.description = f'No records found for Licensee `{licensee_id}`'
+                embed.description = f"No records found for Licensee `{licensee_id}`"
                 await ctx.send(embed=embed)
                 return
 
             table = tables[0]
 
             table_headers = table[0].find_all("th")
-            first_header = ''.join(table_headers[0].strings) if len(table_headers) > 0 else None
+            first_header = "".join(table_headers[0].strings) if len(table_headers) > 0 else None
 
             # catch if the wrong table was selected
-            if first_header is None or not first_header.startswith('With FCC'):
+            if first_header is None or not first_header.startswith("With FCC"):
                 embed.title = f"AE7Q History for Licensee {licensee_id}"
                 embed.colour = cmn.colours.bad
                 embed.url = base_url + licensee_id
-                embed.description = f'No records found for Licensee `{licensee_id}`'
+                embed.description = f"No records found for Licensee `{licensee_id}`"
                 await ctx.send(embed=embed)
                 return
 
@@ -350,19 +350,19 @@ class AE7QCog(commands.Cog):
 
             # add the first three rows of the table to the embed
             for row in table[0:3]:
-                header = f'**{row[0]}** ({row[3]})'     # **Callsign** (Applicant Type)
-                body = (f'Name: *{row[2]}*\n'
-                        f'Class: *{row[4]}*\n'
-                        f'Region: *{row[1]}*\n'
-                        f'Status: *{row[5]}*\n'
-                        f'Granted: *{row[6]}*\n'
-                        f'Effective: *{row[7]}*\n'
-                        f'Cancelled: *{row[8]}*\n'
-                        f'Expires: *{row[9]}*')
+                header = f"**{row[0]}** ({row[3]})"     # **Callsign** (Applicant Type)
+                body = (f"Name: *{row[2]}*\n"
+                        f"Class: *{row[4]}*\n"
+                        f"Region: *{row[1]}*\n"
+                        f"Status: *{row[5]}*\n"
+                        f"Granted: *{row[6]}*\n"
+                        f"Effective: *{row[7]}*\n"
+                        f"Cancelled: *{row[8]}*\n"
+                        f"Expires: *{row[9]}*")
                 embed.add_field(name=header, value=body, inline=False)
 
             if len(table) > 3:
-                embed.description = f'Records 1 to 3 of {len(table)}. See ae7q.com for more...'
+                embed.description = f"Records 1 to 3 of {len(table)}. See ae7q.com for more..."
 
             await ctx.send(embed=embed)
 
@@ -372,13 +372,13 @@ async def process_table(table: list):
     table_contents = []
     for tr in table:
         row = []
-        for td in tr.find_all('td'):
+        for td in tr.find_all("td"):
             cell_val = td.getText().strip()
-            row.append(cell_val if cell_val else '-')
+            row.append(cell_val if cell_val else "-")
 
             # take care of columns that span multiple rows by copying the contents rightward
-            if 'colspan' in td.attrs and int(td.attrs['colspan']) > 1:
-                for i in range(int(td.attrs['colspan']) - 1):
+            if "colspan" in td.attrs and int(td.attrs["colspan"]) > 1:
+                for i in range(int(td.attrs["colspan"]) - 1):
                     row.append(row[-1])
 
         # get rid of ditto marks by copying the contents from the previous row

@@ -20,27 +20,27 @@ class GridCog(commands.Cog):
 
     @commands.command(name="grid", category=cmn.cat.maps)
     async def _grid_sq_lookup(self, ctx: commands.Context, lat: str, lon: str):
-        '''Calculates the grid square for latitude and longitude coordinates,
-with negative being latitude South and longitude West.'''
+        """Calculates the grid square for latitude and longitude coordinates,
+with negative being latitude South and longitude West."""
         with ctx.typing():
             grid = "**"
             latf = float(lat) + 90
             lonf = float(lon) + 180
             if 0 <= latf <= 180 and 0 <= lonf <= 360:
-                grid += chr(ord('A') + int(lonf / 20))
-                grid += chr(ord('A') + int(latf / 10))
-                grid += chr(ord('0') + int((lonf % 20)/2))
-                grid += chr(ord('0') + int((latf % 10)/1))
-                grid += chr(ord('a') + int((lonf - (int(lonf/2)*2)) / (5/60)))
-                grid += chr(ord('a') + int((latf - (int(latf/1)*1)) / (2.5/60)))
+                grid += chr(ord("A") + int(lonf / 20))
+                grid += chr(ord("A") + int(latf / 10))
+                grid += chr(ord("0") + int((lonf % 20)/2))
+                grid += chr(ord("0") + int((latf % 10)/1))
+                grid += chr(ord("a") + int((lonf - (int(lonf/2)*2)) / (5/60)))
+                grid += chr(ord("a") + int((latf - (int(latf/1)*1)) / (2.5/60)))
                 grid += "**"
                 embed = cmn.embed_factory(ctx)
-                embed.title = f'Maidenhead Grid Locator for {float(lat):.6f}, {float(lon):.6f}'
+                embed.title = f"Maidenhead Grid Locator for {float(lat):.6f}, {float(lon):.6f}"
                 embed.description = grid
                 embed.colour = cmn.colours.good
             else:
                 embed = cmn.embed_factory(ctx)
-                embed.title = f'Error generating grid square for {lat}, {lon}.'
+                embed.title = f"Error generating grid square for {lat}, {lon}."
                 embed.description = ("Coordinates out of range.\n"
                                      "The valid ranges are:\n"
                                      "- Latitude: `-90` to `+90`\n"
@@ -48,29 +48,29 @@ with negative being latitude South and longitude West.'''
                 embed.colour = cmn.colours.bad
         await ctx.send(embed=embed)
 
-    @commands.command(name="ungrid", aliases=['loc'], category=cmn.cat.maps)
+    @commands.command(name="ungrid", aliases=["loc"], category=cmn.cat.maps)
     async def _location_lookup(self, ctx: commands.Context, grid: str, grid2: str = None):
-        '''Calculates the latitude and longitude for the center of a grid square.
-If two grid squares are given, the distance and azimuth between them is calculated.'''
+        """Calculates the latitude and longitude for the center of a grid square.
+If two grid squares are given, the distance and azimuth between them is calculated."""
         with ctx.typing():
-            if grid2 is None or grid2 == '':
+            if grid2 is None or grid2 == "":
                 try:
                     grid = grid.upper()
                     loc = get_coords(grid)
 
                     embed = cmn.embed_factory(ctx)
-                    embed.title = f'Latitude and Longitude for {grid}'
+                    embed.title = f"Latitude and Longitude for {grid}"
                     embed.colour = cmn.colours.good
 
                     if len(grid) >= 6:
-                        embed.description = f'**{loc[0]:.5f}, {loc[1]:.5f}**'
-                        embed.url = f'https://www.openstreetmap.org/#map=13/{loc[0]:.5f}/{loc[1]:.5f}'
+                        embed.description = f"**{loc[0]:.5f}, {loc[1]:.5f}**"
+                        embed.url = f"https://www.openstreetmap.org/#map=13/{loc[0]:.5f}/{loc[1]:.5f}"
                     else:
-                        embed.description = f'**{loc[0]:.1f}, {loc[1]:.1f}**'
-                        embed.url = f'https://www.openstreetmap.org/#map=10/{loc[0]:.1f}/{loc[1]:.1f}'
+                        embed.description = f"**{loc[0]:.1f}, {loc[1]:.1f}**"
+                        embed.url = f"https://www.openstreetmap.org/#map=10/{loc[0]:.1f}/{loc[1]:.1f}"
                 except Exception as e:
                     embed = cmn.embed_factory(ctx)
-                    embed.title = f'Error generating latitude and longitude for grid {grid}.'
+                    embed.title = f"Error generating latitude and longitude for grid {grid}."
                     embed.description = str(e)
                     embed.colour = cmn.colours.bad
             else:
@@ -101,12 +101,12 @@ If two grid squares are given, the distance and azimuth between them is calculat
                     bearing = (math.degrees(math.atan2(y_dist, x_dist)) + 360) % 360
 
                     embed = cmn.embed_factory(ctx)
-                    embed.title = f'Great Circle Distance and Bearing from {grid} to {grid2}'
-                    embed.description = f'**Distance:** {d:.1f} km ({d_mi:.1f} mi)\n**Bearing:** {bearing:.1f}°'
+                    embed.title = f"Great Circle Distance and Bearing from {grid} to {grid2}"
+                    embed.description = f"**Distance:** {d:.1f} km ({d_mi:.1f} mi)\n**Bearing:** {bearing:.1f}°"
                     embed.colour = cmn.colours.good
                 except Exception as e:
                     embed = cmn.embed_factory(ctx)
-                    embed.title = f'Error generating great circle distance and bearing from {grid} and {grid2}.'
+                    embed.title = f"Error generating great circle distance and bearing from {grid} and {grid2}."
                     embed.description = str(e)
                     embed.colour = cmn.colours.bad
         await ctx.send(embed=embed)
@@ -114,23 +114,23 @@ If two grid squares are given, the distance and azimuth between them is calculat
 
 def get_coords(grid: str):
     if len(grid) < 3:
-        raise ValueError('The grid locator must be at least 4 characters long.')
+        raise ValueError("The grid locator must be at least 4 characters long.")
 
     if not grid[0:2].isalpha() or not grid[2:4].isdigit():
         if len(grid) <= 4:
-            raise ValueError('The grid locator must be of the form AA##.')
+            raise ValueError("The grid locator must be of the form AA##.")
         if len(grid) >= 6 and not grid[5:7].isalpha():
-            raise ValueError('The grid locator must be of the form AA##AA.')
+            raise ValueError("The grid locator must be of the form AA##AA.")
 
-    lon = ((ord(grid[0]) - ord('A')) * 20) - 180
-    lat = ((ord(grid[1]) - ord('A')) * 10) - 90
-    lon += ((ord(grid[2]) - ord('0')) * 2)
-    lat += ((ord(grid[3]) - ord('0')) * 1)
+    lon = ((ord(grid[0]) - ord("A")) * 20) - 180
+    lat = ((ord(grid[1]) - ord("A")) * 10) - 90
+    lon += ((ord(grid[2]) - ord("0")) * 2)
+    lat += ((ord(grid[3]) - ord("0")) * 1)
 
     if len(grid) >= 6:
         # have subsquares
-        lon += ((ord(grid[4])) - ord('A')) * (5/60)
-        lat += ((ord(grid[5])) - ord('A')) * (2.5/60)
+        lon += ((ord(grid[4])) - ord("A")) * (5/60)
+        lat += ((ord(grid[5])) - ord("A")) * (2.5/60)
         # move to center of subsquare
         lon += (2.5/60)
         lat += (1.25/60)

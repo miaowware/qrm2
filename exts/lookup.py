@@ -19,48 +19,48 @@ class LookupCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         try:
-            self.cty = BigCty('./data/cty.json')
+            self.cty = BigCty("./data/cty.json")
         except OSError:
             self.cty = BigCty()
 
     # TODO: See #107
     # @commands.command(name="sat", category=cmn.cat.lookup)
     # async def _sat_lookup(self, ctx: commands.Context, sat_name: str, grid1: str, grid2: str = None):
-    #     '''Links to info about satellite passes on satmatch.com.'''
-    #     now = datetime.utcnow().strftime('%Y-%m-%d%%20%H:%M')
-    #     if grid2 is None or grid2 == '':
-    #         await ctx.send(f'http://www.satmatch.com/satellite/{sat_name}/obs1/{grid1}'
-    #                        f'?search_start_time={now}&duration_hrs=24')
+    #     """Links to info about satellite passes on satmatch.com."""
+    #     now = datetime.utcnow().strftime("%Y-%m-%d%%20%H:%M")
+    #     if grid2 is None or grid2 == "":
+    #         await ctx.send(f"http://www.satmatch.com/satellite/{sat_name}/obs1/{grid1}"
+    #                        f"?search_start_time={now}&duration_hrs=24")
     #     else:
-    #         await ctx.send(f'http://www.satmatch.com/satellite/{sat_name}/obs1/{grid1}'
-    #                        f'/obs2/{grid2}?search_start_time={now}&duration_hrs=24')
+    #         await ctx.send(f"http://www.satmatch.com/satellite/{sat_name}/obs1/{grid1}"
+    #                        f"/obs2/{grid2}?search_start_time={now}&duration_hrs=24")
 
-    @commands.command(name="dxcc", aliases=['dx'], category=cmn.cat.lookup)
+    @commands.command(name="dxcc", aliases=["dx"], category=cmn.cat.lookup)
     async def _dxcc_lookup(self, ctx: commands.Context, query: str):
-        '''Gets info about a DXCC prefix.'''
+        """Gets info about a DXCC prefix."""
         with ctx.typing():
             query = query.upper()
             full_query = query
             embed = cmn.embed_factory(ctx)
-            embed.title = f'DXCC Info for '
-            embed.description = f'*Last Updated: {self.cty.formatted_version}*'
+            embed.title = f"DXCC Info for "
+            embed.description = f"*Last Updated: {self.cty.formatted_version}*"
             embed.colour = cmn.colours.bad
             while query:
                 if query in self.cty.keys():
                     data = self.cty[query]
-                    embed.add_field(name="Entity", value=data['entity'])
-                    embed.add_field(name="CQ Zone", value=data['cq'])
-                    embed.add_field(name="ITU Zone", value=data['itu'])
-                    embed.add_field(name="Continent", value=data['continent'])
+                    embed.add_field(name="Entity", value=data["entity"])
+                    embed.add_field(name="CQ Zone", value=data["cq"])
+                    embed.add_field(name="ITU Zone", value=data["itu"])
+                    embed.add_field(name="Continent", value=data["continent"])
                     embed.add_field(name="Time Zone",
-                                    value=f'+{data["tz"]}' if data['tz'] > 0 else str(data['tz']))
+                                    value=f"+{data['tz']}" if data["tz"] > 0 else str(data["tz"]))
                     embed.title += query
                     embed.colour = cmn.colours.good
                     break
                 else:
                     query = query[:-1]
             else:
-                embed.title += full_query + ' not found'
+                embed.title += full_query + " not found"
                 embed.colour = cmn.colours.bad
         await ctx.send(embed=embed)
 

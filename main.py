@@ -167,7 +167,7 @@ async def on_command_error(ctx: commands.Context, err: commands.CommandError):
         await cmn.add_react(ctx.message, cmn.emojis.bangbang)
     elif isinstance(err, (commands.CommandInvokeError, commands.ConversionError)):
         # Emulating discord.py's default beaviour.
-        print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
+        print("Ignoring exception in command {}:".format(ctx.command), file=sys.stderr)
         traceback.print_exception(type(err), err, err.__traceback__, file=sys.stderr)
 
         embed = cmn.error_embed_factory(ctx, err.original, bot.qrm.debug_mode)
@@ -176,7 +176,7 @@ async def on_command_error(ctx: commands.Context, err: commands.CommandError):
         await ctx.send(embed=embed)
     else:
         # Emulating discord.py's default beaviour. (safest bet)
-        print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
+        print("Ignoring exception in command {}:".format(ctx.command), file=sys.stderr)
         traceback.print_exception(type(err), err, err.__traceback__, file=sys.stderr)
         await cmn.add_react(ctx.message, cmn.emojis.warning)
 
@@ -221,7 +221,7 @@ async def _ensure_activity_fixed():
 # --- Run ---
 
 for ext in opt.exts:
-    bot.load_extension(ext_dir + '.' + ext)
+    bot.load_extension(ext_dir + "." + ext)
 
 
 try:

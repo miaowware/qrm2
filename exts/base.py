@@ -24,7 +24,7 @@ import data.options as opt
 
 class QrmHelpCommand(commands.HelpCommand):
     def __init__(self):
-        super().__init__(command_attrs={'help': 'Shows help about qrm or a command', 'aliases': ['h']})
+        super().__init__(command_attrs={"help": "Shows help about qrm or a command", "aliases": ["h"]})
         self.verify_checks = True
 
     async def get_bot_mapping(self):
@@ -32,7 +32,7 @@ class QrmHelpCommand(commands.HelpCommand):
         mapping = {}
 
         for cmd in await self.filter_commands(bot.commands, sort=True):
-            cat = cmd.__original_kwargs__.get('category', None)
+            cat = cmd.__original_kwargs__.get("category", None)
             if cat in mapping:
                 mapping[cat].append(cmd)
             else:
@@ -42,27 +42,27 @@ class QrmHelpCommand(commands.HelpCommand):
     async def get_command_signature(self, command):
         parent = command.full_parent_name
         if command.aliases != []:
-            aliases = ', '.join(command.aliases)
+            aliases = ", ".join(command.aliases)
             fmt = command.name
             if parent:
-                fmt = f'{parent} {fmt}'
+                fmt = f"{parent} {fmt}"
             alias = fmt
-            return f'{opt.prefix}{alias} {command.signature}\n    *Aliases:* {aliases}'
-        alias = command.name if not parent else f'{parent} {command.name}'
-        return f'{opt.prefix}{alias} {command.signature}'
+            return f"{opt.prefix}{alias} {command.signature}\n    *Aliases:* {aliases}"
+        alias = command.name if not parent else f"{parent} {command.name}"
+        return f"{opt.prefix}{alias} {command.signature}"
 
     async def send_error_message(self, error):
         embed = cmn.embed_factory(self.context)
-        embed.title = 'qrm Help Error'
+        embed.title = "qrm Help Error"
         embed.description = error
         embed.colour = cmn.colours.bad
         await self.context.send(embed=embed)
 
     async def send_bot_help(self, mapping):
         embed = cmn.embed_factory(self.context)
-        embed.title = 'qrm Help'
-        embed.description = (f'For command-specific help and usage, use `{opt.prefix}help [command name]`'
-                             '. Many commands have shorter aliases.')
+        embed.title = "qrm Help"
+        embed.description = (f"For command-specific help and usage, use `{opt.prefix}help [command name]`."
+                             " Many commands have shorter aliases.")
         mapping = await mapping
 
         for cat, cmds in mapping.items():
@@ -70,9 +70,9 @@ class QrmHelpCommand(commands.HelpCommand):
                 continue
             names = sorted([cmd.name for cmd in cmds])
             if cat is not None:
-                embed.add_field(name=cat.title(), value=', '.join(names), inline=False)
+                embed.add_field(name=cat.title(), value=", ".join(names), inline=False)
             else:
-                embed.add_field(name='Other', value=', '.join(names), inline=False)
+                embed.add_field(name="Other", value=", ".join(names), inline=False)
         await self.context.send(embed=embed)
 
     async def send_command_help(self, command):
@@ -112,27 +112,27 @@ class BaseCog(commands.Cog):
 
         embed.add_field(name="Authors", value=", ".join(info.authors))
         embed.add_field(name="License", value=info.license)
-        embed.add_field(name="Version", value=f'v{info.release}')
+        embed.add_field(name="Version", value=f"v{info.release}")
         embed.add_field(name="Contributing", value=info.contributing, inline=False)
         embed.add_field(name="Official Server", value=info.bot_server, inline=False)
         embed.set_thumbnail(url=str(self.bot.user.avatar_url))
         await ctx.send(embed=embed)
 
-    @commands.command(name="ping", aliases=['beep'])
+    @commands.command(name="ping", aliases=["beep"])
     async def _ping(self, ctx: commands.Context):
         """Show the current latency to the discord endpoint."""
         embed = cmn.embed_factory(ctx)
-        content = ''
+        content = ""
         if ctx.invoked_with == "beep":
             embed.title = "**Boop!**"
         else:
-            content = ctx.message.author.mention if random.random() < 0.05 else ''
+            content = ctx.message.author.mention if random.random() < 0.05 else ""
             embed.title = "🏓 **Pong!**"
-        embed.description = f'Current ping is {self.bot.latency*1000:.1f} ms'
+        embed.description = f"Current ping is {self.bot.latency*1000:.1f} ms"
         await ctx.send(content, embed=embed)
 
     @commands.command(name="changelog", aliases=["clog"])
-    async def _changelog(self, ctx: commands.Context, version: str = 'latest'):
+    async def _changelog(self, ctx: commands.Context, version: str = "latest"):
         """Show what has changed in a bot version."""
         embed = cmn.embed_factory(ctx)
         embed.title = "qrm Changelog"
@@ -144,25 +144,25 @@ class BaseCog(commands.Cog):
 
         version = version.lower()
 
-        if version == 'latest':
+        if version == "latest":
             version = info.release
-        if version == 'unreleased':
-            version = 'Unreleased'
+        if version == "unreleased":
+            version = "Unreleased"
 
         try:
             log = changelog[version]
         except KeyError:
             embed.title += ": Version Not Found"
-            embed.description += '\n\n**Valid versions:** latest, '
-            embed.description += ', '.join(vers)
+            embed.description += "\n\n**Valid versions:** latest, "
+            embed.description += ", ".join(vers)
             embed.colour = cmn.colours.bad
             await ctx.send(embed=embed)
             return
 
-        if 'date' in log:
-            embed.description += f'\n\n**v{version}** ({log["date"]})'
+        if "date" in log:
+            embed.description += f"\n\n**v{version}** ({log['date']})"
         else:
-            embed.description += f'\n\n**v{version}**'
+            embed.description += f"\n\n**v{version}**"
         embed = await format_changelog(log, embed)
 
         await ctx.send(embed=embed)
@@ -190,36 +190,36 @@ class BaseCog(commands.Cog):
 
 def parse_changelog():
     changelog = OrderedDict()
-    ver = ''
-    heading = ''
+    ver = ""
+    heading = ""
 
-    with open('CHANGELOG.md') as changelog_file:
+    with open("CHANGELOG.md") as changelog_file:
         for line in changelog_file.readlines():
-            if line.strip() == '':
+            if line.strip() == "":
                 continue
-            if re.match(r'##[^#]', line):
-                ver_match = re.match(r'\[(.+)\](?: - )?(\d{4}-\d{2}-\d{2})?', line.lstrip('#').strip())
+            if re.match(r"##[^#]", line):
+                ver_match = re.match(r"\[(.+)\](?: - )?(\d{4}-\d{2}-\d{2})?", line.lstrip("#").strip())
                 if ver_match is not None:
                     ver = ver_match.group(1)
                     changelog[ver] = dict()
                     if ver_match.group(2):
-                        changelog[ver]['date'] = ver_match.group(2)
-            elif re.match(r'###[^#]', line):
-                heading = line.lstrip('#').strip()
+                        changelog[ver]["date"] = ver_match.group(2)
+            elif re.match(r"###[^#]", line):
+                heading = line.lstrip("#").strip()
                 changelog[ver][heading] = []
-            elif ver != '' and heading != '':
-                if line.startswith('-'):
-                    changelog[ver][heading].append(line.lstrip('-').strip())
+            elif ver != "" and heading != "":
+                if line.startswith("-"):
+                    changelog[ver][heading].append(line.lstrip("-").strip())
     return changelog
 
 
 async def format_changelog(log: dict, embed: discord.Embed):
     for header, lines in log.items():
-        formatted = ''
-        if header != 'date':
+        formatted = ""
+        if header != "date":
             for line in lines:
-                formatted += f'- {line}\n'
-            embed.add_field(name=f'**{header}**', value=formatted, inline=False)
+                formatted += f"- {line}\n"
+            embed.add_field(name=f"**{header}**", value=formatted, inline=False)
     return embed
 
 
