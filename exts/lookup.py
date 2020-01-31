@@ -3,9 +3,10 @@ Lookup extension for qrm
 ---
 Copyright (C) 2019-2020 Abigail Gold, 0x5c
 
-This file is part of discord-qrm2 and is released under the terms of the GNU
-General Public License, version 2.
+This file is part of discord-qrm2 and is released under the terms of
+the GNU General Public License, version 2.
 """
+
 
 import threading
 

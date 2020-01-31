@@ -3,16 +3,18 @@ ae7q extension for qrm
 ---
 Copyright (C) 2019-2020 Abigail Gold, 0x5c
 
-This file is part of discord-qrm2 and is released under the terms of the GNU
-General Public License, version 2.
----
-Test callsigns:
-KN8U: active, restricted
-AB2EE: expired, restricted
-KE8FGB: assigned once, no restrictions
-KV4AAA: unassigned, no records
-KC4USA: reserved, no call history, *but* has application history
+This file is part of discord-qrm2 and is released under the terms of
+the GNU General Public License, version 2.
 """
+
+
+# Test callsigns:
+# KN8U: active, restricted
+# AB2EE: expired, restricted
+# KE8FGB: assigned once, no restrictions
+# KV4AAA: unassigned, no records
+# KC4USA: reserved, no call history, *but* has application history
+
 
 import discord.ext.commands as commands
 
