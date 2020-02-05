@@ -38,7 +38,7 @@ class ImageCog(commands.Cog):
                 desc = "Possible arguments are:\n"
                 for key, img in self.bandcharts.items():
                     desc += f"`{key}`: {img.name}{('  ' + img.emoji if img.emoji else '')}\n"
-                embed.title = f"Bandplan Not Found!"
+                embed.title = "Bandplan Not Found!"
                 embed.description = desc
                 embed.colour = cmn.colours.bad
                 await ctx.send(embed=embed)
@@ -93,7 +93,7 @@ class ImageCog(commands.Cog):
                 if resp.status != 200:
                     raise cmn.BotHTTPError(resp)
                 data = io.BytesIO(await resp.read())
-            embed.set_image(url=f"attachment://greyline.jpg")
+            embed.set_image(url="attachment://greyline.jpg")
             await ctx.send(embed=embed, file=discord.File(data, "greyline.jpg"))
 
 

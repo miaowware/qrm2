@@ -44,7 +44,7 @@ class LookupCog(commands.Cog):
             query = query.upper()
             full_query = query
             embed = cmn.embed_factory(ctx)
-            embed.title = f"DXCC Info for "
+            embed.title = "DXCC Info for "
             embed.description = f"*Last Updated: {self.cty.formatted_version}*"
             embed.colour = cmn.colours.bad
             while query:

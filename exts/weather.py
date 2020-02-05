@@ -37,7 +37,7 @@ class WeatherCog(commands.Cog):
                 if resp.status != 200:
                     raise cmn.BotHTTPError(resp)
                 data = io.BytesIO(await resp.read())
-            embed.set_image(url=f"attachment://condx.png")
+            embed.set_image(url="attachment://condx.png")
             await ctx.send(embed=embed, file=discord.File(data, "condx.png"))
 
     @commands.group(name="weather", aliases=["wttr"], category=cmn.cat.weather)
@@ -84,7 +84,7 @@ See help for weather command for possible location types. Add a `-c` or `-f` to 
                 if resp.status != 200:
                     raise cmn.BotHTTPError(resp)
                 data = io.BytesIO(await resp.read())
-            embed.set_image(url=f"attachment://wttr_forecast.png")
+            embed.set_image(url="attachment://wttr_forecast.png")
             await ctx.send(embed=embed, file=discord.File(data, "wttr_forecast.png"))
 
     @_weather_conditions.command(name="now", aliases=["n"], category=cmn.cat.weather)
@@ -115,7 +115,7 @@ See help for weather command for possible location types. Add a `-c` or `-f` to 
                 if resp.status != 200:
                     raise cmn.BotHTTPError(resp)
                 data = io.BytesIO(await resp.read())
-            embed.set_image(url=f"attachment://wttr_now.png")
+            embed.set_image(url="attachment://wttr_now.png")
             await ctx.send(embed=embed, file=discord.File(data, "wttr_now.png"))
 
 
