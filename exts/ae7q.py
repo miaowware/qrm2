@@ -16,10 +16,10 @@ the GNU General Public License, version 2.
 # KC4USA: reserved, no call history, *but* has application history
 
 
-import discord.ext.commands as commands
-
 import aiohttp
 from bs4 import BeautifulSoup
+
+import discord.ext.commands as commands
 
 import common as cmn
 

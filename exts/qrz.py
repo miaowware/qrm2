@@ -11,12 +11,13 @@ the GNU General Public License, version 2.
 from collections import OrderedDict
 from io import BytesIO
 
-from discord.ext import commands, tasks
-
 import aiohttp
 from lxml import etree
 
+from discord.ext import commands, tasks
+
 import common as cmn
+
 import data.keys as keys
 
 

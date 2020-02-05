@@ -9,11 +9,11 @@ the GNU General Public License, version 2.
 """
 
 
+import asyncio
+import random
 import sys
 import traceback
-import asyncio
-from datetime import time, datetime
-import random
+from datetime import datetime, time
 from types import SimpleNamespace
 
 import pytz
@@ -21,12 +21,12 @@ import pytz
 import discord
 from discord.ext import commands, tasks
 
-import utils.connector as conn
-import common as cmn
-
 import info
-import data.options as opt
+import common as cmn
+import utils.connector as conn
+
 import data.keys as keys
+import data.options as opt
 
 
 # --- Settings ---

@@ -10,8 +10,9 @@ the GNU General Public License, version 2.
 
 import threading
 
-from discord.ext import commands, tasks
 from ctyparser import BigCty
+
+from discord.ext import commands, tasks
 
 import common as cmn
 
