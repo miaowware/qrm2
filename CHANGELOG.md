@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - The `hamstudy` command now uses the syntax `?hamstudy <country> <pool>`.
 - Replaced `hamstudyanswer` command with answering by reaction.
 - Removed all generic error handling from commands.
+- Cleaned up the description of multiple commands.
 ### Fixed
 - Fixed ditto marks (") appearing in the ae7q call command.
 - Fixed issue where incorrect table was parsed in ae7q call command.
