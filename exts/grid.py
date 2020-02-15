@@ -21,8 +21,8 @@ class GridCog(commands.Cog):
 
     @commands.command(name="grid", category=cmn.cat.maps)
     async def _grid_sq_lookup(self, ctx: commands.Context, lat: str, lon: str):
-        """Calculates the grid square for latitude and longitude coordinates,
-with negative being latitude South and longitude West."""
+        ("""Calculates the grid square for latitude and longitude coordinates, """
+         """with negative being latitude South and longitude West.""")
         with ctx.typing():
             grid = "**"
             latf = float(lat) + 90
@@ -42,17 +42,17 @@ with negative being latitude South and longitude West."""
             else:
                 embed = cmn.embed_factory(ctx)
                 embed.title = f"Error generating grid square for {lat}, {lon}."
-                embed.description = ("Coordinates out of range.\n"
-                                     "The valid ranges are:\n"
-                                     "- Latitude: `-90` to `+90`\n"
-                                     "- Longitude: `-180` to `+180`")
+                embed.description = """Coordinates out of range.
+                                    The valid ranges are:
+                                    - Latitude: `-90` to `+90`
+                                    - Longitude: `-180` to `+180`"""
                 embed.colour = cmn.colours.bad
         await ctx.send(embed=embed)
 
     @commands.command(name="ungrid", aliases=["loc"], category=cmn.cat.maps)
     async def _location_lookup(self, ctx: commands.Context, grid: str, grid2: str = None):
         """Calculates the latitude and longitude for the center of a grid square.
-If two grid squares are given, the distance and azimuth between them is calculated."""
+        If two grid squares are given, the distance and azimuth between them is calculated."""
         with ctx.typing():
             if grid2 is None or grid2 == "":
                 try:

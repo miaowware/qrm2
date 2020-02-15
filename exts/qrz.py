@@ -29,7 +29,7 @@ class QRZCog(commands.Cog):
 
     @commands.command(name="call", aliases=["qrz"], category=cmn.cat.lookup)
     async def _qrz_lookup(self, ctx: commands.Context, callsign: str, *flags):
-        """Look up a callsign on [QRZ.com](https://www.qrz.com/). Add `--link` to only link the QRZ page."""
+        """Looks up a callsign on [QRZ.com](https://www.qrz.com/). Add `--link` to only link the QRZ page."""
         flags = [f.lower() for f in flags]
 
         if keys.qrz_user == "" or keys.qrz_pass == "" or "--link" in flags:

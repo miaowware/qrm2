@@ -28,7 +28,7 @@ class WeatherCog(commands.Cog):
 
     @commands.command(name="bandconditions", aliases=["cond", "condx", "conditions"], category=cmn.cat.weather)
     async def _band_conditions(self, ctx: commands.Context):
-        """Posts an image of HF Band Conditions."""
+        """Gets a solar conditions report."""
         async with ctx.typing():
             embed = cmn.embed_factory(ctx)
             embed.title = "Current Solar Conditions"
@@ -42,24 +42,25 @@ class WeatherCog(commands.Cog):
 
     @commands.group(name="weather", aliases=["wttr"], category=cmn.cat.weather)
     async def _weather_conditions(self, ctx: commands.Context):
-        """Posts an image of Local Weather Conditions from [wttr.in](http://wttr.in/).
+        """Gets local weather conditions from [wttr.in](http://wttr.in/).
 
-*Supported location types:*
-    city name: `paris`
-    any location: `~Eiffel Tower`
-    Unicode name of any location in any language: `Москва`
-    airport code (3 letters): `muc`
-    domain name `@stackoverflow.com`
-    area codes: `12345`
-    GPS coordinates: `-78.46,106.79`
-        """
+        *Supported location types:*
+        city name: `paris`
+        any location: `~Eiffel Tower`
+        Unicode name of any location in any language: `Москва`
+        airport code (3 letters): `muc`
+        domain name `@stackoverflow.com`
+        area codes: `12345`
+        GPS coordinates: `-78.46,106.79`
+
+        Add a `-c` or `-f` to use Celcius or Fahrenheit: `-c YSC`"""
         if ctx.invoked_subcommand is None:
             await ctx.send_help(ctx.command)
 
     @_weather_conditions.command(name="forecast", aliases=["fc", "future"], category=cmn.cat.weather)
     async def _weather_conditions_forecast(self, ctx: commands.Context, *, location: str):
-        """Posts an image of Local Weather Conditions for the next three days from [wttr.in](http://wttr.in/).
-See help for weather command for possible location types. Add a `-c` or `-f` to use Celcius or Fahrenheit."""
+        """Gets local weather forecast for the next three days from [wttr.in](http://wttr.in/).
+        See help of the `weather` command for possible location types and options."""
         async with ctx.typing():
             try:
                 units_arg = re.search(self.wttr_units_regex, location).group(1)
@@ -89,8 +90,8 @@ See help for weather command for possible location types. Add a `-c` or `-f` to 
 
     @_weather_conditions.command(name="now", aliases=["n"], category=cmn.cat.weather)
     async def _weather_conditions_now(self, ctx: commands.Context, *, location: str):
-        """Posts an image of current Local Weather Conditions from [wttr.in](http://wttr.in/).
-See help for weather command for possible location types. Add a `-c` or `-f` to use Celcius or Fahrenheit."""
+        """Gets current local weather conditions from [wttr.in](http://wttr.in/).
+        See help of the `weather` command for possible location types and options."""
         async with ctx.typing():
             try:
                 units_arg = re.search(self.wttr_units_regex, location).group(1)

@@ -30,7 +30,7 @@ class ImageCog(commands.Cog):
 
     @commands.command(name="bandplan", aliases=["plan", "bands"], category=cmn.cat.ref)
     async def _bandplan(self, ctx: commands.Context, region: str = ""):
-        """Posts an image of Frequency Allocations."""
+        """Gets the frequency allocations chart for a given country."""
         async with ctx.typing():
             arg = region.lower()
             embed = cmn.embed_factory(ctx)
@@ -57,7 +57,7 @@ class ImageCog(commands.Cog):
 
     @commands.command(name="map", category=cmn.cat.maps)
     async def _map(self, ctx: commands.Context, map_id: str = ""):
-        """Posts an image of a ham-relevant map."""
+        """Posts a ham-relevant map."""
         async with ctx.typing():
             arg = map_id.lower()
             embed = cmn.embed_factory(ctx)
@@ -84,7 +84,7 @@ class ImageCog(commands.Cog):
 
     @commands.command(name="grayline", aliases=["greyline", "grey", "gray", "gl"], category=cmn.cat.maps)
     async def _grayline(self, ctx: commands.Context):
-        """Posts a map of the current greyline, where HF propagation is the best."""
+        """Gets a map of the current greyline, where HF propagation is the best."""
         async with ctx.typing():
             embed = cmn.embed_factory(ctx)
             embed.title = "Current Greyline Conditions"

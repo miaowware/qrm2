@@ -39,7 +39,7 @@ class LookupCog(commands.Cog):
 
     @commands.command(name="dxcc", aliases=["dx"], category=cmn.cat.lookup)
     async def _dxcc_lookup(self, ctx: commands.Context, query: str):
-        """Gets info about a DXCC prefix."""
+        """Gets DXCC info about a callsign prefix."""
         with ctx.typing():
             query = query.upper()
             full_query = query

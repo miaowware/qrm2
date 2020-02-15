@@ -23,12 +23,12 @@ class FunCog(commands.Cog):
 
     @commands.command(name="xkcd", aliases=["x"], category=cmn.cat.fun)
     async def _xkcd(self, ctx: commands.Context, number: str):
-        """Look up an xkcd by number."""
+        """Looks up an xkcd comic by number."""
         await ctx.send("http://xkcd.com/" + number)
 
     @commands.command(name="tar", category=cmn.cat.fun)
     async def _tar(self, ctx: commands.Context):
-        """Returns an xkcd about tar."""
+        """Returns xkcd: tar."""
         await ctx.send("http://xkcd.com/1168")
 
     @commands.command(name="xd", hidden=True, category=cmn.cat.fun)
@@ -38,7 +38,7 @@ class FunCog(commands.Cog):
 
     @commands.command(name="funetics", aliases=["fun"], category=cmn.cat.fun)
     async def _funetics_lookup(self, ctx: commands.Context, *, msg: str):
-        """Get fun phonetics for a word or phrase."""
+        """Generates fun/wacky phonetics for a word or phrase."""
         with ctx.typing():
             result = ""
             for char in msg.lower():

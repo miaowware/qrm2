@@ -31,13 +31,13 @@ class AE7QCog(commands.Cog):
 
     @commands.group(name="ae7q", aliases=["ae"], category=cmn.cat.lookup)
     async def _ae7q_lookup(self, ctx: commands.Context):
-        """Look up a callsign, FRN, or Licensee ID on [ae7q.com](http://ae7q.com/)."""
+        """Looks up a callsign, FRN, or Licensee ID on [ae7q.com](http://ae7q.com/)."""
         if ctx.invoked_subcommand is None:
             await ctx.send_help(ctx.command)
 
     @_ae7q_lookup.command(name="call", aliases=["c"], category=cmn.cat.lookup)
     async def _ae7q_call(self, ctx: commands.Context, callsign: str):
-        """Look up the history of a callsign on [ae7q.com](http://ae7q.com/)."""
+        """Looks up the history of a callsign on [ae7q.com](http://ae7q.com/)."""
         with ctx.typing():
             callsign = callsign.upper()
             desc = ""
@@ -103,7 +103,7 @@ class AE7QCog(commands.Cog):
 
     @_ae7q_lookup.command(name="trustee", aliases=["t"], category=cmn.cat.lookup)
     async def _ae7q_trustee(self, ctx: commands.Context, callsign: str):
-        """Look up the licenses for which a licensee is trustee on [ae7q.com](http://ae7q.com/)."""
+        """Looks up the licenses for which a licensee is trustee on [ae7q.com](http://ae7q.com/)."""
         with ctx.typing():
             callsign = callsign.upper()
             desc = ""
@@ -170,7 +170,7 @@ class AE7QCog(commands.Cog):
 
     @_ae7q_lookup.command(name="applications", aliases=["a"], category=cmn.cat.lookup)
     async def _ae7q_applications(self, ctx: commands.Context, callsign: str):
-        """Look up the application history for a callsign on [ae7q.com](http://ae7q.com/)."""
+        """Looks up the application history for a callsign on [ae7q.com](http://ae7q.com/)."""
         """
         with ctx.typing():
             callsign = callsign.upper()
@@ -240,7 +240,7 @@ class AE7QCog(commands.Cog):
 
     @_ae7q_lookup.command(name="frn", aliases=["f"], category=cmn.cat.lookup)
     async def _ae7q_frn(self, ctx: commands.Context, frn: str):
-        """Look up the history of an FRN on [ae7q.com](http://ae7q.com/)."""
+        """Looks up the history of an FRN on [ae7q.com](http://ae7q.com/)."""
         """
         NOTES:
         - 2 tables: callsign history and application history
@@ -307,7 +307,7 @@ class AE7QCog(commands.Cog):
 
     @_ae7q_lookup.command(name="licensee", aliases=["l"], category=cmn.cat.lookup)
     async def _ae7q_licensee(self, ctx: commands.Context, licensee_id: str):
-        """Look up the history of a licensee ID on [ae7q.com](http://ae7q.com/)."""
+        """Looks up the history of a licensee ID on [ae7q.com](http://ae7q.com/)."""
         with ctx.typing():
             licensee_id = licensee_id.upper()
             base_url = "http://ae7q.com/query/data/LicenseeIdHistory.php?ID="

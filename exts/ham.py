@@ -24,7 +24,7 @@ class HamCog(commands.Cog):
 
     @commands.command(name="qcode", aliases=["q"], category=cmn.cat.ref)
     async def _qcode_lookup(self, ctx: commands.Context, qcode: str):
-        """Look up a Q Code."""
+        """Looks up the meaning of a Q Code."""
         with ctx.typing():
             qcode = qcode.upper()
             embed = cmn.embed_factory(ctx)
@@ -39,7 +39,7 @@ class HamCog(commands.Cog):
 
     @commands.command(name="phonetics", aliases=["ph", "phoneticize", "phoneticise", "phone"], category=cmn.cat.ref)
     async def _phonetics_lookup(self, ctx: commands.Context, *, msg: str):
-        """Get phonetics for a word or phrase."""
+        """Returns NATO phonetics for a word or phrase."""
         with ctx.typing():
             result = ""
             for char in msg.lower():
@@ -56,7 +56,7 @@ class HamCog(commands.Cog):
 
     @commands.command(name="utc", aliases=["z"], category=cmn.cat.ref)
     async def _utc_lookup(self, ctx: commands.Context):
-        """Gets the current time in UTC."""
+        """Returns the current time in UTC."""
         with ctx.typing():
             now = datetime.utcnow()
             result = "**" + now.strftime("%Y-%m-%d %H:%M") + "Z**"
@@ -68,7 +68,7 @@ class HamCog(commands.Cog):
 
     @commands.command(name="prefixes", aliases=["vanity", "pfx", "vanities", "prefix"], category=cmn.cat.ref)
     async def _vanity_prefixes(self, ctx: commands.Context, country: str = None):
-        """Lists valid prefixes for countries."""
+        """Lists valid callsign prefixes for different countries."""
         if country is None:
             await ctx.send_help(ctx.command)
             return

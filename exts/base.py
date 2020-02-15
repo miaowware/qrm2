@@ -120,7 +120,7 @@ class BaseCog(commands.Cog):
 
     @commands.command(name="ping", aliases=["beep"])
     async def _ping(self, ctx: commands.Context):
-        """Show the current latency to the discord endpoint."""
+        """Shows the current latency to the discord endpoint."""
         embed = cmn.embed_factory(ctx)
         content = ""
         if ctx.invoked_with == "beep":
@@ -133,7 +133,7 @@ class BaseCog(commands.Cog):
 
     @commands.command(name="changelog", aliases=["clog"])
     async def _changelog(self, ctx: commands.Context, version: str = "latest"):
-        """Show what has changed in a bot version."""
+        """Shows what has changed in a bot version. Defaults to the latest version."""
         embed = cmn.embed_factory(ctx)
         embed.title = "qrm Changelog"
         embed.description = ("For a full listing, visit [Github](https://"
@@ -169,7 +169,7 @@ class BaseCog(commands.Cog):
 
     @commands.command(name="issue")
     async def _issue(self, ctx: commands.Context):
-        """Shows how to create an issue for the bot."""
+        """Shows how to create a bug report or feature request about the bot."""
         embed = cmn.embed_factory(ctx)
         embed.title = "Found a bug? Have a feature request?"
         embed.description = ("Submit an issue on the [issue tracker]"
@@ -180,7 +180,7 @@ class BaseCog(commands.Cog):
     @commands.check(cmn.check_if_owner)
     async def _echo(self, ctx: commands.Context,
                     channel: Union[cmn.GlobalChannelConverter, commands.UserConverter], *, msg: str):
-        """Send a message in a channel as qrm. Accepts channel/user IDs/mentions.
+        """Sends a message in a channel as qrm. Accepts channel/user IDs/mentions.
         Channel names are current-guild only.
         Does not work with the ID of the bot user."""
         if isinstance(channel, discord.ClientUser):

@@ -94,7 +94,7 @@ async def _extctl(ctx: commands.Context):
 
 @_extctl.command(name="list", aliases=["ls"])
 async def _extctl_list(ctx: commands.Context):
-    """Lists Extensions."""
+    """Lists loaded extensions."""
     embed = cmn.embed_factory(ctx)
     embed.title = "Loaded Extensions"
     embed.description = "\n".join(["‣ " + x.split(".")[1] for x in bot.extensions.keys()])
@@ -103,12 +103,14 @@ async def _extctl_list(ctx: commands.Context):
 
 @_extctl.command(name="load", aliases=["ld"])
 async def _extctl_load(ctx: commands.Context, extension: str):
+    """Loads an extension."""
     bot.load_extension(ext_dir + "." + extension)
     await cmn.add_react(ctx.message, cmn.emojis.check_mark)
 
 
 @_extctl.command(name="reload", aliases=["rl", "r", "relaod"])
 async def _extctl_reload(ctx: commands.Context, extension: str):
+    """Reloads an extension."""
     if ctx.invoked_with == "relaod":
         pika = bot.get_emoji(opt.pika)
         if pika:
@@ -119,6 +121,7 @@ async def _extctl_reload(ctx: commands.Context, extension: str):
 
 @_extctl.command(name="unload", aliases=["ul"])
 async def _extctl_unload(ctx: commands.Context, extension: str):
+    """Unloads an extension."""
     bot.unload_extension(ext_dir + "." + extension)
     await cmn.add_react(ctx.message, cmn.emojis.check_mark)
 
