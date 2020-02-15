@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Replaced `hamstudyanswer` command with answering by reaction.
 - Removed all generic error handling from commands.
 - Cleaned up the description of multiple commands.
+- Updated repository links from classabbyamp/discord-qrm2 to miaowware/qrm2.
 ### Fixed
 - Fixed ditto marks (") appearing in the ae7q call command.
 - Fixed issue where incorrect table was parsed in ae7q call command.
