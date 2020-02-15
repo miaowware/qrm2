@@ -74,8 +74,8 @@ class HamCog(commands.Cog):
             return
         embed = cmn.embed_factory(ctx)
         if country.lower() not in callsign_info.options:
-            embed.title = f"{country} not found!",
-            embed.description = f"Valid countries: {', '.join(callsign_info.options.keys())}",
+            embed.title = f"{country} not found!"
+            embed.description = f"Valid countries: {', '.join(callsign_info.options.keys())}"
             embed.colour = cmn.colours.bad
         else:
             embed.title = callsign_info.options[country.lower()][0]

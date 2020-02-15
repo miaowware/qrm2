@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fixed ditto marks (") appearing in the ae7q call command.
 - Fixed issue where incorrect table was parsed in ae7q call command.
 - Fixed warning emoji reaction on messages starting with "??".
+- Fixed issue where `prefixes` would error when given an invalid argument.
 
 
 ## [2.1.0] - 2020-01-04
