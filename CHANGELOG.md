@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ## [Unreleased]
+
+
+## [2.2.0] - 2020-02-15
 ### Added
 - Added Trustee field to qrz command for club callsigns.
 - Added alias for `ae7q call` command (`ae7q c`).
@@ -73,6 +76,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## 1.0.0 - 2019-07-31 [YANKED]
 
 
-[Unreleased]: https://github.com/miaowware/qrm2/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/miaowware/qrm2/compare/v2.2.0...HEAD
+[2.2.0]: https://github.com/miaowware/qrm2/releases/tag/v2.2.0
 [2.1.0]: https://github.com/miaowware/qrm2/releases/tag/v2.1.0
 [2.0.0]: https://github.com/miaowware/qrm2/releases/tag/v2.0.0
