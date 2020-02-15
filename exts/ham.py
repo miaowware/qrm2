@@ -3,9 +3,10 @@ Ham extension for qrm
 ---
 Copyright (C) 2019-2020 Abigail Gold, 0x5c
 
-This file is part of discord-qrm2 and is released under the terms of the GNU
-General Public License, version 2.
+This file is part of discord-qrm2 and is released under the terms of
+the GNU General Public License, version 2.
 """
+
 
 from datetime import datetime
 
@@ -21,9 +22,9 @@ class HamCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.command(name="qcode", aliases=['q'], category=cmn.cat.ref)
+    @commands.command(name="qcode", aliases=["q"], category=cmn.cat.ref)
     async def _qcode_lookup(self, ctx: commands.Context, qcode: str):
-        '''Look up a Q Code.'''
+        """Looks up the meaning of a Q Code."""
         with ctx.typing():
             qcode = qcode.upper()
             embed = cmn.embed_factory(ctx)
@@ -32,49 +33,49 @@ class HamCog(commands.Cog):
                 embed.description = qcodes.qcodes[qcode]
                 embed.colour = cmn.colours.good
             else:
-                embed.title = f'Q Code {qcode} not found'
+                embed.title = f"Q Code {qcode} not found"
                 embed.colour = cmn.colours.bad
         await ctx.send(embed=embed)
 
-    @commands.command(name="phonetics", aliases=['ph', 'phoneticize', 'phoneticise', 'phone'], category=cmn.cat.ref)
+    @commands.command(name="phonetics", aliases=["ph", "phoneticize", "phoneticise", "phone"], category=cmn.cat.ref)
     async def _phonetics_lookup(self, ctx: commands.Context, *, msg: str):
-        '''Get phonetics for a word or phrase.'''
+        """Returns NATO phonetics for a word or phrase."""
         with ctx.typing():
-            result = ''
+            result = ""
             for char in msg.lower():
                 if char.isalpha():
                     result += phonetics.phonetics[char]
                 else:
                     result += char
-                result += ' '
+                result += " "
             embed = cmn.embed_factory(ctx)
-            embed.title = f'Phonetics for {msg}'
+            embed.title = f"Phonetics for {msg}"
             embed.description = result.title()
             embed.colour = cmn.colours.good
         await ctx.send(embed=embed)
 
-    @commands.command(name="utc", aliases=['z'], category=cmn.cat.ref)
+    @commands.command(name="utc", aliases=["z"], category=cmn.cat.ref)
     async def _utc_lookup(self, ctx: commands.Context):
-        '''Gets the current time in UTC.'''
+        """Returns the current time in UTC."""
         with ctx.typing():
             now = datetime.utcnow()
-            result = '**' + now.strftime('%Y-%m-%d %H:%M') + 'Z**'
+            result = "**" + now.strftime("%Y-%m-%d %H:%M") + "Z**"
             embed = cmn.embed_factory(ctx)
-            embed.title = 'The current time is:'
+            embed.title = "The current time is:"
             embed.description = result
             embed.colour = cmn.colours.good
         await ctx.send(embed=embed)
 
     @commands.command(name="prefixes", aliases=["vanity", "pfx", "vanities", "prefix"], category=cmn.cat.ref)
     async def _vanity_prefixes(self, ctx: commands.Context, country: str = None):
-        '''Lists valid prefixes for countries.'''
+        """Lists valid callsign prefixes for different countries."""
         if country is None:
             await ctx.send_help(ctx.command)
             return
         embed = cmn.embed_factory(ctx)
         if country.lower() not in callsign_info.options:
-            embed.title = f'{country} not found!',
-            embed.description = f'Valid countries: {", ".join(callsign_info.options.keys())}',
+            embed.title = f"{country} not found!",
+            embed.description = f"Valid countries: {', '.join(callsign_info.options.keys())}",
             embed.colour = cmn.colours.bad
         else:
             embed.title = callsign_info.options[country.lower()][0]

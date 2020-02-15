@@ -3,9 +3,10 @@ Fun extension for qrm
 ---
 Copyright (C) 2019-2020 Abigail Gold, 0x5c
 
-This file is part of discord-qrm2 and is released under the terms of the GNU
-General Public License, version 2.
+This file is part of discord-qrm2 and is released under the terms of
+the GNU General Public License, version 2.
 """
+
 
 import random
 
@@ -17,37 +18,37 @@ import common as cmn
 class FunCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        with open('resources/words') as words_file:
+        with open("resources/words") as words_file:
             self.words = words_file.read().lower().splitlines()
 
-    @commands.command(name="xkcd", aliases=['x'], category=cmn.cat.fun)
+    @commands.command(name="xkcd", aliases=["x"], category=cmn.cat.fun)
     async def _xkcd(self, ctx: commands.Context, number: str):
-        '''Look up an xkcd by number.'''
-        await ctx.send('http://xkcd.com/' + number)
+        """Looks up an xkcd comic by number."""
+        await ctx.send("http://xkcd.com/" + number)
 
     @commands.command(name="tar", category=cmn.cat.fun)
     async def _tar(self, ctx: commands.Context):
-        '''Returns an xkcd about tar.'''
-        await ctx.send('http://xkcd.com/1168')
+        """Returns xkcd: tar."""
+        await ctx.send("http://xkcd.com/1168")
 
     @commands.command(name="xd", hidden=True, category=cmn.cat.fun)
     async def _xd(self, ctx: commands.Context):
-        '''ecks dee'''
-        await ctx.send('ECKS DEE :smirk:')
+        """ecks dee"""
+        await ctx.send("ECKS DEE :smirk:")
 
-    @commands.command(name="funetics", aliases=['fun'], category=cmn.cat.fun)
+    @commands.command(name="funetics", aliases=["fun"], category=cmn.cat.fun)
     async def _funetics_lookup(self, ctx: commands.Context, *, msg: str):
-        '''Get fun phonetics for a word or phrase.'''
+        """Generates fun/wacky phonetics for a word or phrase."""
         with ctx.typing():
-            result = ''
+            result = ""
             for char in msg.lower():
                 if char.isalpha():
                     result += random.choice([word for word in self.words if word[0] == char])
                 else:
                     result += char
-                result += ' '
+                result += " "
             embed = cmn.embed_factory(ctx)
-            embed.title = f'Funetics for {msg}'
+            embed.title = f"Funetics for {msg}"
             embed.description = result.title()
             embed.colour = cmn.colours.good
         await ctx.send(embed=embed)

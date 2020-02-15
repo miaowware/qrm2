@@ -4,16 +4,16 @@ qrm, a bot for Discord
 ---
 Copyright (C) 2019-2020 Abigail Gold, 0x5c
 
-This file is part of discord-qrm2 and is released under the terms of the GNU
-General Public License, version 2.
+This file is part of discord-qrm2 and is released under the terms of
+the GNU General Public License, version 2.
 """
 
 
+import asyncio
+import random
 import sys
 import traceback
-import asyncio
-from datetime import time, datetime
-import random
+from datetime import datetime, time
 from types import SimpleNamespace
 
 import pytz
@@ -21,12 +21,12 @@ import pytz
 import discord
 from discord.ext import commands, tasks
 
-import utils.connector as conn
-import common as cmn
-
 import info
-import data.options as opt
+import common as cmn
+import utils.connector as conn
+
 import data.keys as keys
+import data.options as opt
 
 
 # --- Settings ---
@@ -94,7 +94,7 @@ async def _extctl(ctx: commands.Context):
 
 @_extctl.command(name="list", aliases=["ls"])
 async def _extctl_list(ctx: commands.Context):
-    """Lists Extensions."""
+    """Lists loaded extensions."""
     embed = cmn.embed_factory(ctx)
     embed.title = "Loaded Extensions"
     embed.description = "\n".join(["‣ " + x.split(".")[1] for x in bot.extensions.keys()])
@@ -103,12 +103,14 @@ async def _extctl_list(ctx: commands.Context):
 
 @_extctl.command(name="load", aliases=["ld"])
 async def _extctl_load(ctx: commands.Context, extension: str):
+    """Loads an extension."""
     bot.load_extension(ext_dir + "." + extension)
     await cmn.add_react(ctx.message, cmn.emojis.check_mark)
 
 
 @_extctl.command(name="reload", aliases=["rl", "r", "relaod"])
 async def _extctl_reload(ctx: commands.Context, extension: str):
+    """Reloads an extension."""
     if ctx.invoked_with == "relaod":
         pika = bot.get_emoji(opt.pika)
         if pika:
@@ -119,6 +121,7 @@ async def _extctl_reload(ctx: commands.Context, extension: str):
 
 @_extctl.command(name="unload", aliases=["ul"])
 async def _extctl_unload(ctx: commands.Context, extension: str):
+    """Unloads an extension."""
     bot.unload_extension(ext_dir + "." + extension)
     await cmn.add_react(ctx.message, cmn.emojis.check_mark)
 
@@ -167,7 +170,7 @@ async def on_command_error(ctx: commands.Context, err: commands.CommandError):
         await cmn.add_react(ctx.message, cmn.emojis.bangbang)
     elif isinstance(err, (commands.CommandInvokeError, commands.ConversionError)):
         # Emulating discord.py's default beaviour.
-        print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
+        print("Ignoring exception in command {}:".format(ctx.command), file=sys.stderr)
         traceback.print_exception(type(err), err, err.__traceback__, file=sys.stderr)
 
         embed = cmn.error_embed_factory(ctx, err.original, bot.qrm.debug_mode)
@@ -176,7 +179,7 @@ async def on_command_error(ctx: commands.Context, err: commands.CommandError):
         await ctx.send(embed=embed)
     else:
         # Emulating discord.py's default beaviour. (safest bet)
-        print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
+        print("Ignoring exception in command {}:".format(ctx.command), file=sys.stderr)
         traceback.print_exception(type(err), err, err.__traceback__, file=sys.stderr)
         await cmn.add_react(ctx.message, cmn.emojis.warning)
 
@@ -221,7 +224,7 @@ async def _ensure_activity_fixed():
 # --- Run ---
 
 for ext in opt.exts:
-    bot.load_extension(ext_dir + '.' + ext)
+    bot.load_extension(ext_dir + "." + ext)
 
 
 try:
