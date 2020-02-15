@@ -3,7 +3,7 @@ Base extension for qrm
 ---
 Copyright (C) 2019-2020 Abigail Gold, 0x5c
 
-This file is part of discord-qrm2 and is released under the terms of
+This file is part of qrm2 and is released under the terms of
 the GNU General Public License, version 2.
 """
 
@@ -137,7 +137,7 @@ class BaseCog(commands.Cog):
         embed = cmn.embed_factory(ctx)
         embed.title = "qrm Changelog"
         embed.description = ("For a full listing, visit [Github](https://"
-                             "github.com/classabbyamp/discord-qrm2/blob/master/CHANGELOG.md).")
+                             "github.com/miaowware/qrm2/blob/master/CHANGELOG.md).")
         changelog = self.changelog
         vers = list(changelog.keys())
         vers.remove("Unreleased")
@@ -173,7 +173,7 @@ class BaseCog(commands.Cog):
         embed = cmn.embed_factory(ctx)
         embed.title = "Found a bug? Have a feature request?"
         embed.description = ("Submit an issue on the [issue tracker]"
-                             "(https://github.com/classabbyamp/discord-qrm2/issues)!")
+                             "(https://github.com/miaowware/qrm2/issues)!")
         await ctx.send(embed=embed)
 
     @commands.command(name="echo", aliases=["e"], category=cmn.cat.admin)
