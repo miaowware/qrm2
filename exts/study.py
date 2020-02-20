@@ -14,6 +14,7 @@ from datetime import datetime
 import asyncio
 
 import aiohttp
+import pytz
 
 import discord.ext.commands as commands
 
@@ -88,8 +89,8 @@ class StudyCog(commands.Cog):
                 else:
                     # look at valid_from and expires dates to find the correct one
                     for p in pool_matches:
-                        valid_from = datetime.fromisoformat(pools[p]["valid_from"][:-1] + "+00:00")
-                        expires = datetime.fromisoformat(pools[p]["expires"][:-1] + "+00:00")
+                        valid_from = datetime.fromisoformat(pools[p]["valid_from"][:-1])
+                        expires = datetime.fromisoformat(pools[p]["expires"][:-1])
 
                         if valid_from < datetime.utcnow() < expires:
                             pool = p
