@@ -7,6 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 
+## [2.2.1] - 2020-02-20
+### Fixed
+- Fixed issue where some HamStudy pools will become unselectable.
+
+
 ## [2.2.0] - 2020-02-15
 ### Added
 - Added Trustee field to qrz command for club callsigns.
