@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ## [Unreleased]
+
+
+## [2.2.2] - 2020-02-25
 ### Fixed
 - Fixed issue where HamStudy questions with images would cause an error.
 - Added/fixed/removed typing indicators in numerous commands.
@@ -84,7 +87,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## 1.0.0 - 2019-07-31 [YANKED]
 
 
-[Unreleased]: https://github.com/miaowware/qrm2/compare/v2.2.0...HEAD
+[Unreleased]: https://github.com/miaowware/qrm2/compare/v2.2.2...HEAD
+[2.2.2]: https://github.com/miaowware/qrm2/releases/tag/v2.2.2
+[2.2.1]: https://github.com/miaowware/qrm2/releases/tag/v2.2.1
 [2.2.0]: https://github.com/miaowware/qrm2/releases/tag/v2.2.0
 [2.1.0]: https://github.com/miaowware/qrm2/releases/tag/v2.1.0
 [2.0.0]: https://github.com/miaowware/qrm2/releases/tag/v2.0.0
