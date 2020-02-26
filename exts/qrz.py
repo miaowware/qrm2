@@ -36,50 +36,51 @@ class QRZCog(commands.Cog):
             await ctx.send(f"http://qrz.com/db/{callsign}")
             return
 
-        try:
-            await qrz_test_session(self.key, self.session)
-        except ConnectionError:
-            await self.get_session()
-
-        url = f"http://xmldata.qrz.com/xml/current/?s={self.key};callsign={callsign}"
-        async with self.session.get(url) as resp:
-            if resp.status != 200:
-                raise ConnectionError(f"Unable to connect to QRZ (HTTP Error {resp.status})")
-            with BytesIO(await resp.read()) as resp_file:
-                resp_xml = etree.parse(resp_file).getroot()
-
-        resp_xml_session = resp_xml.xpath("/x:QRZDatabase/x:Session", namespaces={"x": "http://xmldata.qrz.com"})
-        resp_session = {el.tag.split("}")[1]: el.text for el in resp_xml_session[0].getiterator()}
-        if "Error" in resp_session:
-            if "Session Timeout" in resp_session["Error"]:
+        async with ctx.typing():
+            try:
+                await qrz_test_session(self.key, self.session)
+            except ConnectionError:
                 await self.get_session()
-                await self._qrz_lookup(ctx, callsign)
-                return
-            if "Not found" in resp_session["Error"]:
-                embed = cmn.embed_factory(ctx)
-                embed.title = f"QRZ Data for {callsign.upper()}"
-                embed.colour = cmn.colours.bad
-                embed.description = "No data found!"
-                await ctx.send(embed=embed)
-                return
-            raise ValueError(resp_session["Error"])
 
-        resp_xml_data = resp_xml.xpath("/x:QRZDatabase/x:Callsign", namespaces={"x": "http://xmldata.qrz.com"})
-        resp_data = {el.tag.split("}")[1]: el.text for el in resp_xml_data[0].getiterator()}
+            url = f"http://xmldata.qrz.com/xml/current/?s={self.key};callsign={callsign}"
+            async with self.session.get(url) as resp:
+                if resp.status != 200:
+                    raise ConnectionError(f"Unable to connect to QRZ (HTTP Error {resp.status})")
+                with BytesIO(await resp.read()) as resp_file:
+                    resp_xml = etree.parse(resp_file).getroot()
 
-        embed = cmn.embed_factory(ctx)
-        embed.title = f"QRZ Data for {resp_data['call']}"
-        embed.colour = cmn.colours.good
-        embed.url = f"http://www.qrz.com/db/{resp_data['call']}"
-        if "image" in resp_data:
-            embed.set_thumbnail(url=resp_data["image"])
+            resp_xml_session = resp_xml.xpath("/x:QRZDatabase/x:Session", namespaces={"x": "http://xmldata.qrz.com"})
+            resp_session = {el.tag.split("}")[1]: el.text for el in resp_xml_session[0].getiterator()}
+            if "Error" in resp_session:
+                if "Session Timeout" in resp_session["Error"]:
+                    await self.get_session()
+                    await self._qrz_lookup(ctx, callsign)
+                    return
+                if "Not found" in resp_session["Error"]:
+                    embed = cmn.embed_factory(ctx)
+                    embed.title = f"QRZ Data for {callsign.upper()}"
+                    embed.colour = cmn.colours.bad
+                    embed.description = "No data found!"
+                    await ctx.send(embed=embed)
+                    return
+                raise ValueError(resp_session["Error"])
 
-        data = qrz_process_info(resp_data)
+            resp_xml_data = resp_xml.xpath("/x:QRZDatabase/x:Callsign", namespaces={"x": "http://xmldata.qrz.com"})
+            resp_data = {el.tag.split("}")[1]: el.text for el in resp_xml_data[0].getiterator()}
 
-        for title, val in data.items():
-            if val is not None:
-                embed.add_field(name=title, value=val, inline=True)
-        await ctx.send(embed=embed)
+            embed = cmn.embed_factory(ctx)
+            embed.title = f"QRZ Data for {resp_data['call']}"
+            embed.colour = cmn.colours.good
+            embed.url = f"http://www.qrz.com/db/{resp_data['call']}"
+            if "image" in resp_data:
+                embed.set_thumbnail(url=resp_data["image"])
+
+            data = qrz_process_info(resp_data)
+
+            for title, val in data.items():
+                if val is not None:
+                    embed.add_field(name=title, value=val, inline=True)
+            await ctx.send(embed=embed)
 
     async def get_session(self):
         """Session creation and caching."""

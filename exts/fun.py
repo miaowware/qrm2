@@ -39,18 +39,17 @@ class FunCog(commands.Cog):
     @commands.command(name="funetics", aliases=["fun"], category=cmn.cat.fun)
     async def _funetics_lookup(self, ctx: commands.Context, *, msg: str):
         """Generates fun/wacky phonetics for a word or phrase."""
-        with ctx.typing():
-            result = ""
-            for char in msg.lower():
-                if char.isalpha():
-                    result += random.choice([word for word in self.words if word[0] == char])
-                else:
-                    result += char
-                result += " "
-            embed = cmn.embed_factory(ctx)
-            embed.title = f"Funetics for {msg}"
-            embed.description = result.title()
-            embed.colour = cmn.colours.good
+        result = ""
+        for char in msg.lower():
+            if char.isalpha():
+                result += random.choice([word for word in self.words if word[0] == char])
+            else:
+                result += char
+            result += " "
+        embed = cmn.embed_factory(ctx)
+        embed.title = f"Funetics for {msg}"
+        embed.description = result.title()
+        embed.colour = cmn.colours.good
         await ctx.send(embed=embed)
 
 
