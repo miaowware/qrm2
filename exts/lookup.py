@@ -40,30 +40,29 @@ class LookupCog(commands.Cog):
     @commands.command(name="dxcc", aliases=["dx"], category=cmn.cat.lookup)
     async def _dxcc_lookup(self, ctx: commands.Context, query: str):
         """Gets DXCC info about a callsign prefix."""
-        with ctx.typing():
-            query = query.upper()
-            full_query = query
-            embed = cmn.embed_factory(ctx)
-            embed.title = "DXCC Info for "
-            embed.description = f"*Last Updated: {self.cty.formatted_version}*"
-            embed.colour = cmn.colours.bad
-            while query:
-                if query in self.cty.keys():
-                    data = self.cty[query]
-                    embed.add_field(name="Entity", value=data["entity"])
-                    embed.add_field(name="CQ Zone", value=data["cq"])
-                    embed.add_field(name="ITU Zone", value=data["itu"])
-                    embed.add_field(name="Continent", value=data["continent"])
-                    embed.add_field(name="Time Zone",
-                                    value=f"+{data['tz']}" if data["tz"] > 0 else str(data["tz"]))
-                    embed.title += query
-                    embed.colour = cmn.colours.good
-                    break
-                else:
-                    query = query[:-1]
+        query = query.upper()
+        full_query = query
+        embed = cmn.embed_factory(ctx)
+        embed.title = "DXCC Info for "
+        embed.description = f"*Last Updated: {self.cty.formatted_version}*"
+        embed.colour = cmn.colours.bad
+        while query:
+            if query in self.cty.keys():
+                data = self.cty[query]
+                embed.add_field(name="Entity", value=data["entity"])
+                embed.add_field(name="CQ Zone", value=data["cq"])
+                embed.add_field(name="ITU Zone", value=data["itu"])
+                embed.add_field(name="Continent", value=data["continent"])
+                embed.add_field(name="Time Zone",
+                                value=f"+{data['tz']}" if data["tz"] > 0 else str(data["tz"]))
+                embed.title += query
+                embed.colour = cmn.colours.good
+                break
             else:
-                embed.title += full_query + " not found"
-                embed.colour = cmn.colours.bad
+                query = query[:-1]
+        else:
+            embed.title += full_query + " not found"
+            embed.colour = cmn.colours.bad
         await ctx.send(embed=embed)
 
     @tasks.loop(hours=24)

@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 ### Fixed
 - Fixed issue where HamStudy questions with images would cause an error.
+- Added/fixed/removed typing indicators in numerous commands.
 
 
 ## [2.2.1] - 2020-02-20

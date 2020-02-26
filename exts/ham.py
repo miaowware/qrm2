@@ -25,45 +25,42 @@ class HamCog(commands.Cog):
     @commands.command(name="qcode", aliases=["q"], category=cmn.cat.ref)
     async def _qcode_lookup(self, ctx: commands.Context, qcode: str):
         """Looks up the meaning of a Q Code."""
-        with ctx.typing():
-            qcode = qcode.upper()
-            embed = cmn.embed_factory(ctx)
-            if qcode in qcodes.qcodes:
-                embed.title = qcode
-                embed.description = qcodes.qcodes[qcode]
-                embed.colour = cmn.colours.good
-            else:
-                embed.title = f"Q Code {qcode} not found"
-                embed.colour = cmn.colours.bad
+        qcode = qcode.upper()
+        embed = cmn.embed_factory(ctx)
+        if qcode in qcodes.qcodes:
+            embed.title = qcode
+            embed.description = qcodes.qcodes[qcode]
+            embed.colour = cmn.colours.good
+        else:
+            embed.title = f"Q Code {qcode} not found"
+            embed.colour = cmn.colours.bad
         await ctx.send(embed=embed)
 
     @commands.command(name="phonetics", aliases=["ph", "phoneticize", "phoneticise", "phone"], category=cmn.cat.ref)
     async def _phonetics_lookup(self, ctx: commands.Context, *, msg: str):
         """Returns NATO phonetics for a word or phrase."""
-        with ctx.typing():
-            result = ""
-            for char in msg.lower():
-                if char.isalpha():
-                    result += phonetics.phonetics[char]
-                else:
-                    result += char
-                result += " "
-            embed = cmn.embed_factory(ctx)
-            embed.title = f"Phonetics for {msg}"
-            embed.description = result.title()
-            embed.colour = cmn.colours.good
+        result = ""
+        for char in msg.lower():
+            if char.isalpha():
+                result += phonetics.phonetics[char]
+            else:
+                result += char
+            result += " "
+        embed = cmn.embed_factory(ctx)
+        embed.title = f"Phonetics for {msg}"
+        embed.description = result.title()
+        embed.colour = cmn.colours.good
         await ctx.send(embed=embed)
 
     @commands.command(name="utc", aliases=["z"], category=cmn.cat.ref)
     async def _utc_lookup(self, ctx: commands.Context):
         """Returns the current time in UTC."""
-        with ctx.typing():
-            now = datetime.utcnow()
-            result = "**" + now.strftime("%Y-%m-%d %H:%M") + "Z**"
-            embed = cmn.embed_factory(ctx)
-            embed.title = "The current time is:"
-            embed.description = result
-            embed.colour = cmn.colours.good
+        now = datetime.utcnow()
+        result = "**" + now.strftime("%Y-%m-%d %H:%M") + "Z**"
+        embed = cmn.embed_factory(ctx)
+        embed.title = "The current time is:"
+        embed.description = result
+        embed.colour = cmn.colours.good
         await ctx.send(embed=embed)
 
     @commands.command(name="prefixes", aliases=["vanity", "pfx", "vanities", "prefix"], category=cmn.cat.ref)
