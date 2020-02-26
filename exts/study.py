@@ -14,7 +14,6 @@ from datetime import datetime
 import asyncio
 
 import aiohttp
-import pytz
 
 import discord.ext.commands as commands
 
@@ -134,7 +133,7 @@ class StudyCog(commands.Cog):
                                    " the answer will be revealed."),
                             inline=False)
             if "image" in question:
-                image_url = f"https://hamstudy.org/_1330011/images/{pool.split('_',1)[1]}/{question['image']}"
+                image_url = f"https://hamstudy.org/images/{pool_meta['year']}/{question['image']}"
                 embed.set_image(url=image_url)
 
         q_msg = await ctx.send(embed=embed)

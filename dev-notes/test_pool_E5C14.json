@@ -1,0 +1,48 @@
+{
+    "_id": "56956f51f65e5c590272e372",
+    "appears": "2016-04-01T06:00:00.000Z",
+    "class": "Amateur Extra",
+    "subtext": "Expires Jul 1, 2020",
+    "valid_from": "2016-07-01T06:00:00.000Z",
+    "expires": "2020-07-01T06:00:00.000Z",
+    "official_name": "Element 4",
+    "id": "E4_2016",
+    "slug": "extra2016",
+    "passing": 37,
+    "year": 2016,
+    "pool": [{
+        "_id": "5cd63f15910d9b003d545bd7",
+        "qcount": 4,
+        "id": "E5",
+        "name": "ELECTRICAL PRINCIPLES",
+        "sections": [{
+            "_id": "5cd63f15910d9b003d545beb",
+            "id": "E5C",
+            "questions": [{
+                "_id": "5cd63f15910d9b003d545bef",
+                "keywords": ["4"],
+                "answer": "B",
+                "answers": {
+                    "A": "Point 2",
+                    "B": "Point 4",
+                    "C": "Point 5",
+                    "D": "Point 6"
+                },
+                "fccpart": "",
+                "id": "E5C14",
+                "image": "E5-2.png",
+                "text": "Which point on Figure E5-2 best represents the impedance of a series circuit consisting of a 400 ohm resistor and a 38 picofarad capacitor at 14 MHz?"
+            }],
+            "summary": "Coordinate systems and phasors in electronics: Rectangular Coordinates; Polar Coordinates; Phasors"
+        }]
+    }],
+    "updated": "2019-05-11T03:18:46.121Z",
+    "category": "default",
+    "testIdEnd": 19999,
+    "testIdStart": 10000,
+    "__v": 12,
+    "mat_icon": "flash_on",
+    "tagline": "Serious General operators only! This is the most advanced US license class!",
+    "keywords": ["ham radio extra test prep", "amateur extra class radio study", "amateur extra class ham exam", "ham radio amateur extra test 2016", "2016 amateur extra class", "ham radio license exam", "extra class flash card"],
+    "replaces": "E4_2012"
+}
