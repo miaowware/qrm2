@@ -19,9 +19,17 @@ jobs:
   push:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
+    needs: flake8_py3
 
     steps:
       - uses: actions/checkout@v2
+      
+      - name: Pull previous images
+        run: |
+          docker pull -a ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME
+          # OR
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && docker pull ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:$(echo ${{ github.ref }} | sed -e 's,^refs/tags/v,,')
+          [[ "${{ github.ref }}" == "refs/heads/master" ]] && docker pull ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:dev
 
       - name: Build image
         run: docker build . --file Dockerfile
@@ -46,7 +54,7 @@ jobs:
 
           docker tag image $IMAGE_ID:$VERSION
           # use Docker `latest` convention for versioned releases
-          [[ "$VERSION" != "dev" ]] && docker tag image $IMAGE_ID:latest
+          [ "$VERSION" != "dev" ] && docker tag image $IMAGE_ID:latest
           docker push $IMAGE_ID:$VERSION
       
       - name: Log out of Github Package Registry
