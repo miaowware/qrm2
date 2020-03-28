@@ -45,8 +45,8 @@ loop = asyncio.get_event_loop()
 connector = loop.run_until_complete(conn.new_connector())
 
 bot = commands.Bot(command_prefix=opt.prefix,
-                   description=info.description,
-                   help_command=commands.MinimalHelpCommand(),
+                   case_insensitive=True,
+                   description=info.description, help_command=commands.MinimalHelpCommand(),
                    loop=loop,
                    connector=connector)
 
@@ -82,7 +82,7 @@ async def _shutdown_bot(ctx: commands.Context):
     await bot.logout()
 
 
-@bot.group(name="extctl", aliases=["ex"], category=cmn.cat.admin)
+@bot.group(name="extctl", aliases=["ex"], case_insensitive=True, category=cmn.cat.admin)
 @commands.check(cmn.check_if_owner)
 async def _extctl(ctx: commands.Context):
     """Extension control commands.

@@ -29,7 +29,7 @@ class AE7QCog(commands.Cog):
         self.bot = bot
         self.session = aiohttp.ClientSession(connector=bot.qrm.connector)
 
-    @commands.group(name="ae7q", aliases=["ae"], category=cmn.cat.lookup)
+    @commands.group(name="ae7q", aliases=["ae"], case_insensitive=True, category=cmn.cat.lookup)
     async def _ae7q_lookup(self, ctx: commands.Context):
         """Looks up a callsign, FRN, or Licensee ID on [ae7q.com](http://ae7q.com/)."""
         if ctx.invoked_subcommand is None:
