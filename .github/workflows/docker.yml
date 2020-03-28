@@ -1,0 +1,56 @@
+name: Docker Build and Push
+
+on:
+  push:
+    # Publish `master` as Docker `dev` image.
+    branches:
+      - master
+    # Publish `v*` tags as releases and as `latest`.
+    tags:
+      - v*
+
+env:
+  IMAGE_NAME: qrm2
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        run: docker build . --file Dockerfile -t $IMAGE_NAME
+
+      - name: Log into Github Package Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
+      - name: Log into Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+      - name: Push image to registries
+        run: |
+          GITHUB_IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
+          DOCKER_IMAGE_ID=${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME
+
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+
+          [[ "$VERSION" == "master" ]] && VERSION=dev
+
+          echo GITHUB_IMAGE_ID=$GITHUB_IMAGE_ID
+          echo DOCKER_IMAGE_ID=$DOCKER_IMAGE_ID
+          echo VERSION=$VERSION
+
+          # tag for Github Registry
+          docker tag $IMAGE_NAME $GITHUB_IMAGE_ID:$VERSION
+          [[ "$VERSION" != "dev" ]] && docker tag $IMAGE_NAME $GITHUB_IMAGE_ID:latest
+          docker push $GITHUB_IMAGE_ID
+
+          # tag for Docker Hub
+          docker tag $IMAGE_NAME $DOCKER_IMAGE_ID:$VERSION
+          [[ "$VERSION" != "dev" ]] && docker tag $IMAGE_NAME $DOCKER_IMAGE_ID:latest
+          docker push $DOCKER_IMAGE_ID
