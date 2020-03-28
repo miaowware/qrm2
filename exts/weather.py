@@ -40,7 +40,7 @@ class WeatherCog(commands.Cog):
             embed.set_image(url="attachment://condx.png")
             await ctx.send(embed=embed, file=discord.File(data, "condx.png"))
 
-    @commands.group(name="weather", aliases=["wttr"], category=cmn.cat.weather)
+    @commands.group(name="weather", aliases=["wttr"], case_insensitive=True, category=cmn.cat.weather)
     async def _weather_conditions(self, ctx: commands.Context):
         """Gets local weather conditions from [wttr.in](http://wttr.in/).
 
