@@ -92,6 +92,26 @@ class HamCog(commands.Cog):
         embed.colour = cmn.colours.good
         await ctx.send(embed=embed)
 
+    @commands.command(name="phoneticweight", aliases=["pw"], category=cmn.cat.ref)
+    async def _weight(self, ctx: commands.Context, *, msg: str):
+        """Calculates the phonetic weight of a callsign or message."""
+        embed = cmn.embed_factory(ctx)
+        msg = msg.upper()
+        weight = 0
+        for char in msg:
+            try:
+                weight += phonetics.pweights[char]
+            except KeyError:
+                embed.title = "Error in calculation of phonetic weight"
+                embed.description = f"Unknown character `{char}` in message"
+                embed.colour = cmn.colours.bad
+                await ctx.send(embed=embed)
+                return
+        embed.title = f"Phonetic Weight of {msg}"
+        embed.description = f"The phonetic weight is **{weight}**"
+        embed.colour = cmn.colours.good
+        await ctx.send(embed=embed)
+
 
 def setup(bot: commands.Bot):
     bot.add_cog(HamCog(bot))
