@@ -10,7 +10,6 @@ the GNU General Public License, version 2.
 
 import random
 import re
-from collections import OrderedDict
 from typing import Union
 
 import discord
@@ -189,7 +188,7 @@ class BaseCog(commands.Cog):
 
 
 def parse_changelog():
-    changelog = OrderedDict()
+    changelog = {}
     ver = ""
     heading = ""
 
