@@ -175,9 +175,6 @@ def qrz_process_info(data: dict):
             "Paper QSL?": mqsl,
             "LotW?": lotw,
             "QSL Info": data.get("qslmgr", None),
-            "CQ Zone": data.get("cqzone", None),
-            "ITU Zone": data.get("ituzone", None),
-            "IOTA Designator": data.get("iota", None),
             "Born": data.get("born", None)}
 
 
