@@ -31,6 +31,11 @@ class FunCog(commands.Cog):
         """Returns xkcd: tar."""
         await ctx.send("http://xkcd.com/1168")
 
+    @commands.command(name="standards", category=cmn.cat.fun)
+    async def _standards(self, ctx: commands.Context):
+        """Returns xkcd: Standards."""
+        await ctx.send("http://xkcd.com/927")
+
     @commands.command(name="xd", hidden=True, category=cmn.cat.fun)
     async def _xd(self, ctx: commands.Context):
         """ecks dee"""
