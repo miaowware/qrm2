@@ -14,6 +14,8 @@ See [README-DOCKER.md](./README-DOCKER.md)
 
 ### Without Docker
 
+Requires Python 3.7 or newer.
+
 Prep the environment. For more information on extra options, see the [quick-bot-no-pain Makefile documentation](https://github.com/0x5c/quick-bot-no-pain/blob/master/docs/makefile.md).
 
 ```

@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ## [Unreleased]
+
+
+## [2.3.0] - 2020-03-30
 ### Added
 - `?phoneticweight` command, which calculates a message's length in syllables.
 - `?standards` command to display [xkcd 927](https://xkcd.com/927/).
