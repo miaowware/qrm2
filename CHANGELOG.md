@@ -5,8 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ## [Unreleased]
-### Removed
-- `OrderedDict`s in favour of default dictionaries. Python>=3.7 now required.
+### Changed
+- Python>=3.7 now required.
 
 
 ## [2.2.3] - 2020-03-29
