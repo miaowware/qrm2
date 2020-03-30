@@ -8,7 +8,6 @@ the GNU General Public License, version 2.
 """
 
 
-from collections import OrderedDict
 from io import BytesIO
 
 import aiohttp
@@ -159,27 +158,24 @@ def qrz_process_info(data: dict):
     else:
         lotw = "Unknown"
 
-    return OrderedDict([("Name", name),
-                        ("Country", data.get("country", None)),
-                        ("Address", address),
-                        ("Grid Square", data.get("grid", None)),
-                        ("County", data.get("county", None)),
-                        ("CQ Zone", data.get("cqzone", None)),
-                        ("ITU Zone", data.get("ituzone", None)),
-                        ("IOTA Designator", data.get("iota", None)),
-                        ("Expires", data.get("expdate", None)),
-                        ("Aliases", data.get("aliases", None)),
-                        ("Previous Callsign", data.get("p_call", None)),
-                        ("License Class", data.get("class", None)),
-                        ("Trustee", data.get("trustee", None)),
-                        ("eQSL?", eqsl),
-                        ("Paper QSL?", mqsl),
-                        ("LotW?", lotw),
-                        ("QSL Info", data.get("qslmgr", None)),
-                        ("CQ Zone", data.get("cqzone", None)),
-                        ("ITU Zone", data.get("ituzone", None)),
-                        ("IOTA Designator", data.get("iota", None)),
-                        ("Born", data.get("born", None))])
+    return {"Name": name,
+            "Country": data.get("country", None),
+            "Address": address,
+            "Grid Square": data.get("grid", None),
+            "County": data.get("county", None),
+            "CQ Zone": data.get("cqzone", None),
+            "ITU Zone": data.get("ituzone", None),
+            "IOTA Designator": data.get("iota", None),
+            "Expires": data.get("expdate", None),
+            "Aliases": data.get("aliases", None),
+            "Previous Callsign": data.get("p_call", None),
+            "License Class": data.get("class", None),
+            "Trustee": data.get("trustee", None),
+            "eQSL?": eqsl,
+            "Paper QSL?": mqsl,
+            "LotW?": lotw,
+            "QSL Info": data.get("qslmgr", None),
+            "Born": data.get("born", None)}
 
 
 def setup(bot):
