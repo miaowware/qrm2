@@ -3,3 +3,4 @@ ctyparser
 beautifulsoup4
 lxml
 pytz
+ae7qparser
