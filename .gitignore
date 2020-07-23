@@ -9,6 +9,8 @@ cty.zip
 
 /docker-compose.yml
 
+.vscode/
+
 
 #########################################################
 # Byte-compiled / optimized / DLL files
