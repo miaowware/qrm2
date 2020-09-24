@@ -15,7 +15,10 @@ Settings and options for the bot.
 
 # The prefix for the bot (str). Define a list of stings for multiple prefixes.
 # ie: `["?", "!", "pls "]`
-prefix = "?"
+prefix = ["?", "? "]
+
+# The prefix to use for display purposes (ex: status message).
+display_prefix = "?"
 
 # Whether the bot should print full stacktraces for normal exceptions: `True`,
 # or be nice and only print small messages: `False` (the default).
@@ -45,6 +48,9 @@ time_statuses = [("with lids on 3.840", (00, 00), (6, 00)),
                  ("with lids on 14.313", (10, 00), (18, 00)),
                  ("with lids on 7.200", (18, 00), (20, 00)),
                  ("with lids on 3.840", (20, 00), (23, 59))]
+
+# append " | {display_prefix}help" to the Discord playing status
+show_help = False
 
 # Emoji IDs and keywords for emoji reactions
 # Use the format {emoji_id (int): ("tuple", "of", "lowercase", "keywords")}

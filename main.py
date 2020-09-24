@@ -193,7 +193,10 @@ async def _ensure_activity_time():
     try:
         tz = pytz.timezone(opt.status_tz)
     except pytz.exceptions.UnknownTimeZoneError:
-        await bot.change_presence(activity=discord.Game(name="with invalid timezones."))
+        status = "with invalid timezones"
+        if opt.show_help:
+            status += f" | {opt.display_prefix}help"
+        await bot.change_presence(activity=discord.Game(name=status))
         return
 
     now = datetime.now(tz=tz).time()
@@ -203,6 +206,8 @@ async def _ensure_activity_time():
         end_time = time(hour=sts[2][0], minute=sts[2][1], tzinfo=tz)
         if start_time < now <= end_time:
             status = sts[0]
+            if opt.show_help:
+                status += f" | {opt.display_prefix}help"
 
     await bot.change_presence(activity=discord.Game(name=status))
 
@@ -210,6 +215,8 @@ async def _ensure_activity_time():
 @tasks.loop(minutes=5)
 async def _ensure_activity_random():
     status = random.choice(opt.statuses)
+    if opt.show_help:
+        status += f" | {opt.display_prefix}help"
 
     await bot.change_presence(activity=discord.Game(name=status))
 
@@ -217,6 +224,8 @@ async def _ensure_activity_random():
 @tasks.loop(minutes=5)
 async def _ensure_activity_fixed():
     status = opt.statuses[0]
+    if opt.show_help:
+        status += f" | {opt.display_prefix}help"
 
     await bot.change_presence(activity=discord.Game(name=status))
 
