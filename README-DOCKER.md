@@ -1,6 +1,6 @@
 # Docker help for qrm2
 
-You have multiple ways to use docker to run an instance of qrm2
+You have multiple ways to use docker to run an instance of qrm2.
 
 - [Docker help for qrm2](#docker-help-for-qrm2)
   - [Using docker-compose and the prebuilt-image (recommended)](#using-docker-compose-and-the-prebuilt-image-recommended)
@@ -23,13 +23,16 @@ This is the easiest method for running the bot without any modifications.
     version: '3'
     services:
       qrm2:
-        image: "classabbyamp/discord-qrm2:latest"
+        image: "classabbyamp/qrm2:latest"
+        # OR
+        # image: "docker.pkg.github.com/miaowware/qrm2/qrm2:latest"
         restart: on-failure
         volumes:
           - "./data:/app/data:rw"
         environment:
           - PYTHONUNBUFFERED=1
     ```
+   > Note that there are two possible sources for the image: docker's and github's registry. Github's registry requires [a few extra steps](https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages) during the initial setup.
 
 3. Create a subdirectory named `data`.
 
@@ -59,7 +62,7 @@ This is the easiest method to run the bot with modifications.
     services:
       qrm2:
         build: .
-        image: "discord-qrm2:local-latest"
+        image: "qrm2:local-latest"
         restart: on-failure
         volumes:
           - "./data:/app/data:rw"
@@ -75,7 +78,7 @@ This is the easiest method to run the bot with modifications.
 
     ```none
     $ docker-compose build --pull
-    $ docker-compose -d
+    $ docker-compose up -d
     ```
 
     > Run without "-d" to test the bot. (run in foreground)
@@ -95,7 +98,7 @@ This methods is not very nice to use.
 2. Run docker build:
 
     ```none
-    $ docker build -t discord-qrm2:local-latest .
+    $ docker build -t qrm2:local-latest .
     ```
 
 
