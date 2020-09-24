@@ -63,6 +63,7 @@ emojis = SimpleNamespace(
 paths = SimpleNamespace(
     data=Path("./data/"),
     resources=Path("./resources/"),
+    img=Path("./resources/img/"),
     bandcharts=Path("./resources/img/bandcharts/"),
     maps=Path("./resources/img/maps/"),
 )
