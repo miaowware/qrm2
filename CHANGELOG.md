@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 ### Added
 - Canadian prefix info to the `?prefixes` command.
+- Option to append ` | ?help` to the playing status.
+### Fixed
+- Issue where multiple prefixes were not handled properly.
 
 
 ## [2.3.2] - 2020-07-22
