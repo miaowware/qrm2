@@ -7,7 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 ### Added
 - Canadian prefix info to the `?prefixes` command.
+- `?worksplit` command.
+- Maps for CQ Zones, ITU Zones, ITU Regions, and Canadian prefixes.
+- Attribution for all maps.
 - Option to append ` | ?help` to the playing status.
+### Changed
+- ARRL/RAC section maps to include all current ARRL/RAC sections.
 ### Fixed
 - Issue where multiple prefixes were not handled properly.
 
@@ -15,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [2.3.2] - 2020-07-22
 ### Fixed
 - Dependency issues
+
 
 ## [2.3.1] - 2020-04-02
 ### Fixed
