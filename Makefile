@@ -30,7 +30,7 @@ help:
 
 ### Actual install/setup targets ###
 
-# Main install target
+# Main install targets
 .PHONY: install
 install: $(BOTENV)/req_done data/options.py data/keys.py
 
@@ -71,6 +71,17 @@ clean:
 
 
 ### Dev targets ###
+.PHONY: dev-install
+dev-install: $(BOTENV)/dev_req_done data/options.py data/keys.py
+
+# Installing dev requirements
+$(BOTENV)/dev_req_done: dev-requirements.txt $(BOTENV)/success
+	@echo "\033[34;1m--> Installing the dependencies...\033[0m"
+	@. $(BOTENV)/bin/activate; \
+		pip install ${PIP_OUTPUT} -U pip setuptools wheel; \
+		pip install ${PIP_OUTPUT} -U -r dev-requirements.txt
+	@touch $(BOTENV)/dev_req_done
+
 
 
 ### Special targets ###
