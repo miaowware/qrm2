@@ -20,5 +20,5 @@ Used for grouping info such as name, description, source, and such.
 | `name`        | The name of the file.                           | `Canada`, `ITU Zones`                            |
 | `long_name`   | The long name (title) of the file.              | `Worldwide map of ITU Zones`                     |
 | `description` | The description accompanying the file.          | `Full radio allocations chart for all services.` |
-| `source`      | The source of the file.                         | `Instituto Federal de Telecomunicaciones (IFT)` |
+| `source`      | The source of the file.                         | `Instituto Federal de Telecomunicaciones (IFT)`  |
 | `emoji`       | A Unicode emoji associated with the file.       | `📻`, `🇨🇦`                                       |
