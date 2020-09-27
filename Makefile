@@ -30,7 +30,7 @@ help:
 
 ### Actual install/setup targets ###
 
-# Main install targets
+# Main install target
 .PHONY: install
 install: $(BOTENV)/req_done data/options.py data/keys.py
 
