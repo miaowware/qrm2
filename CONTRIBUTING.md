@@ -14,6 +14,7 @@ Once all of the above is done, you can get started by setting up your developmen
 1. [Fork this repo][1] into your own GitHub namespace.
 1. Make sure the `master` branch is up to date, then make yourself a new branch with a descriptive name.
 1. Once the forked repo is cloned and on the proper branch, you can set up the development environment.
+    1. Install python 3.7 or higher.
     1. Run `make dev-install`.
        This should install everything you need to develop and run qrm.
     1. [Create a bot and token][2], and add it to `data/keys.py`.
@@ -24,18 +25,21 @@ Once all of the above is done, you can get started by setting up your developmen
 
 ## While You Develop
 
-To run qrm, use the command `sh run.sh`.
-If you want to break when an error happens, use the flag `--pass-errors`.
+To run qrm, use the command `./run.sh`.
+We recommend you use the `--pass-errors` flags to avoid perpetual restart loops if you break the bot.
+It exists because repeatedly mashing [Ctrl+C] at high speed to break a fast loop is not fun.
 
 Make commits as needed, but try to keep it reasonable.
 If there are too many, your contribution may be squashed when merged.
 Commit messages should be descriptive and mention issues that they fix ("fixes #123") or contain progress on ("progress on #123").
 
 Make sure to document your code as you go, in both comments and external documentation (in `/dev-notes/`) as needed.
+`dev-notes` is especially important if you introduce a new json file format or to document some development process (like the command to crush the various images in the repository).
 
 **Test your changes.**
 If your code doesn't work, it's not ready for merging.
 Make sure you not only test intended behaviour, but also edge cases and error cases.
+Make sure to run `flake8` to ensure your code uses the proper style, and `mypy [files...]` to ensure proper typing.
 
 If you're making a user-facing change, put a quick summary in `CHANGELOG.md` under the `[Unreleased]` heading.
 Follow the [Keep a Changelog][4] format.
@@ -50,15 +54,16 @@ if that fails, you will be expected to fix those errors before merge.
 Otherwise, try to follow the existing style:
 double-quotes except when required to be single,
 indentation of mult-line structures matching other examples in the code,
+add type hints,
 etc.
 
 ## When You're Ready to Merge
 
-1. When you have finished working on your contribution, create a pull request from your fork's branch into the main master branch.
+1. When you have finished working on your contribution, create a pull request from your fork's branch into the master branch of this repository.
 1. Read through and complete the pull request template.
    If the checklist is not complete, your contribution will not be merged.
 1. Your pull request will get reviewed by at least one maintainer.
-1. If approved, another maintainer will merge the pull request.
+1. If approved, another maintainer may merge the pull request if everything looks good.
 
 [1]: https://github.com/miaowware/qrm2/fork
 [2]: https://discordpy.readthedocs.io/en/latest/discord.html
