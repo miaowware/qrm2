@@ -29,9 +29,15 @@ To run qrm, use the command `./run.sh`.
 We recommend you use the `--pass-errors` flags to avoid perpetual restart loops if you break the bot.
 It exists because repeatedly mashing [Ctrl+C] at high speed to break a fast loop is not fun.
 
+Commit messages should be descriptive and mention issues that they fix ("fixes #123") or contain progress on ("progress on #123").
 Make commits as needed, but try to keep it reasonable.
 If there are too many, your contribution may be squashed when merged.
-Commit messages should be descriptive and mention issues that they fix ("fixes #123") or contain progress on ("progress on #123").
+You may want to squash your commits locally yourself:
+
+```sh
+git reset --soft [commit before your changes]
+git commit
+```
 
 Make sure to document your code as you go, in both comments and external documentation (in `/dev-notes/`) as needed.
 `dev-notes` is especially important if you introduce a new json file format or to document some development process (like the command to crush the various images in the repository).
