@@ -15,7 +15,7 @@ Settings and options for the bot.
 
 # The prefix for the bot (str). Define a list of stings for multiple prefixes.
 # ie: `["?", "!", "pls "]`
-prefix = ["?", "? "]
+prefix = ["? ", "?"]
 
 # The prefix to use for display purposes (ex: status message).
 display_prefix = "?"
