@@ -12,5 +12,5 @@ authors = ("@ClassAbbyAmplifier#2229", "@0x5c#0639")
 description = """A bot with various useful ham radio-related functions, written in Python."""
 license = "Released under the GNU General Public License v2"
 contributing = "Check out the source on GitHub, contributions welcome: https://github.com/miaowware/qrm2"
-release = "2.3.2"
+release = "2.4.0"
 bot_server = "https://discord.gg/Ntbg3J4"
