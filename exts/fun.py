@@ -10,6 +10,7 @@ the GNU General Public License, version 2.
 
 import random
 
+import discord
 import discord.ext.commands as commands
 
 import common as cmn
@@ -35,6 +36,16 @@ class FunCog(commands.Cog):
     async def _standards(self, ctx: commands.Context):
         """Returns xkcd: Standards."""
         await ctx.send("http://xkcd.com/927")
+
+    @commands.command(name="worksplit", aliases=["split", "ft8"], category=cmn.cat.fun)
+    async def _worksplit(self, ctx: commands.Context):
+        """Posts "Work split you lids"."""
+        fn = "worksplit.jpg"
+        embed = cmn.embed_factory(ctx)
+        embed.title = "Work Split, You Lids!"
+        embed.set_image(url="attachment://" + fn)
+        img = discord.File(cmn.paths.img / fn, filename=fn)
+        await ctx.send(embed=embed, file=img)
 
     @commands.command(name="xd", hidden=True, category=cmn.cat.fun)
     async def _xd(self, ctx: commands.Context):

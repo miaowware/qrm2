@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 ### Added
 - Canadian prefix info to the `?prefixes` command.
+- `?worksplit` command.
 
 
 ## [2.3.2] - 2020-07-22
