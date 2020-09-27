@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Maps for CQ Zones, ITU Zones, ITU Regions, and Canadian prefixes.
 - Attribution for all maps.
 - Option to append ` | ?help` to the playing status.
+- `?dbconv` command to convert voltage, power, and antenna gain values.
 ### Changed
 - ARRL/RAC section maps to include all current ARRL/RAC sections.
 ### Fixed
