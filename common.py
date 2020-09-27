@@ -63,12 +63,23 @@ emojis = SimpleNamespace(
 paths = SimpleNamespace(
     data=Path("./data/"),
     resources=Path("./resources/"),
+    img=Path("./resources/img/"),
     bandcharts=Path("./resources/img/bandcharts/"),
     maps=Path("./resources/img/maps/"),
 )
 
 
 # --- Classes ---
+
+
+class CallsignInfoData:
+    """Represents a country's callsign info"""
+    def __init__(self, data: list):
+        self.title: str = data[0]
+        self.desc: str = data[1]
+        self.calls: str = data[2]
+        self.emoji: str = data[3]
+
 
 class ImageMetadata:
     """Represents the metadata of a single image."""

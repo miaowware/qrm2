@@ -21,6 +21,7 @@ from resources import qcodes
 class HamCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        self.pfxs = callsign_info.options
 
     @commands.command(name="qcode", aliases=["q"], category=cmn.cat.ref)
     async def _qcode_lookup(self, ctx: commands.Context, qcode: str):
@@ -64,22 +65,26 @@ class HamCog(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="prefixes", aliases=["vanity", "pfx", "vanities", "prefix"], category=cmn.cat.ref)
-    async def _vanity_prefixes(self, ctx: commands.Context, country: str = None):
+    async def _vanity_prefixes(self, ctx: commands.Context, country: str = ""):
         """Lists valid callsign prefixes for different countries."""
-        if country is None:
-            await ctx.send_help(ctx.command)
-            return
+        country = country.lower()
         embed = cmn.embed_factory(ctx)
-        if country.lower() not in callsign_info.options:
-            embed.title = f"{country} not found!"
-            embed.description = f"Valid countries: {', '.join(callsign_info.options.keys())}"
+        if country not in self.pfxs:
+            desc = "Possible arguments are:\n"
+            for key, val in self.pfxs.items():
+                desc += f"`{key}`: {val.title}{('  ' + val.emoji if val.emoji else '')}\n"
+            embed.title = f"{country} Not Found!"
+            embed.description = desc
             embed.colour = cmn.colours.bad
+            await ctx.send(embed=embed)
+            return
         else:
-            embed.title = callsign_info.options[country.lower()][0]
-            embed.description = callsign_info.options[country.lower()][1]
+            data = self.pfxs[country]
+            embed.title = data.title + ("  " + data.emoji if data.emoji else "")
+            embed.description = data.desc
             embed.colour = cmn.colours.good
 
-            for name, val in callsign_info.options[country.lower()][2].items():
+            for name, val in data.calls.items():
                 embed.add_field(name=name, value=val, inline=False)
         await ctx.send(embed=embed)
 

@@ -28,6 +28,10 @@ Run. For more information on options, see the [quick-bot-no-pain run.sh document
 $ run.sh
 ```
 
+## Contributing
+
+Check out the [contribution guidelines](/CONTRIBUTING.md) for more information about how to contribute to this project.
+
 ## Copyright
 
 Copyright (C) 2019-2020 Abigail Gold, 0x5c
