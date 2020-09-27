@@ -46,9 +46,9 @@ class QrmHelpCommand(commands.HelpCommand):
             if parent:
                 fmt = f"{parent} {fmt}"
             alias = fmt
-            return f"{opt.prefix}{alias} {command.signature}\n    *Aliases:* {aliases}"
+            return f"{opt.display_prefix}{alias} {command.signature}\n    *Aliases:* {aliases}"
         alias = command.name if not parent else f"{parent} {command.name}"
-        return f"{opt.prefix}{alias} {command.signature}"
+        return f"{opt.display_prefix}{alias} {command.signature}"
 
     async def send_error_message(self, error):
         embed = cmn.embed_factory(self.context)
@@ -60,7 +60,7 @@ class QrmHelpCommand(commands.HelpCommand):
     async def send_bot_help(self, mapping):
         embed = cmn.embed_factory(self.context)
         embed.title = "qrm Help"
-        embed.description = (f"For command-specific help and usage, use `{opt.prefix}help [command name]`."
+        embed.description = (f"For command-specific help and usage, use `{opt.display_prefix}help [command name]`."
                              " Many commands have shorter aliases.")
         mapping = await mapping
 
