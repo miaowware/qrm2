@@ -11,6 +11,7 @@ the GNU General Public License, version 2.
 import math
 from enum import Enum
 from typing import Optional
+from dataclasses import dataclass
 
 import discord.ext.commands as commands
 
@@ -21,47 +22,45 @@ from data import options as opt
 # not sure why but UnitConverter and Unit need to be defined before DbConvCog and convert()
 class UnitConverter(commands.Converter):
     async def convert(self, ctx: commands.Context, argument: str):
+        is_db = None
+        mult = None
+        unit = None
+        utype = None
         try:
-            return Unit(argument)
+            s = argument.lower()
+            if len(s) > 2 and s[:2] == "db":
+                is_db = True
+                if s[2:] in units:
+                    u = units[s[2:]]
+                    mult = u["mult"]
+                    unit = u["log"]
+                    utype = u["type"]
+            elif s in units:
+                is_db = False
+                u = units[s]
+                mult = u["mult"]
+                unit = u["scalar"]
+                utype = u["type"]
+            else:
+                raise ValueError(f"Invalid unit: {argument}")
+            return Unit(argument, unit, utype, is_db, mult)
         except ValueError as e:
             raise commands.BadArgument(message=str(e))
-
-
-class Unit:
-    def __init__(self, raw: str):
-        self.raw: str = raw
-        self.unit: str
-        self.type: UnitType
-        self.is_db: bool
-        self.mult: int
-        self._parse()
-
-    def _parse(self):
-        s = self.raw.lower()
-        if len(s) > 2 and s[:2] == "db":
-            self.is_db = True
-            if s[2:] in units:
-                u = units[s[2:]]
-                self.mult = u["mult"]
-                self.unit = u["log"]
-                self.type = u["type"]
-        elif s in units:
-            self.is_db = False
-            u = units[s]
-            self.mult = u["mult"]
-            self.unit = u["scalar"]
-            self.type = u["type"]
-        else:
-            raise ValueError(f"Invalid unit: {self.raw}")
-
-    def __str__(self):
-        return self.unit
 
 
 class UnitType(Enum):
     voltage = 1
     power = 2
     antenna = 3
+
+
+@dataclass
+class Unit:
+    raw: str
+    unit: str
+    type: UnitType
+    is_db: bool
+    mult: int
 
 
 class DbConvCog(commands.Cog):
@@ -85,7 +84,7 @@ class DbConvCog(commands.Cog):
         if value is not None and unit_from is not None and unit_to is not None:
             converted = convert(value, unit_from, unit_to)
 
-            embed.title = f"{value:.3g} {unit_from} = {converted:.3g} {unit_to}"
+            embed.title = f"{value:.3g} {unit_from.unit} = {converted:.3g} {unit_to.unit}"
             embed.colour = cmn.colours.good
         else:
             embed.title = "Decibel Quick Reference"
