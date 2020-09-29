@@ -72,15 +72,6 @@ paths = SimpleNamespace(
 # --- Classes ---
 
 
-class CallsignInfoData:
-    """Represents a country's callsign info"""
-    def __init__(self, data: list):
-        self.title: str = data[0]
-        self.desc: str = data[1]
-        self.calls: str = data[2]
-        self.emoji: str = data[3]
-
-
 class ImageMetadata:
     """Represents the metadata of a single image."""
     def __init__(self, metadata: list):
