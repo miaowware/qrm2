@@ -1,0 +1,53 @@
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+name: Create Release
+
+jobs:
+  build:
+    name: Create Release
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Get Version Info
+        id: get_tag
+        shell: bash
+        run: |
+          SUBJECT=$(/usr/bin/git tag -l ${GITHUB_REF#refs/tags/} --format='%(subject)')
+          echo SUBJECT=$SUBJECT
+          BODY=$(/usr/bin/git tag -l ${GITHUB_REF#refs/tags/} --format='%(body)' | sed '/-----BEGIN PGP SIGNATURE-----/,$d')
+          echo BODY=$BODY
+
+          echo ::set-output name=subject::${SUBJECT}
+          echo ::set-output name=body::${BODY}
+          echo ::set-output name=current_version::${GITHUB_REF#refs/tags/v}
+
+      - name: Get Changelog Content
+        id: changelog_reader
+        uses: mindsers/changelog-reader-action@v2
+        with:
+          version: ${{ steps.get_tag.outputs.current_version }}
+          path: ./CHANGELOG.md
+
+      - name: Publish Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.changelog_reader.outputs.version }}
+          release_name: ${{ steps.get_tag.outputs.subject }}
+          body: |
+            ${{ steps.get_tag.outputs.body }}
+
+            ## Changelog
+
+            ${{ steps.changelog_reader.outputs.changes }}
+          draft: false
+          prerelease: false
+

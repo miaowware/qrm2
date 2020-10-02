@@ -19,3 +19,16 @@ jobs:
           checkName: 'flake8_py3'   # NOTE: this needs to be the same as the job name
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  mypy_py3:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+          architecture: x64
+      - name: Install mypy
+        # install dev-requirements.txt?
+        run: pip install mypy
+      - name: Run mypy
+        run: mypy # --idk-what-args
