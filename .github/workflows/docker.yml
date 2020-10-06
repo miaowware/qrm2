@@ -52,7 +52,7 @@ jobs:
           # tag dev or x.x.x
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           # tag latest if not a dev release
-          [[ "$VERSION" != "dev" ]] && docker tag $IMAGE_NAME $IMAGE_ID:latest
+          [[ "$VERSION" != "dev" ]] && docker tag $IMAGE_NAME $IMAGE_ID:latest || true
 
       - name: Push images to registry
         run: docker push ${{ steps.tag_image.outputs.image_id }}
