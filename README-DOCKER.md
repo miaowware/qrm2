@@ -23,16 +23,14 @@ This is the easiest method for running the bot without any modifications.
     version: '3'
     services:
       qrm2:
-        image: "classabbyamp/qrm2:latest"
-        # OR
-        # image: "docker.pkg.github.com/miaowware/qrm2/qrm2:latest"
+        image: "docker.pkg.github.com/miaowware/qrm2/qrm2:latest"
         restart: on-failure
         volumes:
           - "./data:/app/data:rw"
         environment:
           - PYTHONUNBUFFERED=1
     ```
-   > Note that there are two possible sources for the image: docker's and github's registry. Github's registry requires [a few extra steps](https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages) during the initial setup.
+   *Note that Github's registry requires [a few extra steps](https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages) during the initial setup.*
 
 3. Create a subdirectory named `data`.
 
@@ -45,7 +43,7 @@ This is the easiest method for running the bot without any modifications.
     $ docker-compose up -d
     ```
 
-    > Run without "-d" to test the bot. (run in foreground)
+    *Run without "-d" to test the bot (run in foreground).*
 
 
 
@@ -81,7 +79,7 @@ This is the easiest method to run the bot with modifications.
     $ docker-compose up -d
     ```
 
-    > Run without "-d" to test the bot. (run in foreground)
+    *Run without "-d" to test the bot (run in foreground).*
 
 
 
@@ -113,5 +111,5 @@ This methods is not very nice to use.
     ```
 
     Where `[image]` is either of:
-    - `discord-qrm2:local-latest` if you are building your own.
-    - `classabbyamp/discord-qrm2:latest` if you want to use the prebuilt image.
+    - `qrm2:local-latest` if you are building your own.
+    - `docker.pkg.github.com/miaowware/qrm2/qrm2:latest` if you want to use the prebuilt image.
