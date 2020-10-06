@@ -1,4 +1,4 @@
-discord.py==1.3.4
+discord.py==1.5.0
 ctyparser==2.0.0.post1
 beautifulsoup4==4.9.1
 lxml==4.5.2
