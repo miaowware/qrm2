@@ -44,9 +44,21 @@ debug_mode = opt.debug  # Separate assignement in-case we define an override (te
 loop = asyncio.get_event_loop()
 connector = loop.run_until_complete(conn.new_connector())
 
+# Defining the intents
+intents = discord.Intents.default()
+# We don't need those
+intents.bans = False
+intents.emojis = False
+intents.integrations = False
+intents.webhooks = False
+intents.invites = False
+intents.voice_states = False
+intents.typing = False
+
 bot = commands.Bot(command_prefix=opt.prefix,
                    case_insensitive=True,
                    description=info.description, help_command=commands.MinimalHelpCommand(),
+                   intents=intents,
                    loop=loop,
                    connector=connector)
 
