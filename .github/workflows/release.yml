@@ -30,13 +30,14 @@ jobs:
 
           echo ::set-output name=subject::${SUBJECT}
           echo ::set-output name=body::${BODY}
-          echo ::set-output name=current_version::${GITHUB_REF#refs/tags/v}
+          echo ::set-output name=version_tag::${GITHUB_REF#refs/tags/}
+          echo ::set-output name=version::${GITHUB_REF#refs/tags/v}
 
       - name: Get Changelog Content
         id: changelog_reader
         uses: mindsers/changelog-reader-action@v2
         with:
-          version: ${{ steps.get_tag.outputs.current_version }}
+          version: ${{ steps.get_tag.outputs.version }}
           path: ./CHANGELOG.md
 
       - name: Publish Release
@@ -45,7 +46,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.changelog_reader.outputs.version }}
+          tag_name: ${{ steps.get_tag.outputs.version_tag }}
           release_name: ${{ steps.get_tag.outputs.subject }}
           body: |
             ${{ steps.get_tag.outputs.body }}
