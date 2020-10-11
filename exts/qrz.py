@@ -18,6 +18,8 @@ from discord.ext import commands, tasks
 import common as cmn
 
 import data.keys as keys
+import pprint
+pp = pprint.PrettyPrinter(indent=4)
 
 
 class QRZCog(commands.Cog):
@@ -66,6 +68,7 @@ class QRZCog(commands.Cog):
 
             resp_xml_data = resp_xml.xpath("/x:QRZDatabase/x:Callsign", namespaces={"x": "http://xmldata.qrz.com"})
             resp_data = {el.tag.split("}")[1]: el.text for el in resp_xml_data[0].getiterator()}
+            pp.pprint(resp_data)
 
             embed = cmn.embed_factory(ctx)
             embed.title = f"QRZ Data for {resp_data['call']}"
@@ -146,15 +149,15 @@ def qrz_process_info(data: dict):
     if address == "":
         address = None
     if "eqsl" in data:
-        eqsl = "Yes" if data["eqsl"] == 1 else "No"
+        eqsl = "Yes" if data["eqsl"] == "1" else "No"
     else:
         eqsl = "Unknown"
     if "mqsl" in data:
-        mqsl = "Yes" if data["mqsl"] == 1 else "No"
+        mqsl = "Yes" if data["mqsl"] == "1" else "No"
     else:
         mqsl = "Unknown"
     if "lotw" in data:
-        lotw = "Yes" if data["lotw"] == 1 else "No"
+        lotw = "Yes" if data["lotw"] == "1" else "No"
     else:
         lotw = "Unknown"
 
