@@ -57,20 +57,16 @@ jobs:
       - name: Push images to registry
         run: docker push ${{ steps.tag_image.outputs.image_id }}
 
-#  deploy:
-#    name: Deploy new images
-#    runs-on: ubuntu-20.04
-#    needs: docker
-#    steps:
-#      - name: Deploy official images
-#        id: deploy_images
-#        uses: satak/webrequest-action@v1.2.3
-#        with:
-#          url: ${{ secrets.DEPLOY_URL }}
-#          method: POST
-#          headers: '{"Authentication": "Token ${{ secrets.DEPLOY_TOKEN }}"}'
-#          payload: |
-#            '{
-#              "repository": "${{ github.repository }}",
-#              "version": "${{ jobs.docker.steps.tag_image.outputs.version }}"
-#             }'
+  deploy:
+    name: Deploy new images
+    runs-on: ubuntu-20.04
+    needs: docker
+    steps:
+      - name: Deploy official images
+        id: deploy_images
+        uses: satak/webrequest-action@v1
+        with:
+          url: ${{ secrets.DEPLOY_URL }}
+          method: POST
+          headers: '{"Authentication": "Token ${{ secrets.DEPLOY_TOKEN }}"}'
+          payload: '{"version": "${{ jobs.docker.steps.tag_image.outputs.version }}"}'
