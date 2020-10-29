@@ -1,5 +1,5 @@
-discord.py==1.5.0
-ctyparser==2.0.0.post1
-beautifulsoup4==4.9.1
-lxml==4.5.2
-pytz==2020.1
+discord.py~=1.5.0
+ctyparser~=2.0
+beautifulsoup4
+lxml
+pytz
