@@ -15,11 +15,13 @@ import traceback
 from datetime import datetime
 from pathlib import Path
 from types import SimpleNamespace
+from typing import Union
 
 import aiohttp
 
 import discord
 import discord.ext.commands as commands
+from discord import Emoji, Reaction, PartialEmoji
 
 import data.options as opt
 
@@ -149,7 +151,7 @@ class GlobalChannelConverter(commands.IDConverter):
 def embed_factory(ctx: commands.Context) -> discord.Embed:
     """Creates an embed with neutral colour and standard footer."""
     embed = discord.Embed(timestamp=datetime.utcnow(), colour=colours.neutral)
-    embed.set_footer(text=ctx.author, icon_url=str(ctx.author.avatar_url))
+    embed.set_footer(text=str(ctx.author), icon_url=str(ctx.author.avatar_url))
     return embed
 
 
@@ -166,11 +168,12 @@ def error_embed_factory(ctx: commands.Context, exception: Exception, debug_mode:
     return embed
 
 
-async def add_react(msg: discord.Message, react: str):
+async def add_react(msg: discord.Message, react: Union[Emoji, Reaction, PartialEmoji, str]):
     try:
         await msg.add_reaction(react)
     except discord.Forbidden:
-        print(f"[!!] Missing permissions to add reaction in '{msg.guild.id}/{msg.channel.id}'!")
+        idpath = (f"{msg.guild.id}/" if msg.guild else "") + str(msg.channel.id)
+        print(f"[!!] Missing permissions to add reaction in '{idpath}'!")
 
 
 # --- Checks ---

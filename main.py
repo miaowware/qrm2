@@ -100,7 +100,7 @@ async def _extctl(ctx: commands.Context):
     """Extension control commands.
     Defaults to `list` if no subcommand specified"""
     if ctx.invoked_subcommand is None:
-        cmd = bot.get_command("extctl list")
+        cmd = _extctl_list
         await ctx.invoke(cmd)
 
 
@@ -168,7 +168,7 @@ async def on_command_error(ctx: commands.Context, err: commands.CommandError):
         await cmn.add_react(ctx.message, cmn.emojis.warning)
         await ctx.send_help(ctx.command)
     elif isinstance(err, commands.CommandNotFound):
-        if ctx.invoked_with.startswith(("?", "!")):
+        if ctx.invoked_with and ctx.invoked_with.startswith(("?", "!")):
             return
         else:
             await cmn.add_react(ctx.message, cmn.emojis.question)
