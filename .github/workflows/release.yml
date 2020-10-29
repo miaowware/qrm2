@@ -25,18 +25,23 @@ jobs:
           SUBJECT=$(/usr/bin/git tag -l ${GITHUB_REF#refs/tags/} --format='%(subject)')
           BODY=$(/usr/bin/git tag -l ${GITHUB_REF#refs/tags/} --format='%(body)' | sed '/-----BEGIN PGP SIGNATURE-----/,$d')
 
-          echo SUBJECT=$SUBJECT
-          echo BODY=$BODY
+          echo "SUBJECT=$SUBJECT"
+          echo "BODY=$BODY"
 
-          echo ::set-output name=subject::${SUBJECT}
-          echo ::set-output name=body::${BODY}
-          echo ::set-output name=current_version::${GITHUB_REF#refs/tags/v}
+          echo 'tag_subject<<EOS' >> $GITHUB_ENV
+          echo "$SUBJECT" >> $GITHUB_ENV
+          echo 'EOS' >> $GITHUB_ENV
+          echo 'tag_body<<EOB' >> $GITHUB_ENV
+          echo "$BODY" >> $GITHUB_ENV
+          echo 'EOB' >> $GITHUB_ENV
+          echo "tag_version=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          echo "version_num=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
 
       - name: Get Changelog Content
         id: changelog_reader
         uses: mindsers/changelog-reader-action@v2
         with:
-          version: ${{ steps.get_tag.outputs.current_version }}
+          version: ${{ env.version_num }}
           path: ./CHANGELOG.md
 
       - name: Publish Release
@@ -45,14 +50,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.changelog_reader.outputs.version }}
-          release_name: ${{ steps.get_tag.outputs.subject }}
+          tag_name: ${{ env.tag_version }}
+          release_name: ${{ env.tag_subject }}
           body: |
-            ${{ steps.get_tag.outputs.body }}
+            ${{ env.tag_body }}
 
             ## Changelog
 
             ${{ steps.changelog_reader.outputs.changes }}
           draft: false
           prerelease: false
-
