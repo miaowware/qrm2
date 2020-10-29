@@ -7,12 +7,22 @@ This file is part of discord-qrmbot and is released under the terms of
 the GNU General Public License, version 2.
 """
 
+
+from dataclasses import dataclass
+
 from .callsigninfos import (us, ca)
-from common import CallsignInfoData
 
 
-# format: country: (title, description, text)
+@dataclass
+class CallsignInfoData:
+    """Represents a country's callsign info"""
+    title: str = ""
+    desc: str = ""
+    calls: str = ""
+    emoji: str = ""
+
+
 options = {
-    "us": CallsignInfoData([us.title, us.desc, us.calls, us.emoji]),
-    "ca": CallsignInfoData([ca.title, ca.desc, ca.calls, ca.emoji]),
+    "us": CallsignInfoData(us.title, us.desc, us.calls, us.emoji),
+    "ca": CallsignInfoData(ca.title, ca.desc, ca.calls, ca.emoji),
 }
