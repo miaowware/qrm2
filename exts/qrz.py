@@ -146,15 +146,15 @@ def qrz_process_info(data: dict):
     if address == "":
         address = None
     if "eqsl" in data:
-        eqsl = "Yes" if data["eqsl"] == 1 else "No"
+        eqsl = "Yes" if data["eqsl"] == "1" else "No"
     else:
         eqsl = "Unknown"
     if "mqsl" in data:
-        mqsl = "Yes" if data["mqsl"] == 1 else "No"
+        mqsl = "Yes" if data["mqsl"] == "1" else "No"
     else:
         mqsl = "Unknown"
     if "lotw" in data:
-        lotw = "Yes" if data["lotw"] == 1 else "No"
+        lotw = "Yes" if data["lotw"] == "1" else "No"
     else:
         lotw = "Unknown"
 
