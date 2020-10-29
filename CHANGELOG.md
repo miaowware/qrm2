@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ## [Unreleased]
+### Added
+- Italian (`it_hf`, `it_vhf`, `it_shf`) and Australian (`au`) band charts.
 ### Fixed
 - eQSL, paper QSL, and Logbook of the World status in `?qrz` sometimes being shown incorrectly.
 

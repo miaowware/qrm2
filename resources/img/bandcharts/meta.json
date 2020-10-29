@@ -3,5 +3,9 @@
     "cn": ["cn.png", "China", "Amateur radio bands in China", "", "Created by KN8U and NY7H", "🇨🇳"],
     "mx": ["mx.png", "Mexico", "Radio allocations in Mexico", "Full radio allocations chart for all services. No information specific to amateur radio is shown.", "Secretaría de Comunicaciones y Transportes (SCT) / Instituto Federal de Telecomunicaciones (IFT)", "🇲🇽"],
     "nl": ["nl.png", "Netherlands", "Amateur radio bands in the Netherlands", "", "", "🇳🇱"],
-    "us": ["us.png", "USA", "Amateur radio bands in the USA", "", "*[ARRL Frequency Chart](https://www.arrl.org/shop/ARRL-Frequency-Chart-11-17/)*  [[PDF]](http://www.arrl.org/files/file/Regulatory/Band%20Chart/Band%20Chart%20-%2011X17%20Color.pdf)", "🇺🇸"]
+    "us": ["us.png", "USA", "Amateur radio bands in the USA", "", "*[ARRL Frequency Chart](https://www.arrl.org/shop/ARRL-Frequency-Chart-11-17/)*  [[PDF]](http://www.arrl.org/files/file/Regulatory/Band%20Chart/Band%20Chart%20-%2011X17%20Color.pdf)", "🇺🇸"],
+    "au": ["au.png", "Australia", "Amateur radio bands in Australia", "", "[Radio Amateur Society of Australia](https://vkradioamateurs.org/its-my-frequency-and-ill-cry-if-i-want-to/)  [[PDF]](https://vkradioamateurs.org/wp-content/uploads/2018/05/VK-Band-Plan-Quick-Reference-1.pdf)", "🇦🇺"],
+    "it_hf": ["it_hf.png", "Italy (HF)", "HF amateur radio bands in Italy", "", "[Associazione Radioamatori Italiani](https://www.arimi.it/download/bandplan/)  [[PDF]](http://www.arimi.it/wp-content/Plan/BP%20HF%202013%2032.pdf)", "🇮🇹"],
+    "it_vhf": ["it_vhf.png", "Italy (VHF/UHF)", "VHF/UHF amateur radio bands in Italy", "", "[Associazione Radioamatori Italiani](https://www.arimi.it/download/bandplan/)  [[PDF]](https://www.arimi.it/wp-content/Plan/BP%20V_UHF%202013%2032.pdf)", "🇮🇹"],
+    "it_shf": ["it_shf.png", "Italy (UHF/SHF)", "UHF/SHF amateur radio bands in Italy", "", "[Associazione Radioamatori Italiani](https://www.arimi.it/download/bandplan/)  [[PDF]](https://www.arimi.it/wp-content/Plan/BP%20U-SHF.pdf)", "🇮🇹"]
 }
