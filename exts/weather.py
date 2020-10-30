@@ -8,12 +8,10 @@ the GNU General Public License, version 2.
 """
 
 
-import io
 import re
 
 import aiohttp
 
-import discord
 import discord.ext.commands as commands
 
 import common as cmn
@@ -29,16 +27,11 @@ class WeatherCog(commands.Cog):
     @commands.command(name="bandconditions", aliases=["cond", "condx", "conditions"], category=cmn.cat.weather)
     async def _band_conditions(self, ctx: commands.Context):
         """Gets a solar conditions report."""
-        async with ctx.typing():
-            embed = cmn.embed_factory(ctx)
-            embed.title = "Current Solar Conditions"
-            embed.colour = cmn.colours.good
-            async with self.session.get("http://www.hamqsl.com/solarsun.php") as resp:
-                if resp.status != 200:
-                    raise cmn.BotHTTPError(resp)
-                data = io.BytesIO(await resp.read())
-            embed.set_image(url="attachment://condx.png")
-            await ctx.send(embed=embed, file=discord.File(data, "condx.png"))
+        embed = cmn.embed_factory(ctx)
+        embed.title = "Current Solar Conditions"
+        embed.colour = cmn.colours.good
+        embed.set_image(url="http://www.hamqsl.com/solarsun.php")
+        await ctx.send(embed=embed)
 
     @commands.group(name="weather", aliases=["wttr"], case_insensitive=True, category=cmn.cat.weather)
     async def _weather_conditions(self, ctx: commands.Context):
@@ -61,63 +54,53 @@ class WeatherCog(commands.Cog):
     async def _weather_conditions_forecast(self, ctx: commands.Context, *, location: str):
         """Gets local weather forecast for the next three days from [wttr.in](http://wttr.in/).
         See help of the `weather` command for possible location types and options."""
-        async with ctx.typing():
-            try:
-                units_arg = re.search(self.wttr_units_regex, location).group(1)
-            except AttributeError:
-                units_arg = ""
-            if units_arg.lower() == "f":
-                units = "u"
-            elif units_arg.lower() == "c":
-                units = "m"
-            else:
-                units = ""
+        try:
+            units_arg = re.search(self.wttr_units_regex, location).group(1)
+        except AttributeError:
+            units_arg = ""
+        if units_arg.lower() == "f":
+            units = "u"
+        elif units_arg.lower() == "c":
+            units = "m"
+        else:
+            units = ""
 
-            loc = self.wttr_units_regex.sub("", location).strip()
+        loc = self.wttr_units_regex.sub("", location).strip()
 
-            embed = cmn.embed_factory(ctx)
-            embed.title = f"Weather Forecast for {loc}"
-            embed.description = "Data from [wttr.in](http://wttr.in/)."
-            embed.colour = cmn.colours.good
+        embed = cmn.embed_factory(ctx)
+        embed.title = f"Weather Forecast for {loc}"
+        embed.description = "Data from [wttr.in](http://wttr.in/)."
+        embed.colour = cmn.colours.good
 
-            loc = loc.replace(" ", "+")
-            async with self.session.get(f"http://wttr.in/{loc}_{units}pnFQ.png") as resp:
-                if resp.status != 200:
-                    raise cmn.BotHTTPError(resp)
-                data = io.BytesIO(await resp.read())
-            embed.set_image(url="attachment://wttr_forecast.png")
-            await ctx.send(embed=embed, file=discord.File(data, "wttr_forecast.png"))
+        loc = loc.replace(" ", "+")
+        embed.set_image(url=f"http://wttr.in/{loc}_{units}pnFQ.png")
+        await ctx.send(embed=embed)
 
     @_weather_conditions.command(name="now", aliases=["n"], category=cmn.cat.weather)
     async def _weather_conditions_now(self, ctx: commands.Context, *, location: str):
         """Gets current local weather conditions from [wttr.in](http://wttr.in/).
         See help of the `weather` command for possible location types and options."""
-        async with ctx.typing():
-            try:
-                units_arg = re.search(self.wttr_units_regex, location).group(1)
-            except AttributeError:
-                units_arg = ""
-            if units_arg.lower() == "f":
-                units = "u"
-            elif units_arg.lower() == "c":
-                units = "m"
-            else:
-                units = ""
+        try:
+            units_arg = re.search(self.wttr_units_regex, location).group(1)
+        except AttributeError:
+            units_arg = ""
+        if units_arg.lower() == "f":
+            units = "u"
+        elif units_arg.lower() == "c":
+            units = "m"
+        else:
+            units = ""
 
-            loc = self.wttr_units_regex.sub("", location).strip()
+        loc = self.wttr_units_regex.sub("", location).strip()
 
-            embed = cmn.embed_factory(ctx)
-            embed.title = f"Current Weather for {loc}"
-            embed.description = "Data from [wttr.in](http://wttr.in/)."
-            embed.colour = cmn.colours.good
+        embed = cmn.embed_factory(ctx)
+        embed.title = f"Current Weather for {loc}"
+        embed.description = "Data from [wttr.in](http://wttr.in/)."
+        embed.colour = cmn.colours.good
 
-            loc = loc.replace(" ", "+")
-            async with self.session.get(f"http://wttr.in/{loc}_0{units}pnFQ.png") as resp:
-                if resp.status != 200:
-                    raise cmn.BotHTTPError(resp)
-                data = io.BytesIO(await resp.read())
-            embed.set_image(url="attachment://wttr_now.png")
-            await ctx.send(embed=embed, file=discord.File(data, "wttr_now.png"))
+        loc = loc.replace(" ", "+")
+        embed.set_image(url=f"http://wttr.in/{loc}_0{units}pnFQ.png")
+        await ctx.send(embed=embed)
 
 
 def setup(bot: commands.Bot):
