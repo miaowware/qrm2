@@ -108,7 +108,6 @@ class BaseCog(commands.Cog):
         embed = cmn.embed_factory(ctx)
         embed.title = "About qrm"
         embed.description = info.description
-
         embed.add_field(name="Authors", value=", ".join(info.authors))
         embed.add_field(name="License", value=info.license)
         embed.add_field(name="Version", value=f"v{info.release}")
