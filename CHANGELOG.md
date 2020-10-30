@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 ### Fixed
 - eQSL, paper QSL, and Logbook of the World status in `?qrz` sometimes being shown incorrectly.
+- Fixed network error in `?greyline`.
 
 
 ## [2.4.1] - 2020-10-06
