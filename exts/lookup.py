@@ -9,6 +9,7 @@ the GNU General Public License, version 2.
 
 
 import threading
+from pathlib import Path
 
 from ctyparser import BigCty
 
@@ -17,11 +18,14 @@ from discord.ext import commands, tasks
 import common as cmn
 
 
+cty_path = Path("./data/cty.json")
+
+
 class LookupCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         try:
-            self.cty = BigCty("./data/cty.json")
+            self.cty = BigCty(cty_path)
         except OSError:
             self.cty = BigCty()
 
@@ -67,7 +71,7 @@ class LookupCog(commands.Cog):
 
     @tasks.loop(hours=24)
     async def _update_cty(self):
-        update = threading.Thread(target=run_update, args=(self.cty, "./data/cty.json"))
+        update = threading.Thread(target=run_update, args=(self.cty, cty_path))
         update.start()
 
 

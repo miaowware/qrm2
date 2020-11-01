@@ -19,7 +19,7 @@ import common as cmn
 class FunCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        with open("resources/words") as words_file:
+        with open(cmn.paths.resources / "words") as words_file:
             self.words = words_file.read().lower().splitlines()
 
     @commands.command(name="xkcd", aliases=["x"], category=cmn.cat.fun)

@@ -45,20 +45,18 @@ loop = asyncio.get_event_loop()
 connector = loop.run_until_complete(conn.new_connector())
 
 # Defining the intents
-intents = discord.Intents.default()
-# We don't need those
-intents.bans = False
-intents.emojis = False
-intents.integrations = False
-intents.webhooks = False
-intents.invites = False
-intents.voice_states = False
-intents.typing = False
+intents = discord.Intents.none()
+intents.guilds = True
+intents.guild_messages = True
+intents.dm_messages = True
+
+member_cache = discord.MemberCacheFlags.from_intents(intents)
 
 bot = commands.Bot(command_prefix=opt.prefix,
                    case_insensitive=True,
                    description=info.description, help_command=commands.MinimalHelpCommand(),
                    intents=intents,
+                   member_cache=member_cache,
                    loop=loop,
                    connector=connector)
 

@@ -8,8 +8,6 @@ the GNU General Public License, version 2.
 """
 
 
-import io
-
 import aiohttp
 
 import discord
@@ -85,16 +83,11 @@ class ImageCog(commands.Cog):
     @commands.command(name="grayline", aliases=["greyline", "grey", "gray", "gl"], category=cmn.cat.maps)
     async def _grayline(self, ctx: commands.Context):
         """Gets a map of the current greyline, where HF propagation is the best."""
-        async with ctx.typing():
-            embed = cmn.embed_factory(ctx)
-            embed.title = "Current Greyline Conditions"
-            embed.colour = cmn.colours.good
-            async with self.session.get(self.gl_url) as resp:
-                if resp.status != 200:
-                    raise cmn.BotHTTPError(resp)
-                data = io.BytesIO(await resp.read())
-            embed.set_image(url="attachment://greyline.jpg")
-            await ctx.send(embed=embed, file=discord.File(data, "greyline.jpg"))
+        embed = cmn.embed_factory(ctx)
+        embed.title = "Current Greyline Conditions"
+        embed.colour = cmn.colours.good
+        embed.set_image(url=self.gl_url)
+        await ctx.send(embed=embed)
 
 
 def setup(bot: commands.Bot):

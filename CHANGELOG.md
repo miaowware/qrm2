@@ -6,9 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 ### Added
-- Italian (`it_hf`, `it_vhf`, `it_shf`) and Australian (`au`) band charts.
+- Italian (`it_hf`, `it_vhf`, `it_shf`), Japanese (`jp`) and Australian (`au`) band charts.
 ### Fixed
+- Details to the Netherlands bandplan command to accurately represent VERNON (Netherlands ARRL equivalent organisation).
 - eQSL, paper QSL, and Logbook of the World status in `?qrz` sometimes being shown incorrectly.
+- Fixed network error in `?greyline`.
 
 
 ## [2.4.1] - 2020-10-06
