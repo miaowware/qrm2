@@ -2,6 +2,7 @@
     "ca": ["ca.png", "Canada", "Amateur radio bands in Canada", "**This bandplan is incomplete**; some bands, like 630m, are simply not present. It also does not cover any band above 30MHz.", "[RAC 0-30MHz Band Plan](https://www.rac.ca/wp-content/uploads/files/pdf/RAC%20Bandplan%20December%201%202015.pdf)", "🇨🇦"],
     "cn": ["cn.png", "China", "Amateur radio bands in China", "", "Created by KN8U and NY7H", "🇨🇳"],
     "mx": ["mx.png", "Mexico", "Radio allocations in Mexico", "Full radio allocations chart for all services. No information specific to amateur radio is shown.", "Secretaría de Comunicaciones y Transportes (SCT) / Instituto Federal de Telecomunicaciones (IFT)", "🇲🇽"],
-    "nl": ["nl.png", "Netherlands", "Amateur radio bands in the Netherlands", "", "", "🇳🇱"],
+    "jp": ["jp.png", "Japan", "Amateur radio bands in Japan", "Pending checks against the latest update from the 総務省 (MIC) of Japan, March 2020", "[JARL Amateur-Use Bandplans](https://jarl.org/Japanese/A_Shiryo/A-3_Band_Plan/bandplan20150105.pdf)", "🇯🇵"],
+    "nl": ["nl.png", "Netherlands", "Amateur radio bands in the Netherlands", "*This version of this bandplan is no longer hosted on VERNON's website and it's accuracy cannot be guaranteed.*", "[VERNON Global Band Plan van de Telecom Agency, Ministerie van Economische Zaken en Klimaat](https://www.veron.nl/downloads/brochures/)", "🇳🇱"],
     "us": ["us.png", "USA", "Amateur radio bands in the USA", "", "*[ARRL Frequency Chart](https://www.arrl.org/shop/ARRL-Frequency-Chart-11-17/)*  [[PDF]](http://www.arrl.org/files/file/Regulatory/Band%20Chart/Band%20Chart%20-%2011X17%20Color.pdf)", "🇺🇸"]
 }

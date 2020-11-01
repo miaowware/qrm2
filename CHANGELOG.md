@@ -5,7 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ## [Unreleased]
+### Added
+- Japanese bandplan information displays when `?plan jp` command is run.
 ### Fixed
+- Details to the Netherlands bandplan command to accurately represent VERNON (Netherlands ARRL equivalent organisation).
 - eQSL, paper QSL, and Logbook of the World status in `?qrz` sometimes being shown incorrectly.
 - Fixed network error in `?greyline`.
 
