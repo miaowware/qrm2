@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ## [Unreleased]
+
+
+## [2.5.0] - 2020-10-31
 ### Added
 - Italian (`it_hf`, `it_vhf`, `it_shf`), Japanese (`jp`) and Australian (`au`) band charts.
 ### Fixed
@@ -135,7 +138,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## 1.0.0 - 2019-07-31 [YANKED]
 
 
-[Unreleased]: https://github.com/miaowware/qrm2/compare/v2.4.1...HEAD
+[Unreleased]: https://github.com/miaowware/qrm2/compare/v2.5.0...HEAD
+[2.5.0]: https://github.com/miaowware/qrm2/releases/tag/v2.5.0
 [2.4.1]: https://github.com/miaowware/qrm2/releases/tag/v2.4.1
 [2.4.0]: https://github.com/miaowware/qrm2/releases/tag/v2.4.0
 [2.3.2]: https://github.com/miaowware/qrm2/releases/tag/v2.3.2
