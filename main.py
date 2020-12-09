@@ -49,6 +49,7 @@ intents = discord.Intents.none()
 intents.guilds = True
 intents.guild_messages = True
 intents.dm_messages = True
+intents.reactions = True
 
 member_cache = discord.MemberCacheFlags.from_intents(intents)
 
