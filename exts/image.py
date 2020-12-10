@@ -86,7 +86,9 @@ class ImageCog(commands.Cog):
         embed = cmn.embed_factory(ctx)
         embed.title = "Current Greyline Conditions"
         embed.colour = cmn.colours.good
-        embed.set_image(url=self.gl_url)
+        # Generate a nonce to force discord to recache this
+        cachenonce = (ctx.message.id >> 22) // 1000 // 600  # nonce will stay the same for ~10min
+        embed.set_image(url=self.gl_url + f"&cachenonce={cachenonce}")
         await ctx.send(embed=embed)
 
 
