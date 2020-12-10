@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ## [Unreleased]
+
+
+## [2.5.1] - 2020-12-10
 ### Fixed
 - The result of `?greyline` was cached by discord and would get out of date.
 - Broken reaction functionality in `?hamstudy`.
@@ -141,7 +144,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## 1.0.0 - 2019-07-31 [YANKED]
 
 
-[Unreleased]: https://github.com/miaowware/qrm2/compare/v2.5.0...HEAD
+[Unreleased]: https://github.com/miaowware/qrm2/compare/v2.5.1...HEAD
+[2.5.1]: https://github.com/miaowware/qrm2/releases/tag/v2.5.1
 [2.5.0]: https://github.com/miaowware/qrm2/releases/tag/v2.5.0
 [2.4.1]: https://github.com/miaowware/qrm2/releases/tag/v2.4.1
 [2.4.0]: https://github.com/miaowware/qrm2/releases/tag/v2.4.0
