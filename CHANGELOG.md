@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 ### Fixed
 - The result of `?greyline` was cached by discord and would get out of date.
+- Broken reaction functionality in `?hamstudy`.
 
 
 ## [2.5.0] - 2020-10-31
