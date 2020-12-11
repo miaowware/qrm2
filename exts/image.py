@@ -17,8 +17,7 @@ import common as cmn
 
 
 class ImageCog(commands.Cog):
-    gl_url = ("http://www.fourmilab.ch/cgi-bin/uncgi/Earth?img=NOAAtopo.evif"
-              "&imgsize=320&dynimg=y&opt=-p&lat=&lon=&alt=&tle=&date=0&utc=&jd=")
+    gl_url = "https://www.fourmilab.ch/cgi-bin/uncgi/Earth?img=ETOPO1_day-m.evif&dynimg=y&opt=-p"
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
