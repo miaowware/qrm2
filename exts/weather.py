@@ -32,7 +32,7 @@ class WeatherCog(commands.Cog):
         embed.colour = cmn.colours.good
         # Generate a nonce to force discord to recache this
         cachenonce = (ctx.message.id >> 22) // 1000 // 600  # nonce will stay the same for ~10min
-        embed.set_image(url="http://www.hamqsl.com/solarsun.php" + f"&cachenonce={cachenonce}")
+        embed.set_image(url="http://www.hamqsl.com/solarsun.php" + f"?cachenonce={cachenonce}")
         await ctx.send(embed=embed)
 
     @commands.group(name="weather", aliases=["wttr"], case_insensitive=True, category=cmn.cat.weather)
