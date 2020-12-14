@@ -30,7 +30,9 @@ class WeatherCog(commands.Cog):
         embed = cmn.embed_factory(ctx)
         embed.title = "Current Solar Conditions"
         embed.colour = cmn.colours.good
-        embed.set_image(url="http://www.hamqsl.com/solarsun.php")
+        # Generate a nonce to force discord to recache this
+        cachenonce = (ctx.message.id >> 22) // 1000 // 600  # nonce will stay the same for ~10min
+        embed.set_image(url="http://www.hamqsl.com/solarsun.php" + f"&cachenonce={cachenonce}")
         await ctx.send(embed=embed)
 
     @commands.group(name="weather", aliases=["wttr"], case_insensitive=True, category=cmn.cat.weather)
