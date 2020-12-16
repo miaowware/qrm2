@@ -16,6 +16,8 @@ import discord.ext.commands as commands
 
 import common as cmn
 
+from datetime import datetime
+
 
 class WeatherCog(commands.Cog):
     wttr_units_regex = re.compile(r"\B-([cCfF])\b")
@@ -30,9 +32,10 @@ class WeatherCog(commands.Cog):
         embed = cmn.embed_factory(ctx)
         embed.title = "Current Solar Conditions"
         embed.colour = cmn.colours.good
-        # Generate a nonce to force discord to recache this
-        cachenonce = (ctx.message.id >> 22) // 1000 // 600  # nonce will stay the same for ~10min
-        embed.set_image(url="http://www.hamqsl.com/solarsun.php" + f"?cachenonce={cachenonce}")
+        # Generate a nonce to force discord to recache this every min
+        now = datetime.now()
+        nonce = now.strftime("%Y%m%d%H%M")
+        embed.set_image(url="http://www.hamqsl.com/solarsun.php" + f"?cachenonce={nonce}")
         await ctx.send(embed=embed)
 
     @commands.group(name="weather", aliases=["wttr"], case_insensitive=True, category=cmn.cat.weather)
