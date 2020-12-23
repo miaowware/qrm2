@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 ### Changed
 - New colour theme for `?greyline`.
+- Moved great circle distance and bearing calculation from `?ungrid` to `?griddistance`.
+- `?ungrid` to `?latlong`.
+### Deprecated
+- `?ungrid`.
 
 
 ## [2.5.1] - 2020-12-10
