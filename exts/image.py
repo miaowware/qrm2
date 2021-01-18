@@ -9,6 +9,7 @@ the GNU General Public License, version 2.
 
 
 import aiohttp
+from datetime import datetime
 
 import discord
 import discord.ext.commands as commands
@@ -17,7 +18,7 @@ import common as cmn
 
 
 class ImageCog(commands.Cog):
-    gl_url = "https://www.fourmilab.ch/cgi-bin/uncgi/Earth?img=ETOPO1_day-m.evif&dynimg=y&opt=-p"
+    gl_baseurl = "https://www.fourmilab.ch/cgi-bin/uncgi/Earth?img=ETOPO1_day-m.evif&dynimg=y&opt=-p"
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -85,9 +86,8 @@ class ImageCog(commands.Cog):
         embed = cmn.embed_factory(ctx)
         embed.title = "Current Greyline Conditions"
         embed.colour = cmn.colours.good
-        # Generate a nonce to force discord to recache this
-        cachenonce = (ctx.message.id >> 22) // 1000 // 600  # nonce will stay the same for ~10min
-        embed.set_image(url=self.gl_url + f"&cachenonce={cachenonce}")
+        date_params = f"&date=1&utc={datetime.utcnow():%Y-%m-%d+%H:%M:%S}"
+        embed.set_image(url=self.gl_baseurl + date_params)
         await ctx.send(embed=embed)
 
 
