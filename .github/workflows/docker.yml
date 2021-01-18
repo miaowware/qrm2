@@ -11,9 +11,6 @@ on:
     tags:
       - v*
 
-env:
-  IMAGE_NAME: qrm2
-
 jobs:
   docker:
     name: Build and push docker images
@@ -28,15 +25,20 @@ jobs:
         run: git rev-list -n 1 $GITHUB_REF > ./git_commit
 
       - name: Build image
-        run: docker build . --file Dockerfile -t $IMAGE_NAME
+        id: build_image
+        run: |
+          IMAGE_NAME=${GITHUB_REPOSITORY#*/}
+          echo ::set-output name=image_name::$IMAGE_NAME
+          docker build . --file Dockerfile -t $IMAGE_NAME
 
       - name: Log into Github Package Registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.CR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Tag image
         id: tag_image
         run: |
-          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
+          IMAGE_NAME=${{ steps.build_image.outputs.image_name }}
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
           echo IMAGE_ID=$IMAGE_ID
           echo ::set-output name=image_id::$IMAGE_ID
 
