@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Moved great circle distance and bearing calculation from `?ungrid` to `?griddistance`.
 - `?ungrid` to `?latlong`.
 - Renamed `?cond` to `?solar`.
+### Fixed
+- Weird image caching situation for `?greyline` on Discord's side.
 ### Deprecated
 - `?ungrid`.
 - Deprecated old `?solar` aliases (`?cond`, etc).
