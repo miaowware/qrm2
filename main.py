@@ -57,7 +57,7 @@ bot = commands.Bot(command_prefix=opt.prefix,
                    case_insensitive=True,
                    description=info.description, help_command=commands.MinimalHelpCommand(),
                    intents=intents,
-                   member_cache=member_cache,
+                   member_cache_flags=member_cache,
                    loop=loop,
                    connector=connector)
 

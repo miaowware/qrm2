@@ -7,8 +7,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 ### Added
 - MUF and foF2 maps from [prop.kc2g.com](https://prop.kc2g.com/).
+### Changed
+- New colour theme for `?greyline`.
+- Moved great circle distance and bearing calculation from `?ungrid` to `?griddistance`.
+- `?ungrid` to `?latlong`.
+### Deprecated
+- `?ungrid`.
+
+
+## [2.5.1] - 2020-12-10
 ### Fixed
 - The result of `?greyline` was cached by discord and would get out of date.
+- Broken reaction functionality in `?hamstudy`.
 
 
 ## [2.5.0] - 2020-10-31
@@ -142,7 +152,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## 1.0.0 - 2019-07-31 [YANKED]
 
 
-[Unreleased]: https://github.com/miaowware/qrm2/compare/v2.5.0...HEAD
+[Unreleased]: https://github.com/miaowware/qrm2/compare/v2.5.1...HEAD
+[2.5.1]: https://github.com/miaowware/qrm2/releases/tag/v2.5.1
 [2.5.0]: https://github.com/miaowware/qrm2/releases/tag/v2.5.0
 [2.4.1]: https://github.com/miaowware/qrm2/releases/tag/v2.4.1
 [2.4.0]: https://github.com/miaowware/qrm2/releases/tag/v2.4.0
