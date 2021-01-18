@@ -3,3 +3,4 @@ ctyparser~=2.0
 beautifulsoup4
 lxml
 pytz
+cairosvg

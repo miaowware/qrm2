@@ -30,7 +30,21 @@ debug = False
 owners_uids = (200102491231092736,)
 
 # The extensions to load when running the bot.
-exts = ["ae7q", "base", "fun", "grid", "ham", "image", "lookup", "morse", "qrz", "study", "weather", "dbconv"]
+exts = [
+    "ae7q",
+    "base",
+    "fun",
+    "grid",
+    "ham",
+    "image",
+    "lookup",
+    "morse",
+    "qrz",
+    "study",
+    "weather",
+    "dbconv",
+    "propagation",
+]
 
 # Either "time", "random", or "fixed" (first item in statuses)
 status_mode = "fixed"
