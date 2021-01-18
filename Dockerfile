@@ -14,6 +14,9 @@ RUN \
         libxml2-dev \
         libxslt-dev \
         libressl-dev \
+        libffi-dev \
+        jpeg-dev \
+        zlib-dev \
         python3-dev && \
     echo "**** install runtime packages ****" && \
     apk add --no-cache \
