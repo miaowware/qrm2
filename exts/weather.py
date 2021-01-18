@@ -24,11 +24,15 @@ class WeatherCog(commands.Cog):
         self.bot = bot
         self.session = aiohttp.ClientSession(connector=bot.qrm.connector)
 
-    @commands.command(name="bandconditions", aliases=["cond", "condx", "conditions"], category=cmn.cat.weather)
-    async def _band_conditions(self, ctx: commands.Context):
-        """Gets a solar conditions report."""
+    @commands.command(aliases=["solar", "bandconditions", "cond", "condx", "conditions"], category=cmn.cat.weather)
+    async def solarweather(self, ctx: commands.Context):
+        """Gets a solar weather report."""
         embed = cmn.embed_factory(ctx)
-        embed.title = "Current Solar Conditions"
+        embed.title = "☀️ Current Solar Weather"
+        if ctx.invoked_with in ["bandconditions", "cond", "condx", "conditions"]:
+            embed.add_field(name="⚠️ Deprecated Command Alias",
+                            value=(f"This command has been renamed to `{ctx.prefix}solar`!\n"
+                                   "The alias you used will be removed in the next version."))
         embed.colour = cmn.colours.good
         embed.set_image(url="http://www.hamqsl.com/solarsun.php")
         await ctx.send(embed=embed)
