@@ -10,8 +10,6 @@ the GNU General Public License, version 2.
 
 import re
 
-import aiohttp
-
 import discord.ext.commands as commands
 
 import common as cmn
@@ -22,7 +20,6 @@ class WeatherCog(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.session = aiohttp.ClientSession(connector=bot.qrm.connector)
 
     @commands.command(aliases=["solar", "bandconditions", "cond", "condx", "conditions"], category=cmn.cat.weather)
     async def solarweather(self, ctx: commands.Context):
