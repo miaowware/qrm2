@@ -4,3 +4,4 @@ gridtools~=1.0
 beautifulsoup4
 lxml
 pytz
+cairosvg
