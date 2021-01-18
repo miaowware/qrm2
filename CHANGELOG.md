@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ## [Unreleased]
+### Added
+- MUF and foF2 maps from [prop.kc2g.com](https://prop.kc2g.com/).
 ### Fixed
 - The result of `?greyline` was cached by discord and would get out of date.
 
