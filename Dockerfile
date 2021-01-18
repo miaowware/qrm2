@@ -21,6 +21,8 @@ RUN \
     echo "**** install runtime packages ****" && \
     apk add --no-cache \
         libressl \
+        cairo \
+        libjpeg-turbo \
         py3-lxml \
         py3-pip \
         python3 && \
