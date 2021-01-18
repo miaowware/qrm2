@@ -10,8 +10,6 @@ the GNU General Public License, version 2.
 
 import re
 
-import aiohttp
-
 import discord.ext.commands as commands
 
 import common as cmn
