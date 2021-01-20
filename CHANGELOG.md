@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 ### Added
 - MUF and foF2 maps from [prop.kc2g.com](https://prop.kc2g.com/).
+- Commands to show METAR (`?metar`) and TAF (`?taf`) (aeronautical weather conditions).
 ### Changed
 - New colour theme for `?greyline`.
 - Moved great circle distance and bearing calculation from `?ungrid` to `?griddistance`.
