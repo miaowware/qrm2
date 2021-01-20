@@ -111,18 +111,19 @@ class WeatherCog(commands.Cog):
 
     @commands.command(name="metar", category=cmn.cat.weather)
     async def metar(self, ctx: commands.Context, airport: str, hours: int = 0):
-        ("""Gets current raw METAR (Meteorological Terminal Aviation Routine Weather Report) for an airport. """
-         """Optionally, a number of hours can be given to show a number of hours of historical METAR data.\n\n"""
-         """Airports should be given as an """
-         """[ICAO code](https://en.wikipedia.org/wiki/List_of_airports_by_IATA_and_ICAO_code). """)
+        """Gets current raw METAR (Meteorological Terminal Aviation Routine Weather Report) for an airport. \
+        Optionally, a number of hours can be given to show a number of hours of historical METAR data.
+
+        Airports should be given as an \
+        [ICAO code](https://en.wikipedia.org/wiki/List_of_airports_by_IATA_and_ICAO_code)."""
         await ctx.send(embed=await self.gen_metar_taf_embed(ctx, airport, hours, False))
 
     @commands.command(name="taf", category=cmn.cat.weather)
     async def taf(self, ctx: commands.Context, airport: str):
-        ("""Gets forecasted raw TAF (Terminal Aerodrome Forecast) data for an airport. """
-         """Includes the latest METAR data.\n\n"""
-         """Airports should be given as an """
-         """[ICAO code](https://en.wikipedia.org/wiki/List_of_airports_by_IATA_and_ICAO_code).""")
+        """Gets forecasted raw TAF (Terminal Aerodrome Forecast) data for an airport. Includes the latest METAR data.
+
+        Airports should be given as an \
+        [ICAO code](https://en.wikipedia.org/wiki/List_of_airports_by_IATA_and_ICAO_code)."""
         await ctx.send(embed=await self.gen_metar_taf_embed(ctx, airport, 0, True))
 
     async def gen_metar_taf_embed(self, ctx: commands.Context, airport: str, hours: int, taf: bool) -> Embed:
