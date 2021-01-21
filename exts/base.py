@@ -170,8 +170,11 @@ class BaseCog(commands.Cog):
         """Shows how to create a bug report or feature request about the bot."""
         embed = cmn.embed_factory(ctx)
         embed.title = "Found a bug? Have a feature request?"
-        embed.description = ("Submit an issue on the [issue tracker]"
-                             "(https://github.com/miaowware/qrm2/issues)!")
+        embed.description = """Submit an issue on the [issue tracker](https://github.com/miaowware/qrm2/issues)!
+
+                            All issues and requests related to resources (including maps, band charts, data) \
+                            should be added in \
+                            [miaowware/qrm-resources](https://github.com/miaowware/qrm-resources/issues)."""
         await ctx.send(embed=embed)
 
     @commands.command(name="echo", aliases=["e"], category=cmn.cat.admin)
