@@ -11,6 +11,7 @@ the GNU General Public License, version 2.
 import random
 import re
 from typing import Union
+import pathlib
 
 import discord
 import discord.ext.commands as commands
@@ -101,6 +102,22 @@ class BaseCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.changelog = parse_changelog()
+        commit_file = pathlib.Path("git_commit")
+        dot_git = pathlib.Path(".git")
+        if commit_file.is_file():
+            with commit_file.open() as f:
+                self.commit = f.readline().strip()[:7]
+        elif dot_git.is_dir():
+            head_file = pathlib.Path(dot_git, "HEAD")
+            if head_file.is_file():
+                with head_file.open() as hf:
+                    head = hf.readline().split(": ")[1].strip()
+                branch_file = pathlib.Path(dot_git, head)
+                if branch_file.is_file():
+                    with branch_file.open() as bf:
+                        self.commit = bf.readline().strip()[:7]
+        else:
+            self.commit = ""
 
     @commands.command(name="info", aliases=["about"])
     async def _info(self, ctx: commands.Context):
@@ -110,7 +127,7 @@ class BaseCog(commands.Cog):
         embed.description = info.description
         embed.add_field(name="Authors", value=", ".join(info.authors))
         embed.add_field(name="License", value=info.license)
-        embed.add_field(name="Version", value=f"v{info.release}")
+        embed.add_field(name="Version", value=f"v{info.release} {'(`' + self.commit + '`)' if self.commit else ''}")
         embed.add_field(name="Contributing", value=info.contributing, inline=False)
         embed.add_field(name="Official Server", value=info.bot_server, inline=False)
         embed.set_thumbnail(url=str(self.bot.user.avatar_url))
