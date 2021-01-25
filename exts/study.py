@@ -31,13 +31,14 @@ class StudyCog(commands.Cog):
         self.session = aiohttp.ClientSession(connector=bot.qrm.connector)
 
     @commands.command(name="hamstudy", aliases=["rq", "randomquestion", "randomq"], category=cmn.cat.study)
-    async def _random_question(self, ctx: commands.Context, country: str = "", level: str = ""):
+    async def _random_question(self, ctx: commands.Context, country: str = "", level: str = "", element: str = ""):
         """Gets a random question from [HamStudy's](https://hamstudy.org) question pools."""
         with ctx.typing():
             embed = cmn.embed_factory(ctx)
 
             country = country.lower()
             level = level.lower()
+            element = element.upper()
 
             if country in study.pool_names.keys():
                 if level in study.pool_names[country].keys():
@@ -115,7 +116,19 @@ class StudyCog(commands.Cog):
                 pool = json.loads(await resp.read())["pool"]
 
             # Select a question
-            pool_section = random.choice(pool)["sections"]
+            if element:
+                els = [el["id"] for el in pool]
+                if element in els:
+                    pool_section = pool[els.index(element)]["sections"]
+                else:
+                    embed.title = "Element Not Found!"
+                    embed.description = f"Possible Elements for Country `{country}` and Level `{level}` are:"
+                    embed.colour = cmn.colours.bad
+                    embed.description += "\n\n" + "`" + "`, `".join(els) + "`"
+                    await ctx.send(embed=embed)
+                    return
+            else:
+                pool_section = random.choice(pool)["sections"]
             pool_questions = random.choice(pool_section)["questions"]
             question = random.choice(pool_questions)
 
