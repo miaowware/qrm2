@@ -32,6 +32,8 @@ $ run.sh
 
 Check out the [contribution guidelines](/CONTRIBUTING.md) for more information about how to contribute to this project.
 
+All issues and requests related to resources (including maps, band charts, data) should be added in [miaowware/qrm-resources](https://github.com/miaowware/qrm-resources).
+
 ## Copyright
 
 Copyright (C) 2019-2020 Abigail Gold, 0x5c
