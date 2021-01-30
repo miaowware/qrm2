@@ -16,6 +16,8 @@ the GNU General Public License, version 2.
 # KC4USA: reserved, no call history, *but* has application history
 
 
+import re
+
 import aiohttp
 from bs4 import BeautifulSoup
 
@@ -43,6 +45,14 @@ class AE7QCog(commands.Cog):
             desc = ""
             base_url = "http://ae7q.com/query/data/CallHistory.php?CALL="
             embed = cmn.embed_factory(ctx)
+
+            if not re.match('[A-Z0-9]+$', callsign):
+                embed = cmn.embed_factory(ctx)
+                embed.title = "AE7Q History for Callsign"
+                embed.colour = cmn.colours.bad
+                embed.description = "Not a valid callsign!"
+                await ctx.send(embed=embed)
+                return
 
             async with self.session.get(base_url + callsign) as resp:
                 if resp.status != 200:
@@ -109,6 +119,14 @@ class AE7QCog(commands.Cog):
             desc = ""
             base_url = "http://ae7q.com/query/data/CallHistory.php?CALL="
             embed = cmn.embed_factory(ctx)
+
+            if not re.match('[A-Z0-9]+$', callsign):
+                embed = cmn.embed_factory(ctx)
+                embed.title = "AE7Q Trustee History for Callsign"
+                embed.colour = cmn.colours.bad
+                embed.description = "Not a valid callsign!"
+                await ctx.send(embed=embed)
+                return
 
             async with self.session.get(base_url + callsign) as resp:
                 if resp.status != 200:
@@ -177,6 +195,14 @@ class AE7QCog(commands.Cog):
             desc = ""
             base_url = "http://ae7q.com/query/data/CallHistory.php?CALL="
             embed = cmn.embed_factory(ctx)
+
+            if not re.match('[A-Z0-9]+$', callsign):
+                embed = cmn.embed_factory(ctx)
+                embed.title = "AE7Q Application History for Callsign"
+                embed.colour = cmn.colours.bad
+                embed.description = "Not a valid callsign!"
+                await ctx.send(embed=embed)
+                return
 
             async with self.session.get(base_url + callsign) as resp:
                 if resp.status != 200:
@@ -250,6 +276,14 @@ class AE7QCog(commands.Cog):
             base_url = "http://ae7q.com/query/data/FrnHistory.php?FRN="
             embed = cmn.embed_factory(ctx)
 
+            if not re.match('[0-9]+$', frn):
+                embed = cmn.embed_factory(ctx)
+                embed.title = "AE7Q History for FRN"
+                embed.colour = cmn.colours.bad
+                embed.description = "Not a valid FRN!"
+                await ctx.send(embed=embed)
+                return
+
             async with self.session.get(base_url + frn) as resp:
                 if resp.status != 200:
                     raise cmn.BotHTTPError(resp)
@@ -312,6 +346,14 @@ class AE7QCog(commands.Cog):
             licensee_id = licensee_id.upper()
             base_url = "http://ae7q.com/query/data/LicenseeIdHistory.php?ID="
             embed = cmn.embed_factory(ctx)
+
+            if not re.match('[A-Z][0-9]+$', licensee_id, re.IGNORECASE):
+                embed = cmn.embed_factory(ctx)
+                embed.title = "AE7Q History for Licensee"
+                embed.colour = cmn.colours.bad
+                embed.description = "Not a valid licensee ID!"
+                await ctx.send(embed=embed)
+                return
 
             async with self.session.get(base_url + licensee_id) as resp:
                 if resp.status != 200:

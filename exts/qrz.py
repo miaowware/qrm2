@@ -9,6 +9,7 @@ the GNU General Public License, version 2.
 
 
 from io import BytesIO
+import re
 
 import aiohttp
 from lxml import etree
@@ -30,6 +31,14 @@ class QRZCog(commands.Cog):
     async def _qrz_lookup(self, ctx: commands.Context, callsign: str, *flags):
         """Looks up a callsign on [QRZ.com](https://www.qrz.com/). Add `--link` to only link the QRZ page."""
         flags = [f.lower() for f in flags]
+
+        if not re.match('[A-Z0-9]+$', callsign, re.IGNORECASE):
+            embed = cmn.embed_factory(ctx)
+            embed.title = "QRZ Data for Callsign"
+            embed.colour = cmn.colours.bad
+            embed.description = "Not a valid callsign!"
+            await ctx.send(embed=embed)
+            return
 
         if keys.qrz_user == "" or keys.qrz_pass == "" or "--link" in flags:
             await ctx.send(f"http://qrz.com/db/{callsign}")
