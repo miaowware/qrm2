@@ -9,7 +9,6 @@ the GNU General Public License, version 2.
 
 
 from io import BytesIO
-import re
 
 import aiohttp
 from lxml import etree
@@ -32,7 +31,7 @@ class QRZCog(commands.Cog):
         """Looks up a callsign on [QRZ.com](https://www.qrz.com/). Add `--link` to only link the QRZ page."""
         flags = [f.lower() for f in flags]
 
-        if not re.match('[A-Z0-9]+$', callsign, re.IGNORECASE):
+        if not callsign.isalnum():
             embed = cmn.embed_factory(ctx)
             embed.title = "QRZ Data for Callsign"
             embed.colour = cmn.colours.bad
