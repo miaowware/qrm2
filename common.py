@@ -36,6 +36,7 @@ colours = SimpleNamespace(
     good=0x43B581,
     neutral=0x7289DA,
     bad=0xF04747,
+    timeout=0xF26522,
 )
 
 # meow
@@ -56,10 +57,12 @@ emojis = SimpleNamespace(
     question="❓",
     no_entry="⛔",
     bangbang="‼️",
+    clock="⏱",
     a="🇦",
     b="🇧",
     c="🇨",
     d="🇩",
+    e="🇪",
 )
 
 paths = SimpleNamespace(
