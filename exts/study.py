@@ -23,6 +23,7 @@ from resources import study
 
 class StudyCog(commands.Cog):
     choices = {"A": cmn.emojis.a, "B": cmn.emojis.b, "C": cmn.emojis.c, "D": cmn.emojis.d, "E": cmn.emojis.e}
+    choices_inv = {y: x for x, y in choices.items()}
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -143,9 +144,9 @@ class StudyCog(commands.Cog):
 
             embed.title = f"{study.pool_emojis[country]} {pool_meta['class']} {question['id']}"
             embed.description = self.source
-            embed.add_field(name="Question:", value=question["text"], inline=False)
-            embed.add_field(name="Answers:", value=answers_str, inline=False)
-            embed.add_field(name="To Answer:",
+            embed.add_field(name="Question", value=question["text"], inline=False)
+            embed.add_field(name="Answers", value=answers_str, inline=False)
+            embed.add_field(name="To Answer",
                             value=("Answer with reactions below. If not answered within 5 minutes,"
                                    " the answer will be revealed."),
                             inline=False)
@@ -157,35 +158,59 @@ class StudyCog(commands.Cog):
 
         for i in range(len(answers)):
             await cmn.add_react(q_msg, list(self.choices.values())[i])
+        await cmn.add_react(q_msg, cmn.emojis.question)
 
         def check(reaction, user):
             return (user.id != self.bot.user.id
                     and reaction.message.id == q_msg.id
-                    and str(reaction.emoji) in self.choices.values())
+                    and (str(reaction.emoji) in self.choices.values() or str(reaction.emoji) == cmn.emojis.question))
 
         try:
-            reaction, _ = await self.bot.wait_for("reaction_add", timeout=300.0, check=check)
+            reaction, user = await self.bot.wait_for("reaction_add", timeout=300.0, check=check)
         except asyncio.TimeoutError:
-            embed.set_field_at(1, name="Answers:", value=answers_str_bolded, inline=False)
-            embed.set_field_at(2, name="Answer:",
+            embed.set_field_at(1, name="Answers", value=answers_str_bolded, inline=False)
+            embed.set_field_at(2, name="Answer",
                                value=(f"{cmn.emojis.clock} "
                                       f"**Timed out!** The correct answer was {self.choices[question['answer']]}"))
             embed.colour = cmn.colours.timeout
             await q_msg.edit(embed=embed)
         else:
-            if self.choices[question["answer"]] == str(reaction.emoji):
-                embed.set_field_at(1, name="Answers:", value=answers_str_bolded, inline=False)
-                embed.set_field_at(2, name="Answer:", value=(f"{cmn.emojis.check_mark} "
-                                                             f"**Correct!** The answer was {reaction.emoji}"))
-                embed.colour = cmn.colours.good
+            if str(reaction.emoji) == cmn.emojis.question:
+                embed.set_field_at(1, name="Answers", value=answers_str_bolded, inline=False)
+                embed.set_field_at(2, name="Answer",
+                                   value=f"The correct answer was {self.choices[question['answer']]}", inline=False)
+                embed.add_field(name="Answer Requested By", value=str(user), inline=False)
+                embed.colour = cmn.colours.timeout
                 await q_msg.edit(embed=embed)
             else:
-                embed.set_field_at(1, name="Answers:", value=answers_str_bolded, inline=False)
-                embed.set_field_at(2, name="Answer:",
-                                   value=(f"{cmn.emojis.x} **Incorrect!** The correct answer was "
-                                          f"{self.choices[question['answer']]}, not {reaction.emoji}"))
-                embed.colour = cmn.colours.bad
-                await q_msg.edit(embed=embed)
+                answers_str_checked = ""
+                chosen_ans = self.choices_inv[str(reaction.emoji)]
+                for letter, ans in answers.items():
+                    answers_str_checked += f"{self.choices[letter]}"
+                    if letter == question["answer"] == chosen_ans:
+                        answers_str_checked += f"{cmn.emojis.check_mark} **{ans}**\n"
+                    elif letter == question["answer"]:
+                        answers_str_checked += f" **{ans}**\n"
+                    elif letter == chosen_ans:
+                        answers_str_checked += f"{cmn.emojis.x} {ans}\n"
+                    else:
+                        answers_str_checked += f" {ans}\n"
+
+                if self.choices[question["answer"]] == str(reaction.emoji):
+                    embed.set_field_at(1, name="Answers", value=answers_str_checked, inline=False)
+                    embed.set_field_at(2, name="Answer", value=(f"{cmn.emojis.check_mark} "
+                                                                f"**Correct!** The answer was {reaction.emoji}"))
+                    embed.add_field(name="Answered By", value=str(user), inline=False)
+                    embed.colour = cmn.colours.good
+                    await q_msg.edit(embed=embed)
+                else:
+                    embed.set_field_at(1, name="Answers", value=answers_str_checked, inline=False)
+                    embed.set_field_at(2, name="Answer",
+                                       value=(f"{cmn.emojis.x} **Incorrect!** The correct answer was "
+                                              f"{self.choices[question['answer']]}, not {reaction.emoji}"))
+                    embed.add_field(name="Answered By", value=str(user), inline=False)
+                    embed.colour = cmn.colours.bad
+                    await q_msg.edit(embed=embed)
 
     async def hamstudy_get_pools(self):
         async with self.session.get("https://hamstudy.org/pools/") as resp:

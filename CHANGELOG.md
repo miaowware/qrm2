@@ -9,11 +9,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - MUF and foF2 maps from [prop.kc2g.com](https://prop.kc2g.com/).
 - Commands to show METAR (`?metar`) and TAF (`?taf`) (aeronautical weather conditions).
 - The ability to select an element of a pool in `?hamstudy`.
+- The ability to answer ❓ to a HamStudy question to get the answer.
 ### Changed
 - New colour theme for `?greyline`.
 - Moved great circle distance and bearing calculation from `?ungrid` to `?griddistance`.
 - `?ungrid` to `?latlong`.
 - Renamed `?cond` to `?solar`.
+- Reduced `?hamstudy` timeout to 5 minutes.
 ### Fixed
 - Weird image caching situation for `?greyline` on Discord's side.
 ### Deprecated
