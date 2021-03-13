@@ -57,7 +57,9 @@ jobs:
           [[ "$VERSION" != "dev" ]] && docker tag $IMAGE_NAME $IMAGE_ID:latest || true
 
       - name: Push images to registry
-        run: docker push ${{ steps.tag_image.outputs.image_id }}
+        run: |
+          [[ "${{ steps.tag_image.outputs.version }}" != "dev" ]] && docker push ${{ steps.tag_image.outputs.image_id }}:latest || true
+          docker push ${{ steps.tag_image.outputs.image_id }}:${{ steps.tag_image.outputs.version }}
 
       - name: Deploy official images
         id: deploy_images

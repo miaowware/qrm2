@@ -31,6 +31,14 @@ class QRZCog(commands.Cog):
         """Looks up a callsign on [QRZ.com](https://www.qrz.com/). Add `--link` to only link the QRZ page."""
         flags = [f.lower() for f in flags]
 
+        if not callsign.isalnum():
+            embed = cmn.embed_factory(ctx)
+            embed.title = "QRZ Data for Callsign"
+            embed.colour = cmn.colours.bad
+            embed.description = "Not a valid callsign!"
+            await ctx.send(embed=embed)
+            return
+
         if keys.qrz_user == "" or keys.qrz_pass == "" or "--link" in flags:
             await ctx.send(f"http://qrz.com/db/{callsign}")
             return
