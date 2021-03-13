@@ -19,13 +19,12 @@ import discord.ext.commands as commands
 import info
 import common as cmn
 
-import data.options as opt
-
 
 class QrmHelpCommand(commands.HelpCommand):
     def __init__(self):
         super().__init__(command_attrs={"help": "Shows help about qrm or a command", "aliases": ["h"]})
         self.verify_checks = True
+        self.context: commands.Context
 
     async def get_bot_mapping(self):
         bot = self.context.bot
@@ -47,9 +46,9 @@ class QrmHelpCommand(commands.HelpCommand):
             if parent:
                 fmt = f"{parent} {fmt}"
             alias = fmt
-            return f"{opt.display_prefix}{alias} {command.signature}\n    *Aliases:* {aliases}"
+            return f"{self.context.prefix}{alias} {command.signature}\n    *Aliases:* {aliases}"
         alias = command.name if not parent else f"{parent} {command.name}"
-        return f"{opt.display_prefix}{alias} {command.signature}"
+        return f"{self.context.prefix}{alias} {command.signature}"
 
     async def send_error_message(self, error):
         embed = cmn.embed_factory(self.context)
@@ -61,8 +60,11 @@ class QrmHelpCommand(commands.HelpCommand):
     async def send_bot_help(self, mapping):
         embed = cmn.embed_factory(self.context)
         embed.title = "qrm Help"
-        embed.description = (f"For command-specific help and usage, use `{opt.display_prefix}help [command name]`."
+        embed.description = (f"For command-specific help and usage, use `{self.context.prefix}help [command name]`."
                              " Many commands have shorter aliases.")
+        if isinstance(self.context.bot.command_prefix, list):
+            embed.description += (" All of the following prefixes work with the bot: `"
+                                  + "`, `".join(self.context.bot.command_prefix) + "`.")
         mapping = await mapping
 
         for cat, cmds in mapping.items():

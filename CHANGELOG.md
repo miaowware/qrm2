@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Commands to show METAR (`?metar`) and TAF (`?taf`) (aeronautical weather conditions).
 - The ability to select an element of a pool in `?hamstudy`.
 - The ability to answer ❓ to a HamStudy question to get the answer.
+- The list of available prefixes to `?help` when there is more than one.
 ### Changed
 - New colour theme for `?greyline`.
 - Moved great circle distance and bearing calculation from `?ungrid` to `?griddistance`.
@@ -18,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Reduced `?hamstudy` timeout to 5 minutes.
 ### Fixed
 - Weird image caching situation for `?greyline` on Discord's side.
+- The help command was not using the prefix it was invoked with.
 ### Deprecated
 - `?ungrid`.
 - Deprecated old `?solar` aliases (`?cond`, etc).
