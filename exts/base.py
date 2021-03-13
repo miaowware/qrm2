@@ -61,6 +61,9 @@ class QrmHelpCommand(commands.HelpCommand):
         embed.title = "qrm Help"
         embed.description = (f"For command-specific help and usage, use `{self.context.prefix}help [command name]`."
                              " Many commands have shorter aliases.")
+        if isinstance(self.context.bot.command_prefix, list):
+            embed.description += (" All of the following prefixes work with the bot: `"
+                                  + "`, `".join(self.context.bot.command_prefix) + "`.")
         mapping = await mapping
 
         for cat, cmds in mapping.items():
