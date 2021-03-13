@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Renamed `?cond` to `?solar`.
 ### Fixed
 - Weird image caching situation for `?greyline` on Discord's side.
+- The help command was not using the prefix it was invoked with.
 ### Deprecated
 - `?ungrid`.
 - Deprecated old `?solar` aliases (`?cond`, etc).
