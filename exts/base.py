@@ -125,8 +125,16 @@ class BaseCog(commands.Cog):
             "Ko-Fi": "https://ko-fi.com/miaowware",
             "LiberaPay": "https://liberapay.com/miaowware",
         }
-        self.bot_invite = (f"https://discordapp.com/oauth2/authorize?client_id={self.bot.user.id}"
-                           f"&scope=bot&permissions={opt.invite_perms}")
+        self.bot_invite = None
+        if self.bot.user:
+            self.bot_invite = (f"https://discordapp.com/oauth2/authorize?client_id={self.bot.user.id}"
+                               f"&scope=bot&permissions={opt.invite_perms}")
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        if not self.bot_invite:
+            self.bot_invite = (f"https://discordapp.com/oauth2/authorize?client_id={self.bot.user.id}"
+                               f"&scope=bot&permissions={opt.invite_perms}")
 
     @commands.command(name="info", aliases=["about"])
     async def _info(self, ctx: commands.Context):
@@ -139,6 +147,10 @@ class BaseCog(commands.Cog):
         embed.add_field(name="Version", value=f"v{info.release} {'(`' + self.commit + '`)' if self.commit else ''}")
         embed.add_field(name="Contributing", value=info.contributing, inline=False)
         embed.add_field(name="Official Server", value=info.bot_server, inline=False)
+        embed.add_field(name="Donate", value="\n".join(f"{k}: {v}" for k, v in self.donation_links.items()),
+                        inline=False)
+        if opt.enable_invite_cmd:
+            embed.add_field(name="Invite qrm to Your Server", value=self.bot_invite, inline=False)
         embed.set_thumbnail(url=str(self.bot.user.avatar_url))
         await ctx.send(embed=embed)
 
