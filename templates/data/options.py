@@ -46,6 +46,10 @@ exts = [
     "propagation",
 ]
 
+# If True (default): when doing QRZ callsign lookups, show the nickname in place of the first name, if it exists
+# if False: use QRZ's default name format
+qrz_only_nickname = True
+
 # enable a command that provides a link to add the bot to a server
 enable_invite_cmd = True
 

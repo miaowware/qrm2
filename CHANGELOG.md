@@ -13,18 +13,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - The list of available prefixes to `?help` when there is more than one.
 - `?donate` command to show ways to support qrm's development.
 - `?invite` command to invite qrm to your server.
+- Configuration options to disable showing the `?invite` and set default invite permissions (enabled by default).
+- Configuration option to show QRZ nickname in place of first name (enabled by default).
 ### Changed
 - New colour theme for `?greyline`.
 - Moved great circle distance and bearing calculation from `?ungrid` to `?griddistance`.
 - `?ungrid` to `?latlong`.
 - Renamed `?cond` to `?solar`.
 - Reduced `?hamstudy` timeout to 5 minutes.
+- Library used for QRZ lookups.
 ### Fixed
 - Weird image caching situation for `?greyline` on Discord's side.
 - The help command was not using the prefix it was invoked with.
 ### Deprecated
 - `?ungrid`.
 - Deprecated old `?solar` aliases (`?cond`, etc).
+- Deprecated old `?call` alias (`?qrz`).
 
 
 ## [2.5.1] - 2020-12-10
