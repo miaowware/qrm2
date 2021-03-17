@@ -18,6 +18,7 @@ import discord.ext.commands as commands
 
 import info
 import common as cmn
+from data import options as opt
 
 
 class QrmHelpCommand(commands.HelpCommand):
@@ -120,6 +121,20 @@ class BaseCog(commands.Cog):
                         self.commit = bf.readline().strip()[:7]
         else:
             self.commit = ""
+        self.donation_links = {
+            "Ko-Fi": "https://ko-fi.com/miaowware",
+            "LiberaPay": "https://liberapay.com/miaowware",
+        }
+        self.bot_invite = None
+        if self.bot.user:
+            self.bot_invite = (f"https://discordapp.com/oauth2/authorize?client_id={self.bot.user.id}"
+                               f"&scope=bot&permissions={opt.invite_perms}")
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        if not self.bot_invite:
+            self.bot_invite = (f"https://discordapp.com/oauth2/authorize?client_id={self.bot.user.id}"
+                               f"&scope=bot&permissions={opt.invite_perms}")
 
     @commands.command(name="info", aliases=["about"])
     async def _info(self, ctx: commands.Context):
@@ -132,6 +147,10 @@ class BaseCog(commands.Cog):
         embed.add_field(name="Version", value=f"v{info.release} {'(`' + self.commit + '`)' if self.commit else ''}")
         embed.add_field(name="Contributing", value=info.contributing, inline=False)
         embed.add_field(name="Official Server", value=info.bot_server, inline=False)
+        embed.add_field(name="Donate", value="\n".join(f"{k}: {v}" for k, v in self.donation_links.items()),
+                        inline=False)
+        if opt.enable_invite_cmd:
+            embed.add_field(name="Invite qrm to Your Server", value=self.bot_invite, inline=False)
         embed.set_thumbnail(url=str(self.bot.user.avatar_url))
         await ctx.send(embed=embed)
 
@@ -194,6 +213,25 @@ class BaseCog(commands.Cog):
                             All issues and requests related to resources (including maps, band charts, data) \
                             should be added in \
                             [miaowware/qrm-resources](https://github.com/miaowware/qrm-resources/issues)."""
+        await ctx.send(embed=embed)
+
+    @commands.command(name="donate")
+    async def _donate(self, ctx: commands.Context):
+        """Shows ways to help support development of the bot via donations."""
+        embed = cmn.embed_factory(ctx)
+        embed.title = "Help Support qrm's Development!"
+        embed.description = ("Donations are always appreciated, and help with server and infrastructure costs."
+                             "\nThank you for your support!")
+        for title, url in self.donation_links.items():
+            embed.add_field(name=title, value=url, inline=False)
+        await ctx.send(embed=embed)
+
+    @commands.command(name="invite", enabled=opt.enable_invite_cmd)
+    async def _invite(self, ctx: commands.Context):
+        """Generates a link to invite the bot to a server."""
+        embed = cmn.embed_factory(ctx)
+        embed.title = "Invite qrm to Your Server!"
+        embed.description = self.bot_invite
         await ctx.send(embed=embed)
 
     @commands.command(name="echo", aliases=["e"], category=cmn.cat.admin)
