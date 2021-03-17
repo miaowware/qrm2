@@ -10,6 +10,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Commands to show METAR (`?metar`) and TAF (`?taf`) (aeronautical weather conditions).
 - The ability to select an element of a pool in `?hamstudy`.
 - The ability to answer ❓ to a HamStudy question to get the answer.
+- The list of available prefixes to `?help` when there is more than one.
+- `?donate` command to show ways to support qrm's development.
+- `?invite` command to invite qrm to your server.
 - Configuration options to disable showing the `?invite` and set default invite permissions (enabled by default).
 - Configuration option to show QRZ nickname in place of first name (enabled by default).
 ### Changed
@@ -21,6 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Library used for QRZ lookups.
 ### Fixed
 - Weird image caching situation for `?greyline` on Discord's side.
+- The help command was not using the prefix it was invoked with.
 ### Deprecated
 - `?ungrid`.
 - Deprecated old `?solar` aliases (`?cond`, etc).
