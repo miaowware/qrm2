@@ -125,7 +125,7 @@ class BaseCog(commands.Cog):
             "Ko-Fi": "https://ko-fi.com/miaowware",
             "LiberaPay": "https://liberapay.com/miaowware",
         }
-        self.bot_invite = None
+        self.bot_invite = ""
         if self.bot.user:
             self.bot_invite = (f"https://discordapp.com/oauth2/authorize?client_id={self.bot.user.id}"
                                f"&scope=bot&permissions={opt.invite_perms}")
@@ -149,7 +149,7 @@ class BaseCog(commands.Cog):
         embed.add_field(name="Official Server", value=info.bot_server, inline=False)
         embed.add_field(name="Donate", value="\n".join(f"{k}: {v}" for k, v in self.donation_links.items()),
                         inline=False)
-        if opt.enable_invite_cmd:
+        if opt.enable_invite_cmd and (await self.bot.application_info()).bot_public:
             embed.add_field(name="Invite qrm to Your Server", value=self.bot_invite, inline=False)
         embed.set_thumbnail(url=str(self.bot.user.avatar_url))
         await ctx.send(embed=embed)
@@ -229,6 +229,8 @@ class BaseCog(commands.Cog):
     @commands.command(name="invite", enabled=opt.enable_invite_cmd)
     async def _invite(self, ctx: commands.Context):
         """Generates a link to invite the bot to a server."""
+        if not (await self.bot.application_info()).bot_public:
+            raise commands.DisabledCommand
         embed = cmn.embed_factory(ctx)
         embed.title = "Invite qrm to Your Server!"
         embed.description = self.bot_invite
