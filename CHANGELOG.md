@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - The ability to select an element of a pool in `?hamstudy`.
 - The ability to answer ❓ to a HamStudy question to get the answer.
 - The list of available prefixes to `?help` when there is more than one.
+- `?donate` command to show ways to support qrm's development.
 ### Changed
 - New colour theme for `?greyline`.
 - Moved great circle distance and bearing calculation from `?ungrid` to `?griddistance`.
