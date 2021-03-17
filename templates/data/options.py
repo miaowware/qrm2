@@ -46,6 +46,12 @@ exts = [
     "propagation",
 ]
 
+# enable a command that provides a link to add the bot to a server
+enable_invite_cmd = True
+
+# the default permissions for the bot, to be included in the invite link for ?invite
+# this probably does not need to be changed
+invite_perms = 67488832
 
 # Either "time", "random", or "fixed" (first item in statuses)
 status_mode = "fixed"

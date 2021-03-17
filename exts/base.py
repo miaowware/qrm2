@@ -125,6 +125,8 @@ class BaseCog(commands.Cog):
             "Ko-Fi": "https://ko-fi.com/miaowware",
             "LiberaPay": "https://liberapay.com/miaowware",
         }
+        self.bot_invite = (f"https://discordapp.com/oauth2/authorize?client_id={self.bot.user.id}"
+                           f"&scope=bot&permissions={opt.invite_perms}")
 
     @commands.command(name="info", aliases=["about"])
     async def _info(self, ctx: commands.Context):
@@ -210,6 +212,14 @@ class BaseCog(commands.Cog):
                              "\nThank you for your support!")
         for title, url in self.donation_links.items():
             embed.add_field(name=title, value=url, inline=False)
+        await ctx.send(embed=embed)
+
+    @commands.command(name="invite", enabled=opt.enable_invite_cmd)
+    async def _invite(self, ctx: commands.Context):
+        """Generates a link to invite the bot to a server."""
+        embed = cmn.embed_factory(ctx)
+        embed.title = "Invite qrm to Your Server!"
+        embed.description = self.bot_invite
         await ctx.send(embed=embed)
 
     @commands.command(name="echo", aliases=["e"], category=cmn.cat.admin)
