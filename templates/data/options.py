@@ -46,6 +46,10 @@ exts = [
     "propagation",
 ]
 
+# If True (default): when doing QRZ callsign lookups, show the nickname in place of the first name, if it exists
+# if False: use QRZ's default name format
+qrz_only_nickname = True
+
 # Either "time", "random", or "fixed" (first item in statuses)
 status_mode = "fixed"
 
