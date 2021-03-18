@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Reduced `?hamstudy` timeout to 5 minutes.
 - Library used for QRZ lookups.
 - Python>=3.9 now required.
+- Most resources are now stored on a website. New indexes are pulled at start and the images linked instead of uploaded.
 ### Fixed
 - Weird image caching situation for `?greyline` on Discord's side.
 - The help command was not using the prefix it was invoked with.

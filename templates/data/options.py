@@ -27,7 +27,7 @@ debug = False
 # A tuple of user IDs that should be considered "bot owners".
 # * Those users will have full control over the bot.
 # ! This MUST be a tuple of integers. Single element tuple: `(123,)`
-owners_uids = (200102491231092736,)
+owners_uids = (200102491231092736, 564766093051166729)
 
 # The extensions to load when running the bot.
 exts = [
@@ -45,6 +45,9 @@ exts = [
     "dbconv",
     "propagation",
 ]
+
+# URL to the resources
+resources_url = "https://qrmresources.miaow.io/resources/"
 
 # If True (default): when doing QRZ callsign lookups, show the nickname in place of the first name, if it exists
 # if False: use QRZ's default name format

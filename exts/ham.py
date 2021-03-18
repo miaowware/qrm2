@@ -1,36 +1,41 @@
 """
 Ham extension for qrm
 ---
-Copyright (C) 2019-2020 Abigail Gold, 0x5c
+Copyright (C) 2019-2021 Abigail Gold, 0x5c
 
 This file is part of qrm2 and is released under the terms of
 the GNU General Public License, version 2.
 """
 
 
+import json
 from datetime import datetime
 
 import discord.ext.commands as commands
 
 import common as cmn
 from resources import callsign_info
-from resources import phonetics
-from resources import qcodes
 
 
 class HamCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.pfxs = callsign_info.options
+        with open(cmn.paths.resources / "phonetics.1.json") as file:
+            d = json.load(file)
+            self.phonetics: dict[str, str] = d["phonetics"]
+            self.pweights: dict[str, int] = d["pweights"]
+        with open(cmn.paths.resources / "qcodes.1.json") as file:
+            self.qcodes: dict = json.load(file)
 
     @commands.command(name="qcode", aliases=["q"], category=cmn.cat.ref)
     async def _qcode_lookup(self, ctx: commands.Context, qcode: str):
         """Looks up the meaning of a Q Code."""
         qcode = qcode.upper()
         embed = cmn.embed_factory(ctx)
-        if qcode in qcodes.qcodes:
+        if qcode in self.qcodes:
             embed.title = qcode
-            embed.description = qcodes.qcodes[qcode]
+            embed.description = self.qcodes[qcode]
             embed.colour = cmn.colours.good
         else:
             embed.title = f"Q Code {qcode} not found"
@@ -43,7 +48,7 @@ class HamCog(commands.Cog):
         result = ""
         for char in msg.lower():
             if char.isalpha():
-                result += phonetics.phonetics[char]
+                result += self.phonetics[char]
             else:
                 result += char
             result += " "
@@ -105,7 +110,7 @@ class HamCog(commands.Cog):
         weight = 0
         for char in msg:
             try:
-                weight += phonetics.pweights[char]
+                weight += self.pweights[char]
             except KeyError:
                 embed.title = "Error in calculation of phonetic weight"
                 embed.description = f"Unknown character `{char}` in message"

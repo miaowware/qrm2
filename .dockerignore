@@ -11,3 +11,5 @@ docker-compose.yml
 Makefile
 
 README*.md
+
+/resource_schemas.py

@@ -1,22 +1,27 @@
 """
 Morse Code extension for qrm
 ---
-Copyright (C) 2019-2020 Abigail Gold, 0x5c
+Copyright (C) 2019-2021 Abigail Gold, 0x5c
 
 This file is part of qrm2 and is released under the terms of
 the GNU General Public License, version 2.
 """
 
 
+import json
+
 import discord.ext.commands as commands
 
 import common as cmn
-from resources import morse
 
 
 class MorseCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+        with open(cmn.paths.resources / "morse.1.json") as file:
+            d = json.load(file)
+            self.morse: dict[str, str] = d["morse"]
+            self.ascii: dict[str, int] = d["ascii"]
 
     @commands.command(name="morse", aliases=["cw"], category=cmn.cat.ref)
     async def _morse(self, ctx: commands.Context, *, msg: str):
@@ -24,7 +29,7 @@ class MorseCog(commands.Cog):
         result = ""
         for char in msg.upper():
             try:
-                result += morse.morse[char]
+                result += self.morse[char]
             except KeyError:
                 result += "<?>"
             result += " "
@@ -44,7 +49,7 @@ class MorseCog(commands.Cog):
         for word in msg:
             for char in word:
                 try:
-                    result += morse.ascii[char]
+                    result += self.ascii[char]
                 except KeyError:
                     result += "<?>"
             result += " "
@@ -62,7 +67,7 @@ class MorseCog(commands.Cog):
         weight = 0
         for char in msg:
             try:
-                cw_char = morse.morse[char].replace("-", "==")
+                cw_char = self.morse[char].replace("-", "==")
                 weight += len(cw_char) * 2 + 2
             except KeyError:
                 embed.title = "Error in calculation of CW weight"
