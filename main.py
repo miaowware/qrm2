@@ -15,6 +15,7 @@ import sys
 import traceback
 from datetime import datetime, time
 from types import SimpleNamespace
+from pathlib import Path
 
 import pytz
 
@@ -34,6 +35,7 @@ import data.options as opt
 exit_code = 1  # The default exit code. ?shutdown and ?restart will change it accordingly (fail-safe)
 
 ext_dir = "exts"  # The name of the directory where extensions are located.
+plugin_dir = "data.plugins"  # The name of the directory where plugins are located.
 
 debug_mode = opt.debug  # Separate assignement in-case we define an override (ternary operator goes here)
 
@@ -108,14 +110,24 @@ async def _extctl_list(ctx: commands.Context):
     """Lists loaded extensions."""
     embed = cmn.embed_factory(ctx)
     embed.title = "Loaded Extensions"
-    embed.description = "\n".join(["‣ " + x.split(".")[1] for x in bot.extensions.keys()])
+    embed.description = "\n".join(
+                            ["‣ " + x.split(".")[-1] for x in bot.extensions.keys() if not x.startswith(plugin_dir)]
+                        )
+    if plugins := ["‣ " + x.split(".")[-1] for x in bot.extensions.keys() if x.startswith(plugin_dir)]:
+        embed.add_field(name="Loaded Plugins", value="\n".join(plugins))
     await ctx.send(embed=embed)
 
 
 @_extctl.command(name="load", aliases=["ld"])
 async def _extctl_load(ctx: commands.Context, extension: str):
     """Loads an extension."""
-    bot.load_extension(ext_dir + "." + extension)
+    try:
+        bot.load_extension(ext_dir + "." + extension)
+    except commands.ExtensionNotFound as e:
+        try:
+            bot.load_extension(plugin_dir + "." + extension)
+        except commands.ExtensionNotFound:
+            raise e
     await cmn.add_react(ctx.message, cmn.emojis.check_mark)
 
 
@@ -126,14 +138,26 @@ async def _extctl_reload(ctx: commands.Context, extension: str):
         pika = bot.get_emoji(opt.pika)
         if pika:
             await cmn.add_react(ctx.message, pika)
-    bot.reload_extension(ext_dir + "." + extension)
+    try:
+        bot.reload_extension(ext_dir + "." + extension)
+    except commands.ExtensionNotLoaded as e:
+        try:
+            bot.reload_extension(plugin_dir + "." + extension)
+        except commands.ExtensionNotLoaded:
+            raise e
     await cmn.add_react(ctx.message, cmn.emojis.check_mark)
 
 
 @_extctl.command(name="unload", aliases=["ul"])
 async def _extctl_unload(ctx: commands.Context, extension: str):
     """Unloads an extension."""
-    bot.unload_extension(ext_dir + "." + extension)
+    try:
+        bot.unload_extension(ext_dir + "." + extension)
+    except commands.ExtensionNotLoaded as e:
+        try:
+            bot.unload_extension(plugin_dir + "." + extension)
+        except commands.ExtensionNotLoaded:
+            raise e
     await cmn.add_react(ctx.message, cmn.emojis.check_mark)
 
 
@@ -245,6 +269,10 @@ async def _ensure_activity_fixed():
 
 for ext in opt.exts:
     bot.load_extension(ext_dir + "." + ext)
+
+# load all py files in plugin_dir
+for plugin in (f.stem for f in Path(plugin_dir.replace(".", "/")).glob("*.py")):
+    bot.load_extension(plugin_dir + "." + plugin)
 
 
 try:
