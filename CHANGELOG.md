@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ## [Unreleased]
+
+
+## [2.6.0] - 2021-03-18
 ### Added
 - MUF and foF2 maps from [prop.kc2g.com](https://prop.kc2g.com/).
 - Commands to show METAR (`?metar`) and TAF (`?taf`) (aeronautical weather conditions).
@@ -170,7 +173,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## 1.0.0 - 2019-07-31 [YANKED]
 
 
-[Unreleased]: https://github.com/miaowware/qrm2/compare/v2.5.1...HEAD
+[Unreleased]: https://github.com/miaowware/qrm2/compare/v2.6.0...HEAD
+[2.6.0]: https://github.com/miaowware/qrm2/releases/tag/v2.6.0
 [2.5.1]: https://github.com/miaowware/qrm2/releases/tag/v2.5.1
 [2.5.0]: https://github.com/miaowware/qrm2/releases/tag/v2.5.0
 [2.4.1]: https://github.com/miaowware/qrm2/releases/tag/v2.4.1
