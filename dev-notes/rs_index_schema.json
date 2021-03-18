@@ -1,0 +1,52 @@
+{
+    "title": "Index",
+    "type": "object",
+    "properties": {
+        "last_updated": {
+            "title": "Last Updated",
+            "type": "string",
+            "format": "date-time"
+        },
+        "resources": {
+            "title": "Resources",
+            "type": "object",
+            "additionalProperties": {
+                "$ref": "#/definitions/Resource"
+            }
+        }
+    },
+    "required": [
+        "last_updated",
+        "resources"
+    ],
+    "definitions": {
+        "File": {
+            "title": "File",
+            "type": "object",
+            "properties": {
+                "filename": {
+                    "title": "Filename",
+                    "type": "string"
+                },
+                "hash": {
+                    "title": "Hash",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "filename",
+                "hash"
+            ]
+        },
+        "Resource": {
+            "title": "Resource",
+            "type": "object",
+            "additionalProperties": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/File"
+                }
+            }
+        }
+    }
+}

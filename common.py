@@ -1,7 +1,7 @@
 """
 Common tools for the bot.
 ---
-Copyright (C) 2019-2020 Abigail Gold, 0x5c
+Copyright (C) 2019-2021 Abigail Gold, 0x5c
 
 This file is part of qrm2 and is released under the terms of
 the GNU General Public License, version 2.
@@ -67,10 +67,7 @@ emojis = SimpleNamespace(
 
 paths = SimpleNamespace(
     data=Path("./data/"),
-    resources=Path("./resources/"),
-    img=Path("./resources/img/"),
-    bandcharts=Path("./resources/img/bandcharts/"),
-    maps=Path("./resources/img/maps/"),
+    resources=Path("./data/resources/"),
 )
 
 

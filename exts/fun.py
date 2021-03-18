@@ -1,25 +1,29 @@
 """
 Fun extension for qrm
 ---
-Copyright (C) 2019-2020 Abigail Gold, 0x5c
+Copyright (C) 2019-2021 Abigail Gold, 0x5c
 
 This file is part of qrm2 and is released under the terms of
 the GNU General Public License, version 2.
 """
 
 
+import json
 import random
 
-import discord
 import discord.ext.commands as commands
 
 import common as cmn
+
+import data.options as opt
 
 
 class FunCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        with open(cmn.paths.resources / "words") as words_file:
+        with open(cmn.paths.resources / "imgs.1.json") as file:
+            self.imgs: dict = json.load(file)
+        with open(cmn.paths.resources / "words.1.txt") as words_file:
             self.words = words_file.read().lower().splitlines()
 
     @commands.command(name="xkcd", aliases=["x"], category=cmn.cat.fun)
@@ -40,12 +44,10 @@ class FunCog(commands.Cog):
     @commands.command(name="worksplit", aliases=["split", "ft8"], category=cmn.cat.fun)
     async def _worksplit(self, ctx: commands.Context):
         """Posts "Work split you lids"."""
-        fn = "worksplit.jpg"
         embed = cmn.embed_factory(ctx)
         embed.title = "Work Split, You Lids!"
-        embed.set_image(url="attachment://" + fn)
-        img = discord.File(cmn.paths.img / fn, filename=fn)
-        await ctx.send(embed=embed, file=img)
+        embed.set_image(url=opt.resources_url + self.imgs["worksplit"])
+        await ctx.send(embed=embed)
 
     @commands.command(name="xd", hidden=True, category=cmn.cat.fun)
     async def _xd(self, ctx: commands.Context):

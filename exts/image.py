@@ -1,7 +1,7 @@
 """
 Image extension for qrm
 ---
-Copyright (C) 2019-2020 Abigail Gold, 0x5c
+Copyright (C) 2019-2021 Abigail Gold, 0x5c
 
 This file is part of qrm2 and is released under the terms of
 the GNU General Public License, version 2.
@@ -11,10 +11,11 @@ the GNU General Public License, version 2.
 import aiohttp
 from datetime import datetime
 
-import discord
 import discord.ext.commands as commands
 
 import common as cmn
+
+import data.options as opt
 
 
 class ImageCog(commands.Cog):
@@ -22,8 +23,8 @@ class ImageCog(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.bandcharts = cmn.ImagesGroup(cmn.paths.bandcharts / "meta.json")
-        self.maps = cmn.ImagesGroup(cmn.paths.maps / "meta.json")
+        self.bandcharts = cmn.ImagesGroup(cmn.paths.resources / "bandcharts.1.json")
+        self.maps = cmn.ImagesGroup(cmn.paths.resources / "maps.1.json")
         self.session = aiohttp.ClientSession(connector=bot.qrm.connector)
 
     @commands.command(name="bandplan", aliases=["plan", "bands"], category=cmn.cat.ref)
@@ -42,16 +43,14 @@ class ImageCog(commands.Cog):
                 await ctx.send(embed=embed)
                 return
             metadata: cmn.ImageMetadata = self.bandcharts[arg]
-            img = discord.File(cmn.paths.bandcharts / metadata.filename,
-                               filename=metadata.filename)
             if metadata.description:
                 embed.description = metadata.description
             if metadata.source:
                 embed.add_field(name="Source", value=metadata.source)
             embed.title = metadata.long_name + ("  " + metadata.emoji if metadata.emoji else "")
             embed.colour = cmn.colours.good
-            embed.set_image(url="attachment://" + metadata.filename)
-            await ctx.send(embed=embed, file=img)
+            embed.set_image(url=opt.resources_url + metadata.filename)
+            await ctx.send(embed=embed)
 
     @commands.command(name="map", category=cmn.cat.maps)
     async def _map(self, ctx: commands.Context, map_id: str = ""):
@@ -69,16 +68,14 @@ class ImageCog(commands.Cog):
                 await ctx.send(embed=embed)
                 return
             metadata: cmn.ImageMetadata = self.maps[arg]
-            img = discord.File(cmn.paths.maps / metadata.filename,
-                               filename=metadata.filename)
             if metadata.description:
                 embed.description = metadata.description
             if metadata.source:
                 embed.add_field(name="Source", value=metadata.source)
             embed.title = metadata.long_name + ("  " + metadata.emoji if metadata.emoji else "")
             embed.colour = cmn.colours.good
-            embed.set_image(url="attachment://" + metadata.filename)
-            await ctx.send(embed=embed, file=img)
+            embed.set_image(url=opt.resources_url + metadata.filename)
+            await ctx.send(embed=embed)
 
     @commands.command(name="grayline", aliases=["greyline", "grey", "gray", "gl"], category=cmn.cat.maps)
     async def _grayline(self, ctx: commands.Context):

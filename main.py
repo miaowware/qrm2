@@ -2,7 +2,7 @@
 """
 qrm, a bot for Discord
 ---
-Copyright (C) 2019-2020 Abigail Gold, 0x5c
+Copyright (C) 2019-2021 Abigail Gold, 0x5c
 
 This file is part of qrm2 and is released under the terms of
 the GNU General Public License, version 2.
@@ -25,6 +25,7 @@ from discord.ext import commands, tasks
 import info
 import common as cmn
 import utils.connector as conn
+from utils.resources_manager import ResourcesManager
 
 import data.keys as keys
 import data.options as opt
@@ -266,6 +267,18 @@ async def _ensure_activity_fixed():
 
 
 # --- Run ---
+
+resource_versions = {
+        "bandcharts": "v1",
+        "img": "v1",
+        "maps": "v1",
+        "morse": "v1",
+        "phonetics": "v1",
+        "qcodes": "v1",
+        "funetics": "v1"
+    }
+
+bot.qrm.rm = ResourcesManager(cmn.paths.resources, opt.resources_url, resource_versions)
 
 for ext in opt.exts:
     bot.load_extension(ext_dir + "." + ext)
