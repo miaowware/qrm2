@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Renamed `?cond` to `?solar`.
 - Reduced `?hamstudy` timeout to 5 minutes.
 - Library used for QRZ lookups.
+- Python>=3.9 now required.
 ### Fixed
 - Weird image caching situation for `?greyline` on Discord's side.
 - The help command was not using the prefix it was invoked with.
