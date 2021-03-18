@@ -1,4 +1,4 @@
-FROM alpine:3.10
+FROM python:3.9-slim
 
 COPY . /app
 WORKDIR /app
@@ -6,35 +6,20 @@ WORKDIR /app
 ENV PYTHON_BIN python3
 
 RUN \
-    echo "**** install build packages ****" && \
-    apk add --no-cache --virtual=build-dependencies \
-        g++ \
-        git \
-        gcc \
-        libxml2-dev \
-        libxslt-dev \
-        libressl-dev \
-        libffi-dev \
-        jpeg-dev \
-        zlib-dev \
-        python3-dev && \
+    apt-get update && \
     echo "**** install runtime packages ****" && \
-    apk add --no-cache \
-        libressl \
-        cairo \
-        libjpeg-turbo \
-        py3-lxml \
-        py3-pip \
-        python3 && \
+    apt-get install -y --no-install-recommends \
+        libcairo2 \
+        libjpeg62-turbo \
+        python-lxml \
+        && \
     echo "**** install pip packages ****" && \
     pip3 install -U pip setuptools wheel && \
     pip3 install -r requirements.txt && \
     echo "**** clean up ****" && \
-    apk del --purge \
-        build-dependencies && \
     rm -rf \
         /root/.cache \
         /tmp/* \
-        /var/cache/apk/*
+        /var/lib/apt/lists/*
 
 CMD ["/bin/sh", "run.sh", "--pass-errors", "--no-botenv"]
