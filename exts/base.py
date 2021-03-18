@@ -215,7 +215,7 @@ class BaseCog(commands.Cog):
                             [miaowware/qrm-resources](https://github.com/miaowware/qrm-resources/issues)."""
         await ctx.send(embed=embed)
 
-    @commands.command(name="donate")
+    @commands.command(name="donate", aliases=["tip"])
     async def _donate(self, ctx: commands.Context):
         """Shows ways to help support development of the bot via donations."""
         embed = cmn.embed_factory(ctx)

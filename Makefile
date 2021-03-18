@@ -32,7 +32,7 @@ help:
 
 # Main install target
 .PHONY: install
-install: $(BOTENV)/req_done data/options.py data/keys.py
+install: $(BOTENV)/req_done data/options.py data/keys.py data/plugins
 
 # Virual environment setup
 $(BOTENV)/success:
@@ -55,6 +55,11 @@ data:
 	@echo "\033[34;1m--> Creating ./data ...\033[0m"
 	@mkdir -p data
 
+# Creating the ./data/plugins subdirectory
+data/plugins: ./data
+	@echo "\033[34;1m--> Creating ./data/plugins ...\033[0m"
+	@mkdir -p data/plugins
+
 # Copying templates
 data/options.py data/keys.py: ./data
 	@echo "\033[34;1m--> Copying template for ./$@ ...\033[0m"
@@ -72,7 +77,7 @@ clean:
 
 ### Dev targets ###
 .PHONY: dev-install
-dev-install: $(BOTENV)/dev_req_done data/options.py data/keys.py
+dev-install: $(BOTENV)/dev_req_done data/options.py data/keys.py data/plugins
 
 # Installing dev requirements
 $(BOTENV)/dev_req_done: dev-requirements.txt $(BOTENV)/success

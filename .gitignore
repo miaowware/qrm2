@@ -6,6 +6,7 @@ cty.zip
 /botenv/
 /devenv/
 /data/
+/data/plugins/
 
 /docker-compose.yml
 
