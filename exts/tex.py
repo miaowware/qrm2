@@ -7,6 +7,7 @@ This file is part of qrm2 and is released under the terms of
 the GNU General Public License, version 2.
 """
 
+
 import aiohttp
 from io import BytesIO
 from urllib.parse import urljoin
@@ -22,7 +23,6 @@ class TexCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.session = aiohttp.ClientSession(connector=bot.qrm.connector)
-        self.rtex_instance = getattr(opt, "rtex_instance", "https://rtex.probablyaweb.site/")
         with open(cmn.paths.resources / "template.1.tex") as latex_template:
             self.template = latex_template.read()
 
@@ -37,7 +37,7 @@ class TexCog(commands.Cog):
 
         with ctx.typing():
             # ask rTeX to render our expression
-            async with self.session.post(urljoin(self.rtex_instance, "api/v2"), json=payload) as r:
+            async with self.session.post(urljoin(opt.rtex_instance, "api/v2"), json=payload) as r:
                 if r.status != 200:
                     raise cmn.BotHTTPError(r)
 
@@ -51,7 +51,7 @@ class TexCog(commands.Cog):
                     return
 
             # if rendering went well, download the file given in the response
-            async with self.session.get(urljoin(self.rtex_instance, "api/v2/" + render_result["filename"])) as r:
+            async with self.session.get(urljoin(opt.rtex_instance, "api/v2/" + render_result["filename"])) as r:
                 png_buffer = BytesIO(await r.read())
 
             embed = cmn.embed_factory(ctx)
