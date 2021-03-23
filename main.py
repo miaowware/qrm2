@@ -275,7 +275,8 @@ resource_versions = {
         "morse": "v1",
         "phonetics": "v1",
         "qcodes": "v1",
-        "funetics": "v1"
+        "funetics": "v1",
+        "latex_template": "v1",
     }
 
 bot.qrm.rm = ResourcesManager(cmn.paths.resources, opt.resources_url, resource_versions)
