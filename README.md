@@ -18,6 +18,8 @@ Requires Python 3.9 or newer.
 
 Prep the environment. For more information on extra options, see the [quick-bot-no-pain Makefile documentation](https://github.com/0x5c/quick-bot-no-pain/blob/master/docs/makefile.md).
 
+Install `libcairo` and `libjpeg` (package names may vary by distro or OS). Then run:
+
 ```
 $ make install
 ```
