@@ -27,9 +27,9 @@ class FunCog(commands.Cog):
             self.words = words_file.read().lower().splitlines()
 
     @commands.command(name="xkcd", aliases=["x"], category=cmn.cat.fun)
-    async def _xkcd(self, ctx: commands.Context, number: str):
+    async def _xkcd(self, ctx: commands.Context, number: int):
         """Looks up an xkcd comic by number."""
-        await ctx.send("http://xkcd.com/" + number)
+        await ctx.send("http://xkcd.com/" + str(number))
 
     @commands.command(name="tar", category=cmn.cat.fun)
     async def _tar(self, ctx: commands.Context):
