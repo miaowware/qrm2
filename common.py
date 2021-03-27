@@ -100,7 +100,7 @@ class ImagesGroup(collections.abc.Mapping):
     def __len__(self):
         return len(self._images)
 
-    def __getitem__(self, key: str):
+    def __getitem__(self, key: str) -> ImageMetadata:
         return self._images[key]
 
     def __iter__(self):

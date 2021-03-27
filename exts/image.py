@@ -27,55 +27,15 @@ class ImageCog(commands.Cog):
         self.maps = cmn.ImagesGroup(cmn.paths.resources / "maps.1.json")
         self.session = aiohttp.ClientSession(connector=bot.qrm.connector)
 
-    @commands.command(name="bandplan", aliases=["plan", "bands"], category=cmn.cat.ref)
-    async def _bandplan(self, ctx: commands.Context, region: str = ""):
+    @commands.command(name="bandchart", aliases=["bandplan", "plan", "bands"], category=cmn.cat.ref)
+    async def _bandcharts(self, ctx: commands.Context, chart_id: str = ""):
         """Gets the frequency allocations chart for a given country."""
-        async with ctx.typing():
-            arg = region.lower()
-            embed = cmn.embed_factory(ctx)
-            if arg not in self.bandcharts:
-                desc = "Possible arguments are:\n"
-                for key, img in self.bandcharts.items():
-                    desc += f"`{key}`: {img.name}{('  ' + img.emoji if img.emoji else '')}\n"
-                embed.title = "Bandplan Not Found!"
-                embed.description = desc
-                embed.colour = cmn.colours.bad
-                await ctx.send(embed=embed)
-                return
-            metadata: cmn.ImageMetadata = self.bandcharts[arg]
-            if metadata.description:
-                embed.description = metadata.description
-            if metadata.source:
-                embed.add_field(name="Source", value=metadata.source)
-            embed.title = metadata.long_name + ("  " + metadata.emoji if metadata.emoji else "")
-            embed.colour = cmn.colours.good
-            embed.set_image(url=opt.resources_url + metadata.filename)
-            await ctx.send(embed=embed)
+        await ctx.send(embed=create_embed(ctx, "Bandchart", self.bandcharts, chart_id))
 
     @commands.command(name="map", category=cmn.cat.maps)
     async def _map(self, ctx: commands.Context, map_id: str = ""):
         """Posts a ham-relevant map."""
-        async with ctx.typing():
-            arg = map_id.lower()
-            embed = cmn.embed_factory(ctx)
-            if arg not in self.maps:
-                desc = "Possible arguments are:\n"
-                for key, img in self.maps.items():
-                    desc += f"`{key}`: {img.name}{('  ' + img.emoji if img.emoji else '')}\n"
-                embed.title = "Map Not Found!"
-                embed.description = desc
-                embed.colour = cmn.colours.bad
-                await ctx.send(embed=embed)
-                return
-            metadata: cmn.ImageMetadata = self.maps[arg]
-            if metadata.description:
-                embed.description = metadata.description
-            if metadata.source:
-                embed.add_field(name="Source", value=metadata.source)
-            embed.title = metadata.long_name + ("  " + metadata.emoji if metadata.emoji else "")
-            embed.colour = cmn.colours.good
-            embed.set_image(url=opt.resources_url + metadata.filename)
-            await ctx.send(embed=embed)
+        await ctx.send(embed=create_embed(ctx, "Map", self.maps, map_id))
 
     @commands.command(name="grayline", aliases=["greyline", "grey", "gray", "gl"], category=cmn.cat.maps)
     async def _grayline(self, ctx: commands.Context):
@@ -86,6 +46,29 @@ class ImageCog(commands.Cog):
         date_params = f"&date=1&utc={datetime.utcnow():%Y-%m-%d+%H:%M:%S}"
         embed.set_image(url=self.gl_baseurl + date_params)
         await ctx.send(embed=embed)
+
+
+def create_embed(ctx: commands.Context, not_found_name: str, db: cmn.ImagesGroup, img_id: str):
+    """Creates an embed for the image and its metadata, or list available images in the group."""
+    img_id = img_id.lower()
+    embed = cmn.embed_factory(ctx)
+    if img_id not in db:
+        desc = "Possible arguments are:\n"
+        for key, img in db.items():
+            desc += f"`{key}`: {img.name}{('  ' + img.emoji if img.emoji else '')}\n"
+        embed.title = f"{not_found_name} Not Found!"
+        embed.description = desc
+        embed.colour = cmn.colours.bad
+        return embed
+    metadata = db[img_id]
+    if metadata.description:
+        embed.description = metadata.description
+    if metadata.source:
+        embed.add_field(name="Source", value=metadata.source)
+    embed.title = metadata.long_name + ("  " + metadata.emoji if metadata.emoji else "")
+    embed.colour = cmn.colours.good
+    embed.set_image(url=opt.resources_url + metadata.filename)
+    return embed
 
 
 def setup(bot: commands.Bot):
