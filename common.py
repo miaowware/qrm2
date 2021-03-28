@@ -9,6 +9,7 @@ the GNU General Public License, version 2.
 
 
 import collections
+import enum
 import json
 import re
 import traceback
@@ -26,7 +27,7 @@ from discord import Emoji, Reaction, PartialEmoji
 import data.options as opt
 
 
-__all__ = ["colours", "cat", "emojis", "paths", "ImageMetadata", "ImagesGroup",
+__all__ = ["colours", "BoltCats", "Cats", "emojis", "paths", "ImageMetadata", "ImagesGroup",
            "embed_factory", "error_embed_factory", "add_react", "check_if_owner"]
 
 
@@ -39,16 +40,24 @@ colours = SimpleNamespace(
     timeout=0xF26522,
 )
 
+
+class BoltCats(enum.Enum):
+    ADMIN = "Bot Control"
+    INFO = "Bot Information"
+
+
 # meow
-cat = SimpleNamespace(
-    lookup="Information Lookup",
-    fun="Fun",
-    maps="Mapping",
-    ref="Reference",
-    study="Exam Study",
-    weather="Land and Space Weather",
-    admin="Bot Control",
-)
+class Cats(enum.Enum):
+    CALC = "Calculators"
+    CODES = "Code References and Tools"
+    FUN = "Fun"
+    LOOKUP = "Information Lookup"
+    REF = "Reference"
+    STUDY = "Exam Study"
+    TIME = "Time and Time Zones"
+    UTILS = "Utilities"
+    WEATHER = "Land and Space Weather"
+
 
 emojis = SimpleNamespace(
     check_mark="✅",

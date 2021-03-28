@@ -26,22 +26,22 @@ class FunCog(commands.Cog):
         with open(cmn.paths.resources / "words.1.txt") as words_file:
             self.words = words_file.read().lower().splitlines()
 
-    @commands.command(name="xkcd", aliases=["x"], category=cmn.cat.fun)
+    @commands.command(name="xkcd", aliases=["x"], category=cmn.Cats.FUN)
     async def _xkcd(self, ctx: commands.Context, number: int):
         """Looks up an xkcd comic by number."""
         await ctx.send("http://xkcd.com/" + str(number))
 
-    @commands.command(name="tar", category=cmn.cat.fun)
+    @commands.command(name="tar", category=cmn.Cats.FUN)
     async def _tar(self, ctx: commands.Context):
         """Returns xkcd: tar."""
         await ctx.send("http://xkcd.com/1168")
 
-    @commands.command(name="standards", category=cmn.cat.fun)
+    @commands.command(name="standards", category=cmn.Cats.FUN)
     async def _standards(self, ctx: commands.Context):
         """Returns xkcd: Standards."""
         await ctx.send("http://xkcd.com/927")
 
-    @commands.command(name="worksplit", aliases=["split", "ft8"], category=cmn.cat.fun)
+    @commands.command(name="worksplit", aliases=["split", "ft8"], category=cmn.Cats.FUN)
     async def _worksplit(self, ctx: commands.Context):
         """Posts "Work split you lids"."""
         embed = cmn.embed_factory(ctx)
@@ -49,12 +49,12 @@ class FunCog(commands.Cog):
         embed.set_image(url=opt.resources_url + self.imgs["worksplit"])
         await ctx.send(embed=embed)
 
-    @commands.command(name="xd", hidden=True, category=cmn.cat.fun)
+    @commands.command(name="xd", hidden=True, category=cmn.Cats.FUN)
     async def _xd(self, ctx: commands.Context):
         """ecks dee"""
         await ctx.send("ECKS DEE :smirk:")
 
-    @commands.command(name="funetics", aliases=["fun"], category=cmn.cat.fun)
+    @commands.command(name="funetics", aliases=["fun"], category=cmn.Cats.FUN)
     async def _funetics_lookup(self, ctx: commands.Context, *, msg: str):
         """Generates fun/wacky phonetics for a word or phrase."""
         result = ""

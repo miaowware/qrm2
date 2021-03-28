@@ -23,7 +23,11 @@ from data import options as opt
 
 class QrmHelpCommand(commands.HelpCommand):
     def __init__(self):
-        super().__init__(command_attrs={"help": "Shows help about qrm or a command", "aliases": ["h"]})
+        super().__init__(command_attrs={
+            "help": "Shows help about qrm or a command",
+            "aliases": ["h"],
+            "category": cmn.BoltCats.INFO
+            })
         self.verify_checks = True
         self.context: commands.Context
 
@@ -73,7 +77,7 @@ class QrmHelpCommand(commands.HelpCommand):
                 continue
             names = sorted([cmd.name for cmd in cmds])
             if cat is not None:
-                embed.add_field(name=cat.title(), value=", ".join(names), inline=False)
+                embed.add_field(name=cat.value, value=", ".join(names), inline=False)
             else:
                 embed.add_field(name="Other", value=", ".join(names), inline=False)
         await self.context.send(embed=embed)
@@ -136,7 +140,7 @@ class BaseCog(commands.Cog):
             self.bot_invite = (f"https://discordapp.com/oauth2/authorize?client_id={self.bot.user.id}"
                                f"&scope=bot&permissions={opt.invite_perms}")
 
-    @commands.command(name="info", aliases=["about"])
+    @commands.command(name="info", aliases=["about"], category=cmn.BoltCats.INFO)
     async def _info(self, ctx: commands.Context):
         """Shows info about qrm."""
         embed = cmn.embed_factory(ctx)
@@ -154,7 +158,7 @@ class BaseCog(commands.Cog):
         embed.set_thumbnail(url=str(self.bot.user.avatar_url))
         await ctx.send(embed=embed)
 
-    @commands.command(name="ping", aliases=["beep"])
+    @commands.command(name="ping", aliases=["beep"], category=cmn.BoltCats.INFO)
     async def _ping(self, ctx: commands.Context):
         """Shows the current latency to the discord endpoint."""
         embed = cmn.embed_factory(ctx)
@@ -167,7 +171,7 @@ class BaseCog(commands.Cog):
         embed.description = f"Current ping is {self.bot.latency*1000:.1f} ms"
         await ctx.send(content, embed=embed)
 
-    @commands.command(name="changelog", aliases=["clog"])
+    @commands.command(name="changelog", aliases=["clog"], category=cmn.BoltCats.INFO)
     async def _changelog(self, ctx: commands.Context, version: str = "latest"):
         """Shows what has changed in a bot version. Defaults to the latest version."""
         embed = cmn.embed_factory(ctx)
@@ -203,7 +207,7 @@ class BaseCog(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commands.command(name="issue")
+    @commands.command(name="issue", category=cmn.BoltCats.INFO)
     async def _issue(self, ctx: commands.Context):
         """Shows how to create a bug report or feature request about the bot."""
         embed = cmn.embed_factory(ctx)
@@ -215,7 +219,7 @@ class BaseCog(commands.Cog):
                             [miaowware/qrm-resources](https://github.com/miaowware/qrm-resources/issues)."""
         await ctx.send(embed=embed)
 
-    @commands.command(name="donate", aliases=["tip"])
+    @commands.command(name="donate", aliases=["tip"], category=cmn.BoltCats.INFO)
     async def _donate(self, ctx: commands.Context):
         """Shows ways to help support development of the bot via donations."""
         embed = cmn.embed_factory(ctx)
@@ -226,7 +230,7 @@ class BaseCog(commands.Cog):
             embed.add_field(name=title, value=url, inline=False)
         await ctx.send(embed=embed)
 
-    @commands.command(name="invite", enabled=opt.enable_invite_cmd)
+    @commands.command(name="invite", enabled=opt.enable_invite_cmd, category=cmn.BoltCats.INFO)
     async def _invite(self, ctx: commands.Context):
         """Generates a link to invite the bot to a server."""
         if not (await self.bot.application_info()).bot_public:
@@ -236,7 +240,7 @@ class BaseCog(commands.Cog):
         embed.description = self.bot_invite
         await ctx.send(embed=embed)
 
-    @commands.command(name="echo", aliases=["e"], category=cmn.cat.admin)
+    @commands.command(name="echo", aliases=["e"], category=cmn.BoltCats.ADMIN)
     @commands.check(cmn.check_if_owner)
     async def _echo(self, ctx: commands.Context,
                     channel: Union[cmn.GlobalChannelConverter, commands.UserConverter], *, msg: str):

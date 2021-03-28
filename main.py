@@ -74,7 +74,7 @@ bot.qrm.debug_mode = debug_mode
 
 # --- Commands ---
 
-@bot.command(name="restart", aliases=["rs"], category=cmn.cat.admin)
+@bot.command(name="restart", aliases=["rs"], category=cmn.BoltCats.ADMIN)
 @commands.check(cmn.check_if_owner)
 async def _restart_bot(ctx: commands.Context):
     """Restarts the bot."""
@@ -85,7 +85,7 @@ async def _restart_bot(ctx: commands.Context):
     await bot.logout()
 
 
-@bot.command(name="shutdown", aliases=["shut"], category=cmn.cat.admin)
+@bot.command(name="shutdown", aliases=["shut"], category=cmn.BoltCats.ADMIN)
 @commands.check(cmn.check_if_owner)
 async def _shutdown_bot(ctx: commands.Context):
     """Shuts down the bot."""
@@ -96,7 +96,7 @@ async def _shutdown_bot(ctx: commands.Context):
     await bot.logout()
 
 
-@bot.group(name="extctl", aliases=["ex"], case_insensitive=True, category=cmn.cat.admin)
+@bot.group(name="extctl", aliases=["ex"], case_insensitive=True, category=cmn.BoltCats.ADMIN)
 @commands.check(cmn.check_if_owner)
 async def _extctl(ctx: commands.Context):
     """Extension control commands.

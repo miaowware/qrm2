@@ -9,7 +9,6 @@ the GNU General Public License, version 2.
 
 
 import aiohttp
-from datetime import datetime
 
 import discord.ext.commands as commands
 
@@ -19,33 +18,21 @@ import data.options as opt
 
 
 class ImageCog(commands.Cog):
-    gl_baseurl = "https://www.fourmilab.ch/cgi-bin/uncgi/Earth?img=ETOPO1_day-m.evif&dynimg=y&opt=-p"
-
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.bandcharts = cmn.ImagesGroup(cmn.paths.resources / "bandcharts.1.json")
         self.maps = cmn.ImagesGroup(cmn.paths.resources / "maps.1.json")
         self.session = aiohttp.ClientSession(connector=bot.qrm.connector)
 
-    @commands.command(name="bandchart", aliases=["bandplan", "plan", "bands"], category=cmn.cat.ref)
+    @commands.command(name="bandchart", aliases=["bandplan", "plan", "bands"], category=cmn.Cats.REF)
     async def _bandcharts(self, ctx: commands.Context, chart_id: str = ""):
         """Gets the frequency allocations chart for a given country."""
         await ctx.send(embed=create_embed(ctx, "Bandchart", self.bandcharts, chart_id))
 
-    @commands.command(name="map", category=cmn.cat.maps)
+    @commands.command(name="map", category=cmn.Cats.REF)
     async def _map(self, ctx: commands.Context, map_id: str = ""):
         """Posts a ham-relevant map."""
         await ctx.send(embed=create_embed(ctx, "Map", self.maps, map_id))
-
-    @commands.command(name="grayline", aliases=["greyline", "grey", "gray", "gl"], category=cmn.cat.maps)
-    async def _grayline(self, ctx: commands.Context):
-        """Gets a map of the current greyline, where HF propagation is the best."""
-        embed = cmn.embed_factory(ctx)
-        embed.title = "Current Greyline Conditions"
-        embed.colour = cmn.colours.good
-        date_params = f"&date=1&utc={datetime.utcnow():%Y-%m-%d+%H:%M:%S}"
-        embed.set_image(url=self.gl_baseurl + date_params)
-        await ctx.send(embed=embed)
 
 
 def create_embed(ctx: commands.Context, not_found_name: str, db: cmn.ImagesGroup, img_id: str):

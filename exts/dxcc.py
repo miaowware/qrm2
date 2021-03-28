@@ -1,7 +1,8 @@
 """
-Lookup extension for qrm
+DXCC Prefix Lookup extension for qrm
 ---
-Copyright (C) 2019-2020 Abigail Gold, 0x5c
+Copyright (C) 2019-2020 Abigail Gold, 0x5c  (as lookup.py)
+Copyright (C) 2021 Abigail Gold, 0x5c
 
 This file is part of qrm2 and is released under the terms of
 the GNU General Public License, version 2.
@@ -21,7 +22,7 @@ import common as cmn
 cty_path = Path("./data/cty.json")
 
 
-class LookupCog(commands.Cog):
+class DXCCCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         try:
@@ -29,19 +30,7 @@ class LookupCog(commands.Cog):
         except OSError:
             self.cty = BigCty()
 
-    # TODO: See #107
-    # @commands.command(name="sat", category=cmn.cat.lookup)
-    # async def _sat_lookup(self, ctx: commands.Context, sat_name: str, grid1: str, grid2: str = None):
-    #     """Links to info about satellite passes on satmatch.com."""
-    #     now = datetime.utcnow().strftime("%Y-%m-%d%%20%H:%M")
-    #     if grid2 is None or grid2 == "":
-    #         await ctx.send(f"http://www.satmatch.com/satellite/{sat_name}/obs1/{grid1}"
-    #                        f"?search_start_time={now}&duration_hrs=24")
-    #     else:
-    #         await ctx.send(f"http://www.satmatch.com/satellite/{sat_name}/obs1/{grid1}"
-    #                        f"/obs2/{grid2}?search_start_time={now}&duration_hrs=24")
-
-    @commands.command(name="dxcc", aliases=["dx"], category=cmn.cat.lookup)
+    @commands.command(name="dxcc", aliases=["dx"], category=cmn.Cats.LOOKUP)
     async def _dxcc_lookup(self, ctx: commands.Context, query: str):
         """Gets DXCC info about a callsign prefix."""
         query = query.upper()
@@ -82,6 +71,6 @@ def run_update(cty_obj, dump_loc):
 
 
 def setup(bot: commands.Bot):
-    lookupcog = LookupCog(bot)
-    bot.add_cog(lookupcog)
-    lookupcog._update_cty.start()
+    dxcccog = DXCCCog(bot)
+    bot.add_cog(dxcccog)
+    dxcccog._update_cty.start()

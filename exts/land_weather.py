@@ -1,7 +1,8 @@
 """
-Weather extension for qrm
+Land Weather extension for qrm
 ---
-Copyright (C) 2019-2020 Abigail Gold, 0x5c
+Copyright (C) 2019-2020 Abigail Gold, 0x5c  (as weather.py)
+Copyright (C) 2021 Abigail Gold, 0x5c
 
 This file is part of qrm2 and is released under the terms of
 the GNU General Public License, version 2.
@@ -26,21 +27,7 @@ class WeatherCog(commands.Cog):
         self.bot = bot
         self.session = aiohttp.ClientSession(connector=bot.qrm.connector)
 
-    @commands.command(name="solarweather", aliases=["solar", "bandconditions", "cond", "condx", "conditions"],
-                      category=cmn.cat.weather)
-    async def solarweather(self, ctx: commands.Context):
-        """Gets a solar weather report."""
-        embed = cmn.embed_factory(ctx)
-        embed.title = "☀️ Current Solar Weather"
-        if ctx.invoked_with in ["bandconditions", "cond", "condx", "conditions"]:
-            embed.add_field(name="⚠️ Deprecated Command Alias",
-                            value=(f"This command has been renamed to `{ctx.prefix}solar`!\n"
-                                   "The alias you used will be removed in the next version."))
-        embed.colour = cmn.colours.good
-        embed.set_image(url="http://www.hamqsl.com/solarsun.php")
-        await ctx.send(embed=embed)
-
-    @commands.group(name="weather", aliases=["wttr"], case_insensitive=True, category=cmn.cat.weather)
+    @commands.group(name="weather", aliases=["wttr"], case_insensitive=True, category=cmn.Cats.WEATHER)
     async def _weather_conditions(self, ctx: commands.Context):
         """Gets local weather conditions from [wttr.in](http://wttr.in/).
 
@@ -57,7 +44,7 @@ class WeatherCog(commands.Cog):
         if ctx.invoked_subcommand is None:
             await ctx.send_help(ctx.command)
 
-    @_weather_conditions.command(name="forecast", aliases=["fc", "future"], category=cmn.cat.weather)
+    @_weather_conditions.command(name="forecast", aliases=["fc", "future"], category=cmn.Cats.WEATHER)
     async def _weather_conditions_forecast(self, ctx: commands.Context, *, location: str):
         """Gets local weather forecast for the next three days from [wttr.in](http://wttr.in/).
         See help of the `weather` command for possible location types and options."""
@@ -83,7 +70,7 @@ class WeatherCog(commands.Cog):
         embed.set_image(url=f"http://wttr.in/{loc}_{units}pnFQ.png")
         await ctx.send(embed=embed)
 
-    @_weather_conditions.command(name="now", aliases=["n"], category=cmn.cat.weather)
+    @_weather_conditions.command(name="now", aliases=["n"], category=cmn.Cats.WEATHER)
     async def _weather_conditions_now(self, ctx: commands.Context, *, location: str):
         """Gets current local weather conditions from [wttr.in](http://wttr.in/).
         See help of the `weather` command for possible location types and options."""
@@ -109,7 +96,7 @@ class WeatherCog(commands.Cog):
         embed.set_image(url=f"http://wttr.in/{loc}_0{units}pnFQ.png")
         await ctx.send(embed=embed)
 
-    @commands.command(name="metar", category=cmn.cat.weather)
+    @commands.command(name="metar", category=cmn.Cats.WEATHER)
     async def metar(self, ctx: commands.Context, airport: str, hours: int = 0):
         """Gets current raw METAR (Meteorological Terminal Aviation Routine Weather Report) for an airport. \
         Optionally, a number of hours can be given to show a number of hours of historical METAR data.
@@ -118,7 +105,7 @@ class WeatherCog(commands.Cog):
         [ICAO code](https://en.wikipedia.org/wiki/List_of_airports_by_IATA_and_ICAO_code)."""
         await ctx.send(embed=await self.gen_metar_taf_embed(ctx, airport, hours, False))
 
-    @commands.command(name="taf", category=cmn.cat.weather)
+    @commands.command(name="taf", category=cmn.Cats.WEATHER)
     async def taf(self, ctx: commands.Context, airport: str):
         """Gets forecasted raw TAF (Terminal Aerodrome Forecast) data for an airport. Includes the latest METAR data.
 

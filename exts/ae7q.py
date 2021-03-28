@@ -29,13 +29,13 @@ class AE7QCog(commands.Cog):
         self.bot = bot
         self.session = aiohttp.ClientSession(connector=bot.qrm.connector)
 
-    @commands.group(name="ae7q", aliases=["ae"], case_insensitive=True, category=cmn.cat.lookup)
+    @commands.group(name="ae7q", aliases=["ae"], case_insensitive=True, category=cmn.Cats.LOOKUP)
     async def _ae7q_lookup(self, ctx: commands.Context):
         """Looks up a callsign, FRN, or Licensee ID on [ae7q.com](http://ae7q.com/)."""
         if ctx.invoked_subcommand is None:
             await ctx.send_help(ctx.command)
 
-    @_ae7q_lookup.command(name="call", aliases=["c"], category=cmn.cat.lookup)
+    @_ae7q_lookup.command(name="call", aliases=["c"], category=cmn.Cats.LOOKUP)
     async def _ae7q_call(self, ctx: commands.Context, callsign: str):
         """Looks up the history of a callsign on [ae7q.com](http://ae7q.com/)."""
         with ctx.typing():
@@ -109,7 +109,7 @@ class AE7QCog(commands.Cog):
 
             await ctx.send(embed=embed)
 
-    @_ae7q_lookup.command(name="trustee", aliases=["t"], category=cmn.cat.lookup)
+    @_ae7q_lookup.command(name="trustee", aliases=["t"], category=cmn.Cats.LOOKUP)
     async def _ae7q_trustee(self, ctx: commands.Context, callsign: str):
         """Looks up the licenses for which a licensee is trustee on [ae7q.com](http://ae7q.com/)."""
         with ctx.typing():
@@ -184,7 +184,7 @@ class AE7QCog(commands.Cog):
 
             await ctx.send(embed=embed)
 
-    @_ae7q_lookup.command(name="applications", aliases=["a"], category=cmn.cat.lookup)
+    @_ae7q_lookup.command(name="applications", aliases=["a"], category=cmn.Cats.LOOKUP)
     async def _ae7q_applications(self, ctx: commands.Context, callsign: str):
         """Looks up the application history for a callsign on [ae7q.com](http://ae7q.com/)."""
         """
@@ -262,7 +262,7 @@ class AE7QCog(commands.Cog):
         raise NotImplementedError("Application history lookup not yet supported. "
                                   "Check back in a later version of the bot.")
 
-    @_ae7q_lookup.command(name="frn", aliases=["f"], category=cmn.cat.lookup)
+    @_ae7q_lookup.command(name="frn", aliases=["f"], category=cmn.Cats.LOOKUP)
     async def _ae7q_frn(self, ctx: commands.Context, frn: str):
         """Looks up the history of an FRN on [ae7q.com](http://ae7q.com/)."""
         """
@@ -337,7 +337,7 @@ class AE7QCog(commands.Cog):
 
             await ctx.send(embed=embed)
 
-    @_ae7q_lookup.command(name="licensee", aliases=["l"], category=cmn.cat.lookup)
+    @_ae7q_lookup.command(name="licensee", aliases=["l"], category=cmn.Cats.LOOKUP)
     async def _ae7q_licensee(self, ctx: commands.Context, licensee_id: str):
         """Looks up the history of a licensee ID on [ae7q.com](http://ae7q.com/)."""
         with ctx.typing():

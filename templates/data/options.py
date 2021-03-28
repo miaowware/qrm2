@@ -31,20 +31,23 @@ owners_uids = (200102491231092736, 564766093051166729)
 
 # The extensions to load when running the bot.
 exts = [
-    "ae7q",
     "base",
+    "ae7q",
+    "callsign",
+    "codes",
+    "contests",
+    "dbconv",
+    "dxcc",
     "fun",
     "grid",
-    "ham",
     "image",
-    "lookup",
+    "land_weather",
     "morse",
-    "qrz",
+    "prefixes",
+    "propagation",
     "study",
     "tex",
-    "weather",
-    "dbconv",
-    "propagation",
+    "time",
 ]
 
 # URL to the resources

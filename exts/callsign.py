@@ -1,7 +1,8 @@
 """
-QRZ extension for qrm
+Callsign Lookup extension for qrm
 ---
-Copyright (C) 2019-2020 Abigail Gold, 0x5c
+Copyright (C) 2019-2020 Abigail Gold, 0x5c  (as qrz.py)
+Copyright (C) 2021 Abigail Gold, 0x5c
 
 This file is part of qrm2 and is released under the terms of
 the GNU General Public License, version 2.
@@ -40,7 +41,7 @@ class QRZCog(commands.Cog):
         except AttributeError:
             pass
 
-    @commands.command(name="call", aliases=["qrz"], category=cmn.cat.lookup)
+    @commands.command(name="call", aliases=["qrz"], category=cmn.Cats.LOOKUP)
     async def _qrz_lookup(self, ctx: commands.Context, callsign: str, *flags):
         """Looks up a callsign on [QRZ.com](https://www.qrz.com/). Add `--link` to only link the QRZ page."""
         flags = [f.lower() for f in flags]
