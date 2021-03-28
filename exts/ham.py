@@ -28,7 +28,7 @@ class HamCog(commands.Cog):
         with open(cmn.paths.resources / "qcodes.1.json") as file:
             self.qcodes: dict = json.load(file)
 
-    @commands.command(name="qcode", aliases=["q"], category=cmn.cat.ref)
+    @commands.command(name="qcode", aliases=["q"], category=cmn.Cats.REF)
     async def _qcode_lookup(self, ctx: commands.Context, qcode: str):
         """Looks up the meaning of a Q Code."""
         qcode = qcode.upper()
@@ -42,7 +42,7 @@ class HamCog(commands.Cog):
             embed.colour = cmn.colours.bad
         await ctx.send(embed=embed)
 
-    @commands.command(name="phonetics", aliases=["ph", "phoneticize", "phoneticise", "phone"], category=cmn.cat.ref)
+    @commands.command(name="phonetics", aliases=["ph", "phoneticize", "phoneticise", "phone"], category=cmn.Cats.REF)
     async def _phonetics_lookup(self, ctx: commands.Context, *, msg: str):
         """Returns NATO phonetics for a word or phrase."""
         result = ""
@@ -58,7 +58,7 @@ class HamCog(commands.Cog):
         embed.colour = cmn.colours.good
         await ctx.send(embed=embed)
 
-    @commands.command(name="utc", aliases=["z"], category=cmn.cat.ref)
+    @commands.command(name="utc", aliases=["z"], category=cmn.Cats.REF)
     async def _utc_lookup(self, ctx: commands.Context):
         """Returns the current time in UTC."""
         now = datetime.utcnow()
@@ -69,7 +69,7 @@ class HamCog(commands.Cog):
         embed.colour = cmn.colours.good
         await ctx.send(embed=embed)
 
-    @commands.command(name="prefixes", aliases=["vanity", "pfx", "vanities", "prefix"], category=cmn.cat.ref)
+    @commands.command(name="prefixes", aliases=["vanity", "pfx", "vanities", "prefix"], category=cmn.Cats.REF)
     async def _vanity_prefixes(self, ctx: commands.Context, country: str = ""):
         """Lists valid callsign prefixes for different countries."""
         country = country.lower()
@@ -93,7 +93,7 @@ class HamCog(commands.Cog):
                 embed.add_field(name=name, value=val, inline=False)
         await ctx.send(embed=embed)
 
-    @commands.command(name="contests", aliases=["cc", "tests"], category=cmn.cat.ref)
+    @commands.command(name="contests", aliases=["cc", "tests"], category=cmn.Cats.REF)
     async def _contests(self, ctx: commands.Context):
         embed = cmn.embed_factory(ctx)
         embed.title = "Contest Calendar"
@@ -102,7 +102,7 @@ class HamCog(commands.Cog):
         embed.colour = cmn.colours.good
         await ctx.send(embed=embed)
 
-    @commands.command(name="phoneticweight", aliases=["pw"], category=cmn.cat.ref)
+    @commands.command(name="phoneticweight", aliases=["pw"], category=cmn.Cats.REF)
     async def _weight(self, ctx: commands.Context, *, msg: str):
         """Calculates the phonetic weight of a callsign or message."""
         embed = cmn.embed_factory(ctx)

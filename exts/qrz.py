@@ -40,7 +40,7 @@ class QRZCog(commands.Cog):
         except AttributeError:
             pass
 
-    @commands.command(name="call", aliases=["qrz"], category=cmn.cat.lookup)
+    @commands.command(name="call", aliases=["qrz"], category=cmn.Cats.LOOKUP)
     async def _qrz_lookup(self, ctx: commands.Context, callsign: str, *flags):
         """Looks up a callsign on [QRZ.com](https://www.qrz.com/). Add `--link` to only link the QRZ page."""
         flags = [f.lower() for f in flags]

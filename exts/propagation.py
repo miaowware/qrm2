@@ -27,7 +27,7 @@ class PropagationCog(commands.Cog):
         self.bot = bot
         self.session = aiohttp.ClientSession(connector=bot.qrm.connector)
 
-    @commands.command(name="mufmap", aliases=["muf"], category=cmn.cat.weather)
+    @commands.command(name="mufmap", aliases=["muf"], category=cmn.Cats.WEATHER)
     async def mufmap(self, ctx: commands.Context):
         """Shows a world map of the Maximum Usable Frequency (MUF)."""
         async with ctx.typing():
@@ -41,7 +41,7 @@ class PropagationCog(commands.Cog):
             embed.set_image(url="attachment://muf_map.png")
             await ctx.send(file=file, embed=embed)
 
-    @commands.command(name="fof2map", aliases=["fof2", "critfreq"], category=cmn.cat.weather)
+    @commands.command(name="fof2map", aliases=["fof2", "critfreq"], category=cmn.Cats.WEATHER)
     async def fof2map(self, ctx: commands.Context):
         """Shows a world map of the Critical Frequency (foF2)."""
         async with ctx.typing():

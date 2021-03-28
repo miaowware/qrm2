@@ -31,7 +31,7 @@ class StudyCog(commands.Cog):
         self.source = "Data courtesy of [HamStudy.org](https://hamstudy.org/)"
         self.session = aiohttp.ClientSession(connector=bot.qrm.connector)
 
-    @commands.command(name="hamstudy", aliases=["rq", "randomquestion", "randomq"], category=cmn.cat.study)
+    @commands.command(name="hamstudy", aliases=["rq", "randomquestion", "randomq"], category=cmn.Cats.STUDY)
     async def _random_question(self, ctx: commands.Context, country: str = "", level: str = "", element: str = ""):
         """Gets a random question from [HamStudy's](https://hamstudy.org) question pools."""
         with ctx.typing():

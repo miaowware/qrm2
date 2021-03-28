@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Main name and aliases of `?bandplan`.
 ### Fixed
 - Lack of input sanitisation in `?xkcd`.
+- Incorrect capitalisation of the categories in the `?help` command.
 
 
 ## [2.6.0] - 2021-03-18

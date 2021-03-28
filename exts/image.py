@@ -27,17 +27,17 @@ class ImageCog(commands.Cog):
         self.maps = cmn.ImagesGroup(cmn.paths.resources / "maps.1.json")
         self.session = aiohttp.ClientSession(connector=bot.qrm.connector)
 
-    @commands.command(name="bandchart", aliases=["bandplan", "plan", "bands"], category=cmn.cat.ref)
+    @commands.command(name="bandchart", aliases=["bandplan", "plan", "bands"], category=cmn.Cats.REF)
     async def _bandcharts(self, ctx: commands.Context, chart_id: str = ""):
         """Gets the frequency allocations chart for a given country."""
         await ctx.send(embed=create_embed(ctx, "Bandchart", self.bandcharts, chart_id))
 
-    @commands.command(name="map", category=cmn.cat.maps)
+    @commands.command(name="map", category=cmn.Cats.MAPS)
     async def _map(self, ctx: commands.Context, map_id: str = ""):
         """Posts a ham-relevant map."""
         await ctx.send(embed=create_embed(ctx, "Map", self.maps, map_id))
 
-    @commands.command(name="grayline", aliases=["greyline", "grey", "gray", "gl"], category=cmn.cat.maps)
+    @commands.command(name="grayline", aliases=["greyline", "grey", "gray", "gl"], category=cmn.Cats.MAPS)
     async def _grayline(self, ctx: commands.Context):
         """Gets a map of the current greyline, where HF propagation is the best."""
         embed = cmn.embed_factory(ctx)

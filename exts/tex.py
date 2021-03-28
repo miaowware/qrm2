@@ -26,7 +26,7 @@ class TexCog(commands.Cog):
         with open(cmn.paths.resources / "template.1.tex") as latex_template:
             self.template = latex_template.read()
 
-    @commands.command(name="tex", aliases=["latex"], category=cmn.cat.fun)
+    @commands.command(name="tex", aliases=["latex"], category=cmn.Cats.FUN)
     async def tex(self, ctx: commands.Context, *, expr: str):
         """Renders a LaTeX expression."""
         payload = {

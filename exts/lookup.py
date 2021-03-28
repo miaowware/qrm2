@@ -30,7 +30,7 @@ class LookupCog(commands.Cog):
             self.cty = BigCty()
 
     # TODO: See #107
-    # @commands.command(name="sat", category=cmn.cat.lookup)
+    # @commands.command(name="sat", category=cmn.Cats.Lookup)
     # async def _sat_lookup(self, ctx: commands.Context, sat_name: str, grid1: str, grid2: str = None):
     #     """Links to info about satellite passes on satmatch.com."""
     #     now = datetime.utcnow().strftime("%Y-%m-%d%%20%H:%M")
@@ -41,7 +41,7 @@ class LookupCog(commands.Cog):
     #         await ctx.send(f"http://www.satmatch.com/satellite/{sat_name}/obs1/{grid1}"
     #                        f"/obs2/{grid2}?search_start_time={now}&duration_hrs=24")
 
-    @commands.command(name="dxcc", aliases=["dx"], category=cmn.cat.lookup)
+    @commands.command(name="dxcc", aliases=["dx"], category=cmn.Cats.LOOKUP)
     async def _dxcc_lookup(self, ctx: commands.Context, query: str):
         """Gets DXCC info about a callsign prefix."""
         query = query.upper()

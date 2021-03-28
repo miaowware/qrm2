@@ -19,7 +19,7 @@ class GridCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.command(name="grid", category=cmn.cat.maps)
+    @commands.command(name="grid", category=cmn.Cats.MAPS)
     async def _grid_sq_lookup(self, ctx: commands.Context, lat: float, lon: float):
         ("""Calculates the grid square for latitude and longitude coordinates."""
          """\n\nCoordinates should be in decimal format, with negative being latitude South and longitude West."""
@@ -33,7 +33,7 @@ class GridCog(commands.Cog):
         embed.colour = cmn.colours.good
         await ctx.send(embed=embed)
 
-    @commands.command(name="latlong", aliases=["latlon", "loc", "ungrid"], category=cmn.cat.maps)
+    @commands.command(name="latlong", aliases=["latlon", "loc", "ungrid"], category=cmn.Cats.MAPS)
     async def _location_lookup(self, ctx: commands.Context, grid: str):
         ("""Calculates the latitude and longitude for the center of a grid locator."""
          """\n\nTo calculate the grid locator from a latitude and longitude, use `grid`"""
@@ -49,7 +49,7 @@ class GridCog(commands.Cog):
                                                    "latlong` to see other names for this command.*"))
         await ctx.send(embed=embed)
 
-    @commands.command(name="griddistance", aliases=["griddist", "distance", "dist"], category=cmn.cat.maps)
+    @commands.command(name="griddistance", aliases=["griddist", "distance", "dist"], category=cmn.Cats.MAPS)
     async def _dist_lookup(self, ctx: commands.Context, grid1: str, grid2: str):
         """Calculates the great circle distance and azimuthal bearing between two grid locators."""
         g1 = gridtools.Grid(grid1)

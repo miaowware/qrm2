@@ -23,7 +23,7 @@ class MorseCog(commands.Cog):
             self.morse: dict[str, str] = d["morse"]
             self.ascii: dict[str, int] = d["ascii"]
 
-    @commands.command(name="morse", aliases=["cw"], category=cmn.cat.ref)
+    @commands.command(name="morse", aliases=["cw"], category=cmn.Cats.REF)
     async def _morse(self, ctx: commands.Context, *, msg: str):
         """Converts ASCII to international morse code."""
         result = ""
@@ -39,7 +39,7 @@ class MorseCog(commands.Cog):
         embed.colour = cmn.colours.good
         await ctx.send(embed=embed)
 
-    @commands.command(name="unmorse", aliases=["demorse", "uncw", "decw"], category=cmn.cat.ref)
+    @commands.command(name="unmorse", aliases=["demorse", "uncw", "decw"], category=cmn.Cats.REF)
     async def _unmorse(self, ctx: commands.Context, *, msg: str):
         """Converts international morse code to ASCII."""
         result = ""
@@ -59,7 +59,7 @@ class MorseCog(commands.Cog):
         embed.colour = cmn.colours.good
         await ctx.send(embed=embed)
 
-    @commands.command(name="cwweight", aliases=["weight", "cww"], category=cmn.cat.ref)
+    @commands.command(name="cwweight", aliases=["weight", "cww"], category=cmn.Cats.REF)
     async def _weight(self, ctx: commands.Context, *, msg: str):
         """Calculates the CW weight of a callsign or message."""
         embed = cmn.embed_factory(ctx)
