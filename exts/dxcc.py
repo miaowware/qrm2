@@ -1,8 +1,8 @@
 """
 DXCC Prefix Lookup extension for qrm
 ---
-Copyright (C) 2019-2020 Abigail Gold, 0x5c  (as lookup.py)
-Copyright (C) 2021 Abigail Gold, 0x5c
+Copyright (C) 2019-2020 classabbyamp, 0x5c  (as lookup.py)
+Copyright (C) 2021 classabbyamp, 0x5c
 
 This file is part of qrm2 and is released under the terms of
 the GNU General Public License, version 2.
