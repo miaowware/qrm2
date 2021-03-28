@@ -48,11 +48,14 @@ class BoltCats(enum.Enum):
 
 # meow
 class Cats(enum.Enum):
-    LOOKUP = "Information Lookup"
+    CALC = "Calculators"
+    CODES = "Code References and Tools"
     FUN = "Fun"
-    MAPS = "Mapping"
+    LOOKUP = "Information Lookup"
     REF = "Reference"
     STUDY = "Exam Study"
+    TIME = "Time and Time Zones"
+    UTILS = "Utilities"
     WEATHER = "Land and Space Weather"
 
 

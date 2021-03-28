@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Configuration option to use another rTeX instance for `?tex`.
 ### Changed
 - Main name and aliases of `?bandplan`.
+- Recategorized the commands.
 ### Fixed
 - Lack of input sanitisation in `?xkcd`.
 - Incorrect capitalisation of the categories in the `?help` command.
@@ -85,7 +86,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [2.3.1] - 2020-04-02
 ### Fixed
-- Wordlist containing innappropriate words.
+- Wordlist containing inappropriate words.
 
 
 ## [2.3.0] - 2020-03-30

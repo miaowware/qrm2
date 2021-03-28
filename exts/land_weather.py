@@ -1,7 +1,8 @@
 """
-Weather extension for qrm
+Land Weather extension for qrm
 ---
-Copyright (C) 2019-2020 Abigail Gold, 0x5c
+Copyright (C) 2019-2020 Abigail Gold, 0x5c  (as weather.py)
+Copyright (C) 2021 Abigail Gold, 0x5c
 
 This file is part of qrm2 and is released under the terms of
 the GNU General Public License, version 2.
@@ -25,20 +26,6 @@ class WeatherCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.session = aiohttp.ClientSession(connector=bot.qrm.connector)
-
-    @commands.command(name="solarweather", aliases=["solar", "bandconditions", "cond", "condx", "conditions"],
-                      category=cmn.Cats.WEATHER)
-    async def solarweather(self, ctx: commands.Context):
-        """Gets a solar weather report."""
-        embed = cmn.embed_factory(ctx)
-        embed.title = "☀️ Current Solar Weather"
-        if ctx.invoked_with in ["bandconditions", "cond", "condx", "conditions"]:
-            embed.add_field(name="⚠️ Deprecated Command Alias",
-                            value=(f"This command has been renamed to `{ctx.prefix}solar`!\n"
-                                   "The alias you used will be removed in the next version."))
-        embed.colour = cmn.colours.good
-        embed.set_image(url="http://www.hamqsl.com/solarsun.php")
-        await ctx.send(embed=embed)
 
     @commands.group(name="weather", aliases=["wttr"], case_insensitive=True, category=cmn.Cats.WEATHER)
     async def _weather_conditions(self, ctx: commands.Context):

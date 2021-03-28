@@ -67,7 +67,7 @@ class DbConvCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.command(name="dbconv", aliases=["dbc"], category=cmn.Cats.REF)
+    @commands.command(name="dbconv", aliases=["dbc"], category=cmn.Cats.CALC)
     async def _db_conv(self, ctx: commands.Context,
                        value: Optional[float] = None,
                        unit_from: Optional[UnitConverter] = None,
