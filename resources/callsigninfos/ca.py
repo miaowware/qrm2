@@ -1,7 +1,7 @@
 """
 Information about callsigns for the CA prefixes command in hamcog.
 ---
-Copyright (C) 2019-2020 Abigail Gold, 0x5c
+Copyright (C) 2019-2020 classabbyamp, 0x5c
 
 This file is part of discord-qrmbot and is released under the terms of
 the GNU General Public License, version 2.

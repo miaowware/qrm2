@@ -38,7 +38,7 @@ All issues and requests related to resources (including maps, band charts, data)
 
 ## Copyright
 
-Copyright (C) 2019-2020 Abigail Gold, 0x5c
+Copyright (C) 2019-2020 classabbyamp, 0x5c
 
 This program is released under the terms of the GNU General Public License,
 version 2. See `COPYING` for full license text.
