@@ -1,6 +1,6 @@
 name: Bug Report
 description: Report a bug to help us improve this project
-labels: [bug]
+labels: [bug, 'needs triage']
 body:
 - id: description
   type: textarea
