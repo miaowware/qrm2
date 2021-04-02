@@ -1,0 +1,84 @@
+name: Bug Report
+description: Report a bug to help us improve this project
+labels: [bug]
+body:
+- id: description
+  type: textarea
+  attributes:
+    label: Bug description
+    description: A clear and concise description of what the bug is.
+    placeholder: There was a crash when...
+  validations:
+    required: true
+- id: steps
+  type: textarea
+  attributes:
+    label: Steps to reproduce
+    description: Clear steps to reproduce the bug.
+    placeholder: |
+      1. Do the thing
+      2. Do the other thing
+      3. ???
+      4. Crash :(
+  validations:
+    required: true
+- id: expected
+  type: textarea
+  attributes:
+    label: Expected behaviour
+    description: A clear and concise description of what you expected to happen.
+    placeholder: The app is supposed to show that thing.
+  validations:
+    required: true
+- id: source
+  type: dropdown
+  attributes:
+    label: How did you download qrm?
+    options:
+      - Official Docker package
+      - Git (clone)
+      - Zip download on the releases package
+  validations:
+    required: true
+- id: runtime
+  type: dropdown
+  attributes:
+    label: How are you running qrm?
+    options:
+      - docker-compose
+      - Daemon (systemd, etc)
+      - Docker
+      - Command line (./run.sh)
+  validations:
+    required: true
+- id: version
+  type: input
+  attributes:
+    label: What qrm version are you running?
+    description: The version number, or the commit id if `dev` version. You can find both in `?info`.
+    placeholder: v2.5.2
+  validations:
+    required: true
+- id: environment
+  type: textarea
+  attributes:
+    label: Environment
+    description: If relevant, include list of software used and versions
+    placeholder: |
+      - Linux 5.8
+      - Docker 19.04
+- id: logs
+  type: textarea
+  attributes:
+    label: Logs
+    description: If you have a log associated with the bug (tracebacks, etc), paste it directly here.
+    render: none
+# - id: context
+#   type: textarea
+#   attributes:
+#     label: Additional context, screenshots, etc
+#     description: Add any other relevant context about the problem here.
+- type: markdown
+  value: |
+    ## Additional context, screenshots, etc
+    Add any other relevant context about the problem here.
