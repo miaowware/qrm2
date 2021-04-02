@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Feature Request
+    url: https://github.com/miaowware/qrm2/discussions/new?category=ideas
+    about: Suggest an idea for this project
+  - name: Support
+    url: https://github.com/miaowware/qrm2/discussions/new?category=support
+    about: Get help with qrm in GitHub Discussions
+  - name: Support (Discord)
+    url: https://discord.gg/SwyjdDN
+    about: Get help with qrm on Discord
