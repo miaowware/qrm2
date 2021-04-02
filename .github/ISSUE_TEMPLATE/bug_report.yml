@@ -79,6 +79,7 @@ body:
 #     label: Additional context, screenshots, etc
 #     description: Add any other relevant context about the problem here.
 - type: markdown
-  value: |
-    ## Additional context, screenshots, etc
-    Add any other relevant context about the problem here.
+  attributes:
+    value: |
+      ## Additional context, screenshots, etc
+      Add any other relevant context about the problem here.
