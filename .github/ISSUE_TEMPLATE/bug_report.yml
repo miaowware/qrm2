@@ -38,6 +38,7 @@ body:
       - Official Docker package
       - Git (clone)
       - Zip download on the releases package
+      - I do not know (user of official instance)
   validations:
     required: true
 - id: runtime
@@ -49,6 +50,7 @@ body:
       - Daemon (systemd, etc)
       - Docker
       - Command line (./run.sh)
+      - I do not know (user of official instance)
   validations:
     required: true
 - id: version
