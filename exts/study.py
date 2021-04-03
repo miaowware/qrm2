@@ -170,7 +170,7 @@ class StudyCog(commands.Cog):
         except asyncio.TimeoutError:
             embed.set_field_at(1, name="Answers", value=answers_str_bolded, inline=False)
             embed.set_field_at(2, name="Answer",
-                               value=(f"{cmn.emojis.clock} "
+                               value=(f"{cmn.emojis.stopwatch} "
                                       f"**Timed out!** The correct answer was {self.choices[question['answer']]}"))
             embed.colour = cmn.colours.timeout
             await q_msg.edit(embed=embed)
