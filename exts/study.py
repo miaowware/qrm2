@@ -1,7 +1,7 @@
 """
 Study extension for qrm
 ---
-Copyright (C) 2019-2020 classabbyamp, 0x5c
+Copyright (C) 2019-2021 classabbyamp, 0x5c
 
 This file is part of qrm2 and is released under the terms of
 the GNU General Public License, version 2.
