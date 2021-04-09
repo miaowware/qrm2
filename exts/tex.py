@@ -30,7 +30,7 @@ class TexCog(commands.Cog):
     async def tex(self, ctx: commands.Context, *, expr: str):
         """Renders a LaTeX expression.
 
-        In document mode by default. To render math, add `$` around math expressions.
+        In paragraph mode by default. To render math, add `$` around math expressions.
         """
         payload = {
             "format": "png",
