@@ -28,7 +28,10 @@ class TexCog(commands.Cog):
 
     @commands.command(name="tex", aliases=["latex"], category=cmn.Cats.UTILS)
     async def tex(self, ctx: commands.Context, *, expr: str):
-        """Renders a LaTeX expression."""
+        """Renders a LaTeX expression.
+
+        In paragraph mode by default. To render math, add `$` around math expressions.
+        """
         payload = {
             "format": "png",
             "code": self.template.replace("#CONTENT#", expr),
@@ -45,7 +48,11 @@ class TexCog(commands.Cog):
                 if render_result["status"] != "success":
                     embed = cmn.embed_factory(ctx)
                     embed.title = "LaTeX Rendering Failed!"
-                    embed.description = render_result.get("description", "Unknown error")
+                    embed.description = ("Here are some common reasons:\n"
+                                         "• Did you forget to use math mode? Surround math expressions with `$`,"
+                                         " like `$x^3$`.\n"
+                                         "• Are you using a command from a package? It might not be available.\n"
+                                         "• Are you including the document headers? We already did that for you.")
                     embed.colour = cmn.colours.bad
                     await ctx.send(embed=embed)
                     return
