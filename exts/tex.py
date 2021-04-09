@@ -28,7 +28,10 @@ class TexCog(commands.Cog):
 
     @commands.command(name="tex", aliases=["latex"], category=cmn.Cats.UTILS)
     async def tex(self, ctx: commands.Context, *, expr: str):
-        """Renders a LaTeX expression."""
+        """Renders a LaTeX expression.
+        
+        In document mode by default. To render math, add `$` around math expressions.
+        """
         payload = {
             "format": "png",
             "code": self.template.replace("#CONTENT#", expr),
