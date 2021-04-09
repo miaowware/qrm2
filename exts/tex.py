@@ -49,10 +49,10 @@ class TexCog(commands.Cog):
                     embed = cmn.embed_factory(ctx)
                     embed.title = "LaTeX Rendering Failed!"
                     embed.description = ("Here are some common reasons:\n"
-                                         "- Did you forget to use math mode? Surround math expressions with `$`,"
+                                         "• Did you forget to use math mode? Surround math expressions with `$`,"
                                          " like `$x^3$`.\n"
-                                         "- Are you using a command from a package? It might not be available.\n"
-                                         "- Are you including the document headers? We already did that for you.")
+                                         "• Are you using a command from a package? It might not be available.\n"
+                                         "• Are you including the document headers? We already did that for you.")
                     embed.colour = cmn.colours.bad
                     await ctx.send(embed=embed)
                     return
