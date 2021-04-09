@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ## [Unreleased]
+### Added
+- Helpful LaTeX hints for rendering errors in `?tex`.
 
 
 ## [2.7.0] - 2021-04-03
