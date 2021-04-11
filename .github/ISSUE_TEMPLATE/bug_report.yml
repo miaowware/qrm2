@@ -75,13 +75,8 @@ body:
     label: Logs
     description: If you have a log associated with the bug (tracebacks, etc), paste it directly here.
     render: none
-# - id: context
-#   type: textarea
-#   attributes:
-#     label: Additional context, screenshots, etc
-#     description: Add any other relevant context about the problem here.
-- type: markdown
+- id: context
+  type: textarea
   attributes:
-    value: |
-      ## Additional context, screenshots, etc
-      Add any other relevant context about the problem here.
+    label: Additional context, screenshots, etc
+    description: Add any other relevant context about the problem here.
