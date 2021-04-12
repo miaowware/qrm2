@@ -78,7 +78,7 @@ class QRZCog(commands.Cog):
                 embed.set_thumbnail(url=data.image.url)
 
             for title, val in qrz_process_info(data).items():
-                if val is not None:
+                if val:
                     embed.add_field(name=title, value=val, inline=True)
             await ctx.send(embed=embed)
 
@@ -99,7 +99,11 @@ def qrz_process_info(data: qrztools.QrzCallsignData) -> Dict:
 
     if data.address != qrztools.Address():
         state = ", " + data.address.state + " " if data.address.state else ""
-        address = "\n".join([data.address.attn, data.address.line1, data.address.line2 + state, data.address.zip])
+        address = "\n".join(
+            [x for x
+             in [data.address.attn, data.address.line1, data.address.line2 + state, data.address.zip]
+             if x]
+            )
     else:
         address = None
 
