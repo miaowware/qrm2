@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ## [Unreleased]
+
+
+## [2.7.1] - 2021-04-12
 ### Added
 - Helpful LaTeX hints for rendering errors in `?tex`.
 ### Fixed
@@ -190,7 +193,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## 1.0.0 - 2019-07-31 [YANKED]
 
 
-[Unreleased]: https://github.com/miaowware/qrm2/compare/v2.7.0...HEAD
+[Unreleased]: https://github.com/miaowware/qrm2/compare/v2.7.1...HEAD
+[2.7.1]: https://github.com/miaowware/qrm2/releases/tag/v2.7.1
 [2.7.0]: https://github.com/miaowware/qrm2/releases/tag/v2.7.0
 [2.6.0]: https://github.com/miaowware/qrm2/releases/tag/v2.6.0
 [2.5.1]: https://github.com/miaowware/qrm2/releases/tag/v2.5.1
