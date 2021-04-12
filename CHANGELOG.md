@@ -7,6 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 
+## [2.7.3] - 2021-04-12
+### Fixed
+- Issue where `?help` might not display all commands.
+
+
 ## [2.7.2] - 2021-04-12
 ### Fixed
 - Issue where `?help` might not work for all people.
@@ -198,7 +203,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## 1.0.0 - 2019-07-31 [YANKED]
 
 
-[Unreleased]: https://github.com/miaowware/qrm2/compare/v2.7.2...HEAD
+[Unreleased]: https://github.com/miaowware/qrm2/compare/v2.7.3...HEAD
+[2.7.3]: https://github.com/miaowware/qrm2/releases/tag/v2.7.3
 [2.7.2]: https://github.com/miaowware/qrm2/releases/tag/v2.7.2
 [2.7.1]: https://github.com/miaowware/qrm2/releases/tag/v2.7.1
 [2.7.0]: https://github.com/miaowware/qrm2/releases/tag/v2.7.0

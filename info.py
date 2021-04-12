@@ -15,5 +15,5 @@ contributing = """Check out the [source on GitHub](https://github.com/miaowware/
 
                All issues and requests related to resources (including maps, band charts, data) should be added \
                in [miaowware/qrm-resources](https://github.com/miaowware/qrm-resources)."""
-release = "2.7.2"
+release = "2.7.3"
 bot_server = "https://discord.gg/Ntbg3J4"

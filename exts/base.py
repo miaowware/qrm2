@@ -43,7 +43,6 @@ class QrmHelpCommand(commands.HelpCommand):
                         bolt_cmds[cat].append(c)
                     else:
                         bolt_cmds[cat] = [c]
-                    cmds.remove(c)
                 else:
                     ret.append(c)
 
