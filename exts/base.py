@@ -50,7 +50,8 @@ class QrmHelpCommand(commands.HelpCommand):
             ret.sort(key=lambda c: c.__original_kwargs__["category"].name)
 
             for cat in cmn.BoltCats:
-                ret += sorted(bolt_cmds[cat], key=lambda c: c.name)
+                if cat in bolt_cmds:
+                    ret += sorted(bolt_cmds[cat], key=lambda c: c.name)
 
             return ret
 

@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ## [Unreleased]
+### Fixed
+- Issue where `?help` might not work for all people.
 
 
 ## [2.7.1] - 2021-04-12
