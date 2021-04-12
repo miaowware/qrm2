@@ -42,8 +42,9 @@ colours = SimpleNamespace(
 
 
 class BoltCats(enum.Enum):
-    ADMIN = "Bot Control"
+    OTHER = "Other"
     INFO = "Bot Information"
+    ADMIN = "Bot Control"
 
 
 # meow

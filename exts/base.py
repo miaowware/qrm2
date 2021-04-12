@@ -10,11 +10,12 @@ the GNU General Public License, version 2.
 
 import random
 import re
-from typing import Union
+from typing import Union, Iterable
 import pathlib
 
 import discord
 import discord.ext.commands as commands
+from discord.ext.commands import Command, CommandError
 
 import info
 import common as cmn
@@ -31,12 +32,52 @@ class QrmHelpCommand(commands.HelpCommand):
         self.verify_checks = True
         self.context: commands.Context
 
+    async def filter_commands(self, commands: Iterable[Command]) -> list[Command]:
+        def sort_by_cat(cmds):
+            ret = []
+            bolt_cmds = {}
+            for c in cmds:
+                cat = c.__original_kwargs__.get("category", cmn.BoltCats.OTHER)
+                if isinstance(cat, cmn.BoltCats):
+                    if cat in bolt_cmds:
+                        bolt_cmds[cat].append(c)
+                    else:
+                        bolt_cmds[cat] = [c]
+                    cmds.remove(c)
+                else:
+                    ret.append(c)
+
+            ret.sort(key=lambda c: c.__original_kwargs__["category"].name)
+
+            for cat in cmn.BoltCats:
+                ret += sorted(bolt_cmds[cat], key=lambda c: c.name)
+
+            return ret
+
+        iterator = commands if self.show_hidden else filter(lambda c: not c.hidden, commands)
+
+        if not self.verify_checks:
+            return sort_by_cat(iterator)
+
+        async def predicate(cmd):
+            try:
+                return await cmd.can_run(self.context)
+            except CommandError:
+                return False
+
+        cmds = []
+        for cmd in iterator:
+            if await predicate(cmd):
+                cmds.append(cmd)
+
+        return sort_by_cat(cmds)
+
     async def get_bot_mapping(self):
         bot = self.context.bot
         mapping = {}
 
-        for cmd in await self.filter_commands(bot.commands, sort=True):
-            cat = cmd.__original_kwargs__.get("category", None)
+        for cmd in await self.filter_commands(bot.commands):
+            cat = cmd.__original_kwargs__.get("category", cmn.BoltCats.OTHER)
             if cat in mapping:
                 mapping[cat].append(cmd)
             else:
