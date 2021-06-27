@@ -4,8 +4,7 @@ Land Weather extension for qrm
 Copyright (C) 2019-2020 classabbyamp, 0x5c  (as weather.py)
 Copyright (C) 2021 classabbyamp, 0x5c
 
-This file is part of qrm2 and is released under the terms of
-the GNU General Public License, version 2.
+SPDX-License-Identifier: LiLiQ-Rplus-1.1
 """
 
 
