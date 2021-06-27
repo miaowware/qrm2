@@ -3,8 +3,7 @@ Common tools for the bot.
 ---
 Copyright (C) 2019-2021 classabbyamp, 0x5c
 
-This file is part of qrm2 and is released under the terms of
-the GNU General Public License, version 2.
+SPDX-License-Identifier: LiLiQ-Rplus-1.1
 """
 
 
