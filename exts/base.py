@@ -168,6 +168,7 @@ class BaseCog(commands.Cog):
         self.donation_links = {
             "Ko-Fi": "https://ko-fi.com/miaowware",
             "LiberaPay": "https://liberapay.com/miaowware",
+            "GitHub Sponsors": "https://github.com/sponsors/classabbyamp",
         }
         self.bot_invite = ""
         if self.bot.user:
