@@ -31,8 +31,12 @@ jobs:
           echo ::set-output name=image_name::$IMAGE_NAME
           docker build . --file Dockerfile -t $IMAGE_NAME
 
-      - name: Log into Github Package Registry
-        run: echo "${{ secrets.CR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Login to Github Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Tag image
         id: tag_image
