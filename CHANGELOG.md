@@ -5,11 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ## [Unreleased]
+
+
+## [2.7.4] - 2021-10-07
 ### Added
 - a new way to support qrm's development.
 ### Changed
 - Changed the licence to LiLiQ-Rplus-1.1.
 - Moved official Docker image to Void Linux.
+- Bumped discord.py to 1.7.3.
 ### Fixed
 - Issue where the help command errored.
 
@@ -210,7 +214,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## 1.0.0 - 2019-07-31 [YANKED]
 
 
-[Unreleased]: https://github.com/miaowware/qrm2/compare/v2.7.3...HEAD
+[Unreleased]: https://github.com/miaowware/qrm2/compare/v2.7.4...HEAD
+[2.7.4]: https://github.com/miaowware/qrm2/releases/tag/v2.7.4
 [2.7.3]: https://github.com/miaowware/qrm2/releases/tag/v2.7.3
 [2.7.2]: https://github.com/miaowware/qrm2/releases/tag/v2.7.2
 [2.7.1]: https://github.com/miaowware/qrm2/releases/tag/v2.7.1

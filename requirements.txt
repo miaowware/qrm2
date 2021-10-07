@@ -1,4 +1,4 @@
-discord.py~=1.6.0
+discord.py~=1.7.3
 ctyparser~=2.0
 gridtools~=1.0
 qrztools[async]~=1.0
