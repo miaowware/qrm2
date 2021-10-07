@@ -31,7 +31,7 @@ class QrmHelpCommand(commands.HelpCommand):
         self.verify_checks = True
         self.context: commands.Context
 
-    async def filter_commands(self, commands: Iterable[Command]) -> list[Command]:
+    async def filter_commands(self, commands: Iterable[Command], **kwargs) -> list[Command]:
         def sort_by_cat(cmds):
             ret = []
             bolt_cmds = {}
