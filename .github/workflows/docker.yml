@@ -27,7 +27,9 @@ jobs:
       - name: Build image
         id: build_image
         run: |
-          IMAGE_NAME=${GITHUB_REPOSITORY#*/}
+          IMAGE_ID=${GITHUB_REPOSITORY,,}
+          IMAGE_NAME=${IMAGE_ID#*/}
+          echo ::set-output name=image_id::$IMAGE_ID
           echo ::set-output name=image_name::$IMAGE_NAME
           docker build . --file Dockerfile -t $IMAGE_NAME
 
@@ -42,7 +44,7 @@ jobs:
         id: tag_image
         run: |
           IMAGE_NAME=${{ steps.build_image.outputs.image_name }}
-          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+          IMAGE_ID=ghcr.io/${{ steps.build_image.outputs.image_id }}
           echo IMAGE_ID=$IMAGE_ID
           echo ::set-output name=image_id::$IMAGE_ID
 
@@ -62,8 +64,11 @@ jobs:
 
       - name: Push images to registry
         run: |
-          [[ "${{ steps.tag_image.outputs.version }}" != "dev" ]] && docker push ${{ steps.tag_image.outputs.image_id }}:latest || true
-          docker push ${{ steps.tag_image.outputs.image_id }}:${{ steps.tag_image.outputs.version }}
+          VERSION=${{ steps.tag_image.outputs.version }}
+          IMAGE_ID=${{ steps.tag_image.outputs.image_id }}
+
+          [[ "$VERSION" != "dev" ]] && docker push $IMAGE_ID:latest || true
+          docker push $IMAGE_ID:$VERSION
 
       - name: Deploy official images
         id: deploy_images
