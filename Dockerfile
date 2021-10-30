@@ -1,17 +1,19 @@
-FROM voidlinux/voidlinux
+FROM ghcr.io/void-linux/void-linux:latest-mini-x86_64
+LABEL org.opencontainers.image.source https://github.com/miaowware/qrm2
 
 COPY . /app
 WORKDIR /app
 
-ENV PYTHON_BIN python3
+ARG REPOSITORY=https://repo-us.voidlinux.org/current
+ARG PKGS="cairo libjpeg-turbo python3 python3-pip"
+ARG UID 1000
+ARG GID 1000
 
 RUN \
-    echo "**** update packages ****" && \
-    xbps-install -Suy && \
+    echo "**** update system ****" && \
+    xbps-install -SuyM -R ${REPOSITORY} && \
     echo "**** install system packages ****" && \
-    export runtime_deps='cairo libjpeg-turbo' && \
-    export runtime_pkgs="${runtime_deps} python3-pip python3" && \
-    xbps-install -y $runtime_pkgs && \
+    xbps-install -yM -R ${REPOSITORY} ${PKGS} && \
     echo "**** install pip packages ****" && \
     pip3 install -U pip setuptools wheel && \
     pip3 install -r requirements.txt && \
@@ -21,10 +23,11 @@ RUN \
         /tmp/* \
         /var/cache/xbps/*
 
-ARG UID
-ENV UID=${UID:-1000}
-ARG GID
-ENV GID=${GID:-1000}
+ENV PYTHON_BIN python3
+ENV PYTHONUNBUFFERED 1
+ENV UID ${UID:-1000}
+ENV GID ${GID:-1000}
+
 USER $UID:$GID
 
 CMD ["/bin/sh", "run.sh", "--pass-errors", "--no-botenv"]

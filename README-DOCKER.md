@@ -23,14 +23,11 @@ This is the easiest method for running the bot without any modifications.
     version: '3'
     services:
       qrm2:
-        image: "docker.pkg.github.com/miaowware/qrm2/qrm2:latest"
+        image: "ghcr.io/miaowware/qrm2:latest"
         restart: on-failure
         volumes:
           - "./data:/app/data:rw"
-        environment:
-          - PYTHONUNBUFFERED=1
     ```
-   *Note that Github's registry requires [a few extra steps](https://docs.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages) during the initial setup.*
 
 3. Create a subdirectory named `data`.
 
@@ -64,8 +61,6 @@ This is the easiest method to run the bot with modifications.
         restart: on-failure
         volumes:
           - "./data:/app/data:rw"
-        environment:
-          - PYTHONUNBUFFERED=1
     ```
 
 3. Create a subdirectory named `data`.
@@ -112,4 +107,4 @@ This methods is not very nice to use.
 
     Where `[image]` is either of:
     - `qrm2:local-latest` if you are building your own.
-    - `docker.pkg.github.com/miaowware/qrm2/qrm2:latest` if you want to use the prebuilt image.
+    - `ghcr.io/miaowware/qrm2:latest` if you want to use the prebuilt image.
