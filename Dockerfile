@@ -5,7 +5,7 @@ COPY . /app
 WORKDIR /app
 
 ARG REPOSITORY=https://repo-us.voidlinux.org/current
-ARG PKGS="cairo libjpeg-turbo python3 python3-pip"
+ARG PKGS="cairo libjpeg-turbo"
 ARG UID 1000
 ARG GID 1000
 
@@ -13,7 +13,7 @@ RUN \
     echo "**** update system ****" && \
     xbps-install -SuyM -R ${REPOSITORY} && \
     echo "**** install system packages ****" && \
-    xbps-install -yM -R ${REPOSITORY} ${PKGS} && \
+    xbps-install -yM -R ${REPOSITORY} ${PKGS} python3 python3-pip && \
     echo "**** install pip packages ****" && \
     pip3 install -U pip setuptools wheel && \
     pip3 install -r requirements.txt && \
