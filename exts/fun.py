@@ -71,10 +71,9 @@ class FunCog(commands.Cog):
 
     @commands.command(name="uwuify", aliases=["uwu"], category=cmn.Cats.FUN)
     async def _uwuify(self, ctx: commands.Context, *, msg: str):
-        uwuified_text = msg
-        uwuified_text = uwuified_text.replace('na', 'nya')
-        uwuified_text = uwuified_text.translate({108: 119, 114: 119, 76: 87, 82: 87})
-        uwuified_text = uwuified_text.replace('no', 'yo').replace('mo', 'yo')
+        """UwUify your text"""
+        trans_table = msg.maketrans({"l": "w", "L": "W", "r": "w", "R": "W"})
+        uwuified_text = msg.replace('na', 'nya').translate(trans_table).replace("no", "yo").replace("mo", "yo")
         await ctx.send(uwuified_text)
 
 
