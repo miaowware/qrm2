@@ -71,22 +71,12 @@ class FunCog(commands.Cog):
 
     @commands.command(name="uwuify", aliases=["uwu"], category=cmn.Cats.FUN)
     async def _uwuify(self, ctx: commands.Context, *, msg: str):
-        uwuified_text = ''
-        for i, c in enumerate(msg):
-            previous_char = msg[i - 1] if i > 0 else ''
-            if c == 'L' or c == 'R':
-                uwuified_text += 'W'
-            elif c == 'l' or c == 'r':
-                uwuified_text += 'w'
-            elif c == 'O' or c == 'o':
-                if previous_char == 'N' or previous_char == 'n' or previous_char == 'M' or previous_char == 'm':
-                    uwuified_text += "yo"
-                else:
-                    uwuified_text += c
-
-            else:
-                uwuified_text += c
+        uwuified_text = msg
+        uwuified_text = uwuified_text.replace('na', 'nya')
+        uwuified_text = uwuified_text.translate({108: 119, 114: 119, 76: 87, 82: 87})
+        uwuified_text = uwuified_text.replace('no', 'yo').replace('mo', 'yo')
         await ctx.send(uwuified_text)
+
 
 def setup(bot: commands.Bot):
     bot.add_cog(FunCog(bot))
