@@ -7,6 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 
+## [2.7.5] - 2022-06-08
+### Changed
+- Bumped ctyparser to 2.2.1.
+
+
 ## [2.7.4] - 2021-10-07
 ### Added
 - a new way to support qrm's development.
@@ -214,7 +219,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## 1.0.0 - 2019-07-31 [YANKED]
 
 
-[Unreleased]: https://github.com/miaowware/qrm2/compare/v2.7.4...HEAD
+[Unreleased]: https://github.com/miaowware/qrm2/compare/v2.7.5...HEAD
+[2.7.5]: https://github.com/miaowware/qrm2/releases/tag/v2.7.5
 [2.7.4]: https://github.com/miaowware/qrm2/releases/tag/v2.7.4
 [2.7.3]: https://github.com/miaowware/qrm2/releases/tag/v2.7.3
 [2.7.2]: https://github.com/miaowware/qrm2/releases/tag/v2.7.2
