@@ -33,7 +33,7 @@ class PropagationCog(commands.Cog):
     async def mufmap(self, ctx: commands.Context):
         """Shows a world map of the Maximum Usable Frequency (MUF)."""
         async with ctx.typing():
-            async with self.session.get(self.muf_url) as r:
+            async with self.session.get(self.muf_url, headers={"Connection": "Upgrade", "Upgrade": "http/1.1"}) as r:
                 svg = await r.read()
             out = BytesIO(cairosvg.svg2png(bytestring=svg))
             file = discord.File(out, "muf_map.png")
@@ -47,7 +47,7 @@ class PropagationCog(commands.Cog):
     async def fof2map(self, ctx: commands.Context):
         """Shows a world map of the Critical Frequency (foF2)."""
         async with ctx.typing():
-            async with self.session.get(self.fof2_url) as r:
+            async with self.session.get(self.fof2_url,  headers={"Connection": "Upgrade", "Upgrade": "http/1.1"}) as r:
                 svg = await r.read()
             out = BytesIO(cairosvg.svg2png(bytestring=svg))
             file = discord.File(out, "fof2_map.png")
