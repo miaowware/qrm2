@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ## [Unreleased]
+### Fixed
+- Issue where `?muf` and `?fof2` would fail with an aiohttp error.
 
 
 ## [2.7.5] - 2022-06-08
