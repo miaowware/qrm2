@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ## [Unreleased]
+### Removed
+- `?ae7q` command (#448).
 
 
 ## [2.7.6] - 2022-06-13
