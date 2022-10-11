@@ -187,7 +187,7 @@ def _calc_volt(db: float, ref: float):
 
 # testing code
 if __name__ == "__main__":
-    while(True):
+    while True:
         try:
             ip = input("> ").split()
             initial = float(ip[0])
