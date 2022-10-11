@@ -1,4 +1,4 @@
-FROM ghcr.io/void-linux/void-linux:latest-mini-x86_64
+FROM ghcr.io/void-linux/void-linux:latest-full-x86_64-musl
 LABEL org.opencontainers.image.source https://github.com/miaowware/qrm2
 
 COPY . /app
@@ -11,9 +11,10 @@ ARG GID 1000
 
 RUN \
     echo "**** update system ****" && \
-    xbps-install -SuyM -R ${REPOSITORY} && \
+    xbps-install -Suy xbps -R ${REPOSITORY} && \
+    xbps-install -uy -R ${REPOSITORY} && \
     echo "**** install system packages ****" && \
-    xbps-install -yM -R ${REPOSITORY} ${PKGS} python3 python3-pip && \
+    xbps-install -y -R ${REPOSITORY} ${PKGS} python3 python3-pip && \
     echo "**** install pip packages ****" && \
     pip3 install -U pip setuptools wheel && \
     pip3 install -r requirements.txt && \
