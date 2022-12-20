@@ -12,7 +12,7 @@
 # Those are the defaults; they can be over-ridden if specified
 # at en environment level or as 'make' arguments.
 BOTENV ?= botenv
-PYTHON_BIN ?= python3.9
+PYTHON_BIN ?= python3.11
 PIP_OUTPUT ?= -q
 
 
