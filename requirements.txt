@@ -5,5 +5,5 @@ qrztools[async]~=1.0
 beautifulsoup4
 pytz
 cairosvg
-requests
+httpx
 pydantic

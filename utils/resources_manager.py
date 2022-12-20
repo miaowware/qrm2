@@ -9,7 +9,7 @@ SPDX-License-Identifier: LiLiQ-Rplus-1.1
 
 from pathlib import Path
 
-import requests
+import httpx
 
 from utils.resources_models import Index
 
@@ -28,8 +28,11 @@ class ResourcesManager:
     def sync_fetch(self, filepath: str):
         """Fetches files in sync mode."""
         self.print_msg(f"Fetching {filepath}", "sync")
-        with requests.get(self.url + filepath) as resp:
-            return resp.content
+        resp = httpx.get(self.url + filepath)
+        resp.raise_for_status()
+        r = resp.content
+        resp.close()
+        return r
 
     def sync_start(self, basedir: Path) -> Index:
         """Takes cares of constructing the local resources repository and initialising the RM."""
@@ -40,7 +43,7 @@ class ResourcesManager:
             new_index: Index = self.parse_index(raw)
             with (basedir / "index.json").open("wb") as file:
                 file.write(raw)
-        except (requests.RequestException, OSError) as ex:
+        except (httpx.RequestError, OSError) as ex:
             self.print_msg(f"There was an issue fetching the index: {ex.__class__.__name__}: {ex}", "sync")
             if (basedir / "index.json").exists():
                 self.print_msg("Old file exist, using old resources", "fallback")
@@ -58,7 +61,7 @@ class ResourcesManager:
                 try:
                     with (basedir / file.filename).open("wb") as f:
                         f.write(self.sync_fetch(file.filename))
-                except (requests.RequestException, OSError) as ex:
+                except (httpx.RequestError, OSError) as ex:
                     ex_cls = ex.__class__.__name__
                     self.print_msg(f"There was an issue fetching {file.filename}: {ex_cls}: {ex}", "sync")
                     if not (basedir / file.filename).exists():
