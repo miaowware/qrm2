@@ -141,7 +141,8 @@ class QrmHelpCommand(commands.HelpCommand):
         embed.title = await self.get_command_signature(group)
         embed.description = group.help
         for cmd in await self.filter_commands(group.commands, sort=True):
-            embed.add_field(name=await self.get_command_signature(cmd), value=cmd.help, inline=False)
+            embed.add_field(name=await self.get_command_signature(cmd), value=cmd.help if cmd.help else "",
+                            inline=False)
         await self.context.send(embed=embed)
 
 
@@ -177,7 +178,7 @@ class BaseCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        if not self.bot_invite:
+        if not self.bot_invite and self.bot.user:
             self.bot_invite = (f"https://discordapp.com/oauth2/authorize?client_id={self.bot.user.id}"
                                f"&scope=bot&permissions={opt.invite_perms}")
 
@@ -196,7 +197,8 @@ class BaseCog(commands.Cog):
                         inline=False)
         if opt.enable_invite_cmd and (await self.bot.application_info()).bot_public:
             embed.add_field(name="Invite qrm to Your Server", value=self.bot_invite, inline=False)
-        embed.set_thumbnail(url=str(self.bot.user.avatar_url))
+        if self.bot.user and self.bot.user.avatar:
+            embed.set_thumbnail(url=str(self.bot.user.avatar.url))
         await ctx.send(embed=embed)
 
     @commands.command(name="ping", aliases=["beep"], category=cmn.BoltCats.INFO)

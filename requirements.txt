@@ -1,4 +1,5 @@
-discord.py~=1.7.3
+py-cord~=2.3.2
+aiohttp[speedups]
 ctyparser~=2.0
 gridtools~=1.0
 qrztools[async]~=1.0
