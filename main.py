@@ -52,6 +52,7 @@ intents.guilds = True
 intents.guild_messages = True
 intents.dm_messages = True
 intents.reactions = True
+intents.message_content = True
 
 member_cache = discord.MemberCacheFlags.from_intents(intents)
 
@@ -81,7 +82,7 @@ async def _restart_bot(ctx: commands.Context):
     await cmn.add_react(ctx.message, cmn.emojis.check_mark)
     print(f"[**] Restarting! Requested by {ctx.author}.")
     exit_code = 42  # Signals to the wrapper script that the bot needs to be restarted.
-    await bot.logout()
+    await bot.close()
 
 
 @bot.command(name="shutdown", aliases=["shut"], category=cmn.BoltCats.ADMIN)
@@ -92,7 +93,7 @@ async def _shutdown_bot(ctx: commands.Context):
     await cmn.add_react(ctx.message, cmn.emojis.check_mark)
     print(f"[**] Shutting down! Requested by {ctx.author}.")
     exit_code = 0  # Signals to the wrapper script that the bot should not be restarted.
-    await bot.logout()
+    await bot.close()
 
 
 @bot.group(name="extctl", aliases=["ex"], case_insensitive=True, category=cmn.BoltCats.ADMIN)
@@ -123,10 +124,10 @@ async def _extctl_load(ctx: commands.Context, extension: str):
     """Loads an extension."""
     try:
         bot.load_extension(ext_dir + "." + extension)
-    except commands.ExtensionNotFound as e:
+    except discord.errors.ExtensionNotFound as e:
         try:
             bot.load_extension(plugin_dir + "." + extension)
-        except commands.ExtensionNotFound:
+        except discord.errors.ExtensionNotFound:
             raise e
     await cmn.add_react(ctx.message, cmn.emojis.check_mark)
 
@@ -140,10 +141,10 @@ async def _extctl_reload(ctx: commands.Context, extension: str):
             await cmn.add_react(ctx.message, pika)
     try:
         bot.reload_extension(ext_dir + "." + extension)
-    except commands.ExtensionNotLoaded as e:
+    except discord.errors.ExtensionNotLoaded as e:
         try:
             bot.reload_extension(plugin_dir + "." + extension)
-        except commands.ExtensionNotLoaded:
+        except discord.errors.ExtensionNotLoaded:
             raise e
     await cmn.add_react(ctx.message, cmn.emojis.check_mark)
 
@@ -153,10 +154,10 @@ async def _extctl_unload(ctx: commands.Context, extension: str):
     """Unloads an extension."""
     try:
         bot.unload_extension(ext_dir + "." + extension)
-    except commands.ExtensionNotLoaded as e:
+    except discord.errors.ExtensionNotLoaded as e:
         try:
             bot.unload_extension(plugin_dir + "." + extension)
-        except commands.ExtensionNotLoaded:
+        except discord.errors.ExtensionNotLoaded:
             raise e
     await cmn.add_react(ctx.message, cmn.emojis.check_mark)
 

@@ -21,7 +21,7 @@ import aiohttp
 
 import discord
 import discord.ext.commands as commands
-from discord import Emoji, Reaction, PartialEmoji
+from discord import Emoji, PartialEmoji
 
 import data.options as opt
 
@@ -161,7 +161,8 @@ class GlobalChannelConverter(commands.IDConverter):
 def embed_factory(ctx: commands.Context) -> discord.Embed:
     """Creates an embed with neutral colour and standard footer."""
     embed = discord.Embed(timestamp=datetime.utcnow(), colour=colours.neutral)
-    embed.set_footer(text=str(ctx.author), icon_url=str(ctx.author.avatar_url))
+    if ctx.author:
+        embed.set_footer(text=str(ctx.author), icon_url=str(ctx.author.avatar.url))
     return embed
 
 
@@ -178,7 +179,7 @@ def error_embed_factory(ctx: commands.Context, exception: Exception, debug_mode:
     return embed
 
 
-async def add_react(msg: discord.Message, react: Union[Emoji, Reaction, PartialEmoji, str]):
+async def add_react(msg: discord.Message, react: Union[Emoji, PartialEmoji, str]):
     try:
         await msg.add_reaction(react)
     except discord.Forbidden:
