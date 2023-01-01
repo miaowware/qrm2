@@ -9,11 +9,9 @@ SPDX-License-Identifier: LiLiQ-Rplus-1.1
 
 
 from typing import Dict
-from datetime import datetime
 
 import aiohttp
-from qrztools import qrztools, QrzAsync, QrzError
-from gridtools import Grid, LatLong
+from callsignlookuptools import QrzAsyncClient, CallsignLookupError, CallsignData
 
 from discord.ext import commands
 
@@ -29,14 +27,16 @@ class QRZCog(commands.Cog):
         self.qrz = None
         try:
             if keys.qrz_user and keys.qrz_pass:
-                self.qrz = QrzAsync(keys.qrz_user, keys.qrz_pass, useragent="discord-qrm2",
-                                    session=aiohttp.ClientSession(connector=bot.qrm.connector))
                 # seed the qrz object with the previous session key, in case it already works
+                session_key = ""
                 try:
                     with open("data/qrz_session") as qrz_file:
-                        self.qrz.session_key = qrz_file.readline().strip()
+                        session_key = qrz_file.readline().strip()
                 except FileNotFoundError:
                     pass
+                self.qrz = QrzAsyncClient(username=keys.qrz_user, password=keys.qrz_pass, useragent="discord-qrm2",
+                                          session_key=session_key,
+                                          session=aiohttp.ClientSession(connector=bot.qrm.connector))
         except AttributeError:
             pass
 
@@ -63,17 +63,17 @@ class QRZCog(commands.Cog):
 
         async with ctx.typing():
             try:
-                data = await self.qrz.get_callsign(callsign)
-            except QrzError as e:
+                data = await self.qrz.search(callsign)
+            except CallsignLookupError as e:
                 embed.colour = cmn.colours.bad
                 embed.description = str(e)
                 await ctx.send(embed=embed)
                 return
 
-            embed.title = f"QRZ Data for {data.call}"
+            embed.title = f"QRZ Data for {data.callsign}"
             embed.colour = cmn.colours.good
             embed.url = data.url
-            if data.image != qrztools.QrzImage():
+            if data.image is not None:
                 embed.set_thumbnail(url=data.image.url)
 
             for title, val in qrz_process_info(data).items():
@@ -82,49 +82,40 @@ class QRZCog(commands.Cog):
             await ctx.send(embed=embed)
 
 
-def qrz_process_info(data: qrztools.QrzCallsignData) -> Dict:
-    if data.name != qrztools.Name():
+def qrz_process_info(data: CallsignData) -> Dict:
+    if data.name is not None:
         if opt.qrz_only_nickname:
-            if data.name.nickname:
-                name = data.name.nickname + " " + data.name.name
+            nm = data.name.name if data.name.name is not None else ""
+            if data.name.nickname is not None:
+                name = data.name.nickname + " " + nm
             elif data.name.first:
-                name = data.name.first + " " + data.name.name
+                name = data.name.first + " " + nm
             else:
-                name = data.name.name
+                name = nm
         else:
-            name = data.name.formatted_name
+            name = str(data.name)
     else:
         name = None
 
-    if data.address != qrztools.Address():
-        state = ", " + data.address.state + " " if data.address.state else ""
-        address = "\n".join(
-            [x for x
-             in [data.address.attn, data.address.line1, data.address.line2 + state, data.address.zip]
-             if x]
-            )
-    else:
-        address = None
-
     return {
         "Name": name,
-        "Country": data.address.country,
-        "Address": address,
-        "Grid Square": data.grid if data.grid != Grid(LatLong(0, 0)) else None,
-        "County": data.county if data.county else None,
-        "CQ Zone": data.cq_zone if data.cq_zone else None,
-        "ITU Zone": data.itu_zone if data.itu_zone else None,
-        "IOTA Designator": data.iota if data.iota else None,
-        "Expires": f"{data.expire_date:%Y-%m-%d}" if data.expire_date != datetime.min else None,
+        "Country": data.address.country if data.address is not None else None,
+        "Address": str(data.address),
+        "Grid Square": str(data.grid),
+        "County": data.county,
+        "CQ Zone": str(data.cq_zone),
+        "ITU Zone": str(data.itu_zone),
+        "IOTA Designator": data.iota,
+        "Expires": f"{data.expire_date:%Y-%m-%d}" if data.expire_date is not None else None,
         "Aliases": ", ".join(data.aliases) if data.aliases else None,
-        "Previous Callsign": data.prev_call if data.prev_call else None,
-        "License Class": data.lic_class if data.lic_class else None,
-        "Trustee": data.trustee if data.trustee else None,
-        "eQSL?": "Yes" if data.eqsl else "No",
-        "Paper QSL?": "Yes" if data.mail_qsl else "No",
-        "LotW?": "Yes" if data.lotw_qsl else "No",
-        "QSL Info": data.qsl_manager if data.qsl_manager else None,
-        "Born": f"{data.born:%Y-%m-%d}" if data.born != datetime.min else None
+        "Previous Callsign": data.prev_call,
+        "License Class": str(data.lic_class),
+        "Trustee": str(data.trustee),
+        "eQSL?": data.qsl.eqsl.name.title() if data.qsl is not None else None,
+        "Paper QSL?": data.qsl.mail.name.title() if data.qsl is not None else None,
+        "LotW?": data.qsl.lotw.name.title() if data.qsl is not None else None,
+        "QSL Info": str(data.qsl.info) if data.qsl is not None else None,
+        "Born": f"{data.born:%Y-%m-%d}" if data.born is not None else None
     }
 
 
