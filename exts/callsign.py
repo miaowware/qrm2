@@ -12,6 +12,7 @@ from typing import Dict
 
 import aiohttp
 from callsignlookuptools import QrzAsyncClient, CallsignLookupError, CallsignData
+from callsignlookuptools.common.dataclasses import Trustee
 
 from discord.ext import commands
 
@@ -73,11 +74,11 @@ class QRZCog(commands.Cog):
             embed.title = f"QRZ Data for {data.callsign}"
             embed.colour = cmn.colours.good
             embed.url = data.url
-            if data.image is not None:
+            if data.image is not None and data.image.url is not None:
                 embed.set_thumbnail(url=data.image.url)
 
             for title, val in qrz_process_info(data).items():
-                if val:
+                if val is not None and (val := str(val)):
                     embed.add_field(name=title, value=val, inline=True)
             await ctx.send(embed=embed)
 
@@ -93,30 +94,35 @@ def qrz_process_info(data: CallsignData) -> Dict:
             else:
                 name = nm
         else:
-            name = str(data.name)
+            name = data.name
     else:
         name = None
+
+    qsl = dict()
+    if data.qsl is not None:
+        qsl = {
+            "eQSL?": data.qsl.eqsl.name.title(),
+            "Paper QSL?": data.qsl.mail.name.title(),
+            "LotW?": data.qsl.lotw.name.title(),
+            "QSL Info": data.qsl.info,
+        }
 
     return {
         "Name": name,
         "Country": data.address.country if data.address is not None else None,
-        "Address": str(data.address),
-        "Grid Square": str(data.grid),
+        "Address": data.address,
+        "Grid Square": data.grid,
         "County": data.county,
-        "CQ Zone": str(data.cq_zone),
-        "ITU Zone": str(data.itu_zone),
+        "CQ Zone": data.cq_zone,
+        "ITU Zone": data.itu_zone,
         "IOTA Designator": data.iota,
         "Expires": f"{data.expire_date:%Y-%m-%d}" if data.expire_date is not None else None,
         "Aliases": ", ".join(data.aliases) if data.aliases else None,
         "Previous Callsign": data.prev_call,
-        "License Class": str(data.lic_class),
-        "Trustee": str(data.trustee),
-        "eQSL?": data.qsl.eqsl.name.title() if data.qsl is not None else None,
-        "Paper QSL?": data.qsl.mail.name.title() if data.qsl is not None else None,
-        "LotW?": data.qsl.lotw.name.title() if data.qsl is not None else None,
-        "QSL Info": str(data.qsl.info) if data.qsl is not None else None,
-        "Born": f"{data.born:%Y-%m-%d}" if data.born is not None else None
-    }
+        "License Class": data.lic_class,
+        "Trustee": data.trustee if data.trustee is not None and data.trustee != Trustee(None, None) else None,
+        "Born": data.born,
+    } | qsl
 
 
 def setup(bot):
