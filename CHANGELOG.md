@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Long-deprecated aliases for `?solarweather`.
 ### Fixed
 - Issue where ?hamstudy would not work in direct messages (#442).
+- Issue where `?solarweather` would not show a picture (#461).
 
 
 ## [2.8.0] - 2022-06-24

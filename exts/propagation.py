@@ -7,11 +7,11 @@ SPDX-License-Identifier: LiLiQ-Rplus-1.1
 """
 
 
+from datetime import datetime
 from io import BytesIO
 
-import aiohttp
 import cairosvg
-from datetime import datetime
+import httpx
 
 import discord
 import discord.ext.commands as commands
@@ -27,15 +27,17 @@ class PropagationCog(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.session = aiohttp.ClientSession(connector=bot.qrm.connector)
+        self.httpx_client: httpx.AsyncClient = bot.qrm.httpx_client
 
     @commands.command(name="mufmap", aliases=["muf"], category=cmn.Cats.WEATHER)
     async def mufmap(self, ctx: commands.Context):
         """Shows a world map of the Maximum Usable Frequency (MUF)."""
         async with ctx.typing():
-            async with self.session.get(self.muf_url, headers={"Connection": "Upgrade", "Upgrade": "http/1.1"}) as r:
-                svg = await r.read()
-            out = BytesIO(cairosvg.svg2png(bytestring=svg))
+            resp = await self.httpx_client.get(self.muf_url)
+            await resp.aclose()
+            if resp.status_code != 200:
+                raise cmn.BotHTTPError(resp)
+            out = BytesIO(cairosvg.svg2png(bytestring=await resp.aread()))
             file = discord.File(out, "muf_map.png")
             embed = cmn.embed_factory(ctx)
             embed.title = "Maximum Usable Frequency Map"
@@ -47,9 +49,11 @@ class PropagationCog(commands.Cog):
     async def fof2map(self, ctx: commands.Context):
         """Shows a world map of the Critical Frequency (foF2)."""
         async with ctx.typing():
-            async with self.session.get(self.fof2_url,  headers={"Connection": "Upgrade", "Upgrade": "http/1.1"}) as r:
-                svg = await r.read()
-            out = BytesIO(cairosvg.svg2png(bytestring=svg))
+            resp = await self.httpx_client.get(self.fof2_url)
+            await resp.aclose()
+            if resp.status_code != 200:
+                raise cmn.BotHTTPError(resp)
+            out = BytesIO(cairosvg.svg2png(bytestring=await resp.aread()))
             file = discord.File(out, "fof2_map.png")
             embed = cmn.embed_factory(ctx)
             embed.title = "Critical Frequency (foF2) Map"
@@ -67,15 +71,20 @@ class PropagationCog(commands.Cog):
         embed.set_image(url=self.gl_baseurl + date_params)
         await ctx.send(embed=embed)
 
-    @commands.command(name="solarweather", aliases=["solar"],
-                      category=cmn.Cats.WEATHER)
+    @commands.command(name="solarweather", aliases=["solar"], category=cmn.Cats.WEATHER)
     async def solarweather(self, ctx: commands.Context):
         """Gets a solar weather report."""
+        resp = await self.httpx_client.get(self.n0nbh_sun_url)
+        await resp.aclose()
+        if resp.status_code != 200:
+            raise cmn.BotHTTPError(resp)
+        img = BytesIO(await resp.aread())
+        file = discord.File(img, "solarweather.png")
         embed = cmn.embed_factory(ctx)
         embed.title = "☀️ Current Solar Weather"
         embed.colour = cmn.colours.good
-        embed.set_image(url=self.n0nbh_sun_url)
-        await ctx.send(embed=embed)
+        embed.set_image(url="attachment://solarweather.png")
+        await ctx.send(file=file, embed=embed)
 
 
 def setup(bot: commands.Bot):
