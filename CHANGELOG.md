@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Migrated to Pycord.
 ### Removed
 - Long-deprecated aliases for `?solarweather`.
+### Fixed
+- Issue where ?hamstudy would not work in direct messages (#442).
 
 
 ## [2.8.0] - 2022-06-24

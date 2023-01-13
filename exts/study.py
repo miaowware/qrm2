@@ -159,13 +159,13 @@ class StudyCog(commands.Cog):
             await cmn.add_react(q_msg, list(self.choices.values())[i])
         await cmn.add_react(q_msg, cmn.emojis.question)
 
-        def check(reaction, user):
-            return (user.id != self.bot.user.id
-                    and reaction.message.id == q_msg.id
-                    and (str(reaction.emoji) in self.choices.values() or str(reaction.emoji) == cmn.emojis.question))
+        def check(ev):
+            return (ev.user_id != self.bot.user.id
+                    and ev.message_id == q_msg.id
+                    and (str(ev.emoji) in self.choices.values() or str(ev.emoji) == cmn.emojis.question))
 
         try:
-            reaction, user = await self.bot.wait_for("reaction_add", timeout=300.0, check=check)
+            ev = await self.bot.wait_for("raw_reaction_add", timeout=300.0, check=check)
         except asyncio.TimeoutError:
             embed.set_field_at(1, name="Answers", value=answers_str_bolded, inline=False)
             embed.set_field_at(2, name="Answer",
@@ -174,16 +174,18 @@ class StudyCog(commands.Cog):
             embed.colour = cmn.colours.timeout
             await q_msg.edit(embed=embed)
         else:
-            if str(reaction.emoji) == cmn.emojis.question:
+            if str(ev.emoji) == cmn.emojis.question:
                 embed.set_field_at(1, name="Answers", value=answers_str_bolded, inline=False)
                 embed.set_field_at(2, name="Answer",
                                    value=f"The correct answer was {self.choices[question['answer']]}", inline=False)
-                embed.add_field(name="Answer Requested By", value=str(user), inline=False)
+                # only available in guilds, but it only makes sense there
+                if ev.member:
+                    embed.add_field(name="Answer Requested By", value=str(ev.member), inline=False)
                 embed.colour = cmn.colours.timeout
                 await q_msg.edit(embed=embed)
             else:
                 answers_str_checked = ""
-                chosen_ans = self.choices_inv[str(reaction.emoji)]
+                chosen_ans = self.choices_inv[str(ev.emoji)]
                 for letter, ans in answers.items():
                     answers_str_checked += f"{self.choices[letter]}"
                     if letter == question["answer"] == chosen_ans:
@@ -195,19 +197,23 @@ class StudyCog(commands.Cog):
                     else:
                         answers_str_checked += f" {ans}\n"
 
-                if self.choices[question["answer"]] == str(reaction.emoji):
+                if self.choices[question["answer"]] == str(ev.emoji):
                     embed.set_field_at(1, name="Answers", value=answers_str_checked, inline=False)
                     embed.set_field_at(2, name="Answer", value=(f"{cmn.emojis.check_mark} "
-                                                                f"**Correct!** The answer was {reaction.emoji}"))
-                    embed.add_field(name="Answered By", value=str(user), inline=False)
+                                                                f"**Correct!** The answer was {ev.emoji}"))
+                    # only available in guilds, but it only makes sense there
+                    if ev.member:
+                        embed.add_field(name="Answered By", value=str(ev.member), inline=False)
                     embed.colour = cmn.colours.good
                     await q_msg.edit(embed=embed)
                 else:
                     embed.set_field_at(1, name="Answers", value=answers_str_checked, inline=False)
                     embed.set_field_at(2, name="Answer",
                                        value=(f"{cmn.emojis.x} **Incorrect!** The correct answer was "
-                                              f"{self.choices[question['answer']]}, not {reaction.emoji}"))
-                    embed.add_field(name="Answered By", value=str(user), inline=False)
+                                              f"{self.choices[question['answer']]}, not {ev.emoji}"))
+                    # only available in guilds, but it only makes sense there
+                    if ev.member:
+                        embed.add_field(name="Answered By", value=str(ev.member), inline=False)
                     embed.colour = cmn.colours.bad
                     await q_msg.edit(embed=embed)
 
