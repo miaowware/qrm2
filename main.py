@@ -49,8 +49,7 @@ connector = loop.run_until_complete(conn.new_connector())
 # Defining the intents
 intents = discord.Intents.none()
 intents.guilds = True
-intents.guild_messages = True
-intents.dm_messages = True
+intents.messages = True
 intents.reactions = True
 intents.message_content = True
 
