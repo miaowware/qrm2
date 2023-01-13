@@ -67,16 +67,12 @@ class PropagationCog(commands.Cog):
         embed.set_image(url=self.gl_baseurl + date_params)
         await ctx.send(embed=embed)
 
-    @commands.command(name="solarweather", aliases=["solar", "bandconditions", "cond", "condx", "conditions"],
+    @commands.command(name="solarweather", aliases=["solar"],
                       category=cmn.Cats.WEATHER)
     async def solarweather(self, ctx: commands.Context):
         """Gets a solar weather report."""
         embed = cmn.embed_factory(ctx)
         embed.title = "☀️ Current Solar Weather"
-        if ctx.invoked_with in ["bandconditions", "cond", "condx", "conditions"]:
-            embed.add_field(name="⚠️ Deprecated Command Alias",
-                            value=(f"This command has been renamed to `{ctx.prefix}solar`!\n"
-                                   "The alias you used will be removed in the next version."))
         embed.colour = cmn.colours.good
         embed.set_image(url=self.n0nbh_sun_url)
         await ctx.send(embed=embed)
