@@ -12,6 +12,8 @@ jobs:
   release:
     name: Create Release
     runs-on: ubuntu-20.04
+    permissions:
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -46,12 +48,10 @@ jobs:
 
       - name: Publish Release
         id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: ${{ env.tag_version }}
-          release_name: ${{ env.tag_subject }}
+          tag: ${{ env.tag_version }}
+          name: ${{ env.tag_subject }}
           body: |
             ${{ env.tag_body }}
 
