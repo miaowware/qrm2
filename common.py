@@ -18,6 +18,7 @@ from types import SimpleNamespace
 from typing import Union
 
 import aiohttp
+import httpx
 
 import discord
 import discord.ext.commands as commands
@@ -125,12 +126,16 @@ class ImagesGroup(collections.abc.Mapping):
 
 class BotHTTPError(Exception):
     """Raised whan a requests fails (status != 200) in a command."""
-    def __init__(self, response: aiohttp.ClientResponse):
-        msg = f"Request failed: {response.status} {response.reason}"
+    def __init__(self, response: aiohttp.ClientResponse | httpx.Response):
+        if isinstance(response, aiohttp.ClientResponse):
+            self.status = response.status
+            self.reason = response.reason
+        else:
+            self.status = response.status_code
+            self.reason = response.reason_phrase
+        msg = f"Request failed: {self.status} {self.reason}"
         super().__init__(msg)
         self.response = response
-        self.status = response.status
-        self.reason = response.reason
 
 
 # --- Converters ---
