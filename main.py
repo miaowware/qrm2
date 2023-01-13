@@ -16,6 +16,7 @@ from datetime import datetime, time
 from types import SimpleNamespace
 from pathlib import Path
 
+import httpx
 import pytz
 
 import discord
@@ -69,6 +70,8 @@ bot.qrm = SimpleNamespace()
 # Let's store stuff here.
 bot.qrm.connector = connector
 bot.qrm.debug_mode = debug_mode
+# TODO: Add code to close the client
+bot.qrm.httpx_client = httpx.AsyncClient()
 
 
 # --- Commands ---
