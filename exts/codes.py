@@ -2,7 +2,7 @@
 Codes extension for qrm
 ---
 Copyright (C) 2019-2021 classabbyamp, 0x5c  (as ham.py)
-Copyright (C) 2021 classabbyamp, 0x5c
+Copyright (C) 2021-2023 classabbyamp, 0x5c
 
 SPDX-License-Identifier: LiLiQ-Rplus-1.1
 """
