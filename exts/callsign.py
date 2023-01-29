@@ -101,7 +101,7 @@ def qrz_process_info(data: CallsignData) -> Dict:
     if data.qsl is not None:
         qsl = {
             "eQSL?": data.qsl.eqsl,
-            "Paper QSL?": data.qsl,
+            "Paper QSL?": data.qsl.mail,
             "LotW?": data.qsl.lotw,
             "QSL Info": data.qsl.info,
         }
