@@ -12,7 +12,7 @@ import enum
 import json
 import re
 import traceback
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Union
@@ -165,9 +165,9 @@ class GlobalChannelConverter(commands.IDConverter):
 
 def embed_factory(ctx: commands.Context) -> discord.Embed:
     """Creates an embed with neutral colour and standard footer."""
-    embed = discord.Embed(timestamp=datetime.utcnow(), colour=colours.neutral)
+    embed = discord.Embed(timestamp=datetime.now(timezone.utc), colour=colours.neutral)
     if ctx.author:
-        embed.set_footer(text=str(ctx.author), icon_url=str(ctx.author.avatar.url))
+        embed.set_footer(text=str(ctx.author), icon_url=str(ctx.author.display_avatar))
     return embed
 
 
