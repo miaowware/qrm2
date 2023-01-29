@@ -12,7 +12,7 @@ description = """A bot with various useful ham radio-related functions, written 
 license = "Québec Free and Open-Source Licence – Strong Reciprocity (LiLiQ-R+), version 1.1"
 contributing = """Check out the [source on GitHub](https://github.com/miaowware/qrm2). Contributions are welcome!
 
-               All issues and requests related to resources (including maps, band charts, data) should be added \
-               in [miaowware/qrm-resources](https://github.com/miaowware/qrm-resources)."""
-release = "2.9.0"
+All issues and requests related to resources (including maps, band charts, data) should be added \
+in [miaowware/qrm-resources](https://github.com/miaowware/qrm-resources)."""
+release = "2.9.1"
 bot_server = "https://discord.gg/Ntbg3J4"
