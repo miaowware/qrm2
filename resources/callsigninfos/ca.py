@@ -1,7 +1,7 @@
 """
 Information about callsigns for the CA prefixes command in hamcog.
 ---
-Copyright (C) 2019-2021 classabbyamp, 0x5c
+Copyright (C) 2019-2023 classabbyamp, 0x5c
 
 SPDX-License-Identifier: LiLiQ-Rplus-1.1
 """

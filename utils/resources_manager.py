@@ -1,7 +1,7 @@
 """
 Resources manager for qrm2.
 ---
-Copyright (C) 2021 classabbyamp, 0x5c
+Copyright (C) 2021-2023 classabbyamp, 0x5c
 
 SPDX-License-Identifier: LiLiQ-Rplus-1.1
 """

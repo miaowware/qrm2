@@ -38,7 +38,7 @@ All issues and requests related to resources (including maps, band charts, data)
 
 ## Copyright
 
-Copyright (C) 2019-2021 classabbyamp, 0x5c
+Copyright (C) 2019-2023 classabbyamp, 0x5c
 
 This program is released under the terms of the *Québec Free and Open-Source Licence – Strong Reciprocity (LiLiQ-R+)*, version 1.1.  
 See [`LICENCE`](LICENCE) for full license text (Français / English).
