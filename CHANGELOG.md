@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 - Issue where embeds would not work for users without avatars (#467).
 - Issue where embeds would show the wrong timezone.
+- Several issues with `?call` caused by issues in a library (#466).
 
 
 ## [2.9.0] - 2023-01-13

@@ -12,7 +12,6 @@ from typing import Dict
 
 import aiohttp
 from callsignlookuptools import QrzAsyncClient, CallsignLookupError, CallsignData
-from callsignlookuptools.common.dataclasses import Trustee
 
 from discord.ext import commands
 
@@ -74,7 +73,7 @@ class QRZCog(commands.Cog):
             embed.title = f"QRZ Data for {data.callsign}"
             embed.colour = cmn.colours.good
             embed.url = data.url
-            if data.image is not None and data.image.url is not None:
+            if data.image is not None:
                 embed.set_thumbnail(url=data.image.url)
 
             for title, val in qrz_process_info(data).items():
@@ -101,9 +100,9 @@ def qrz_process_info(data: CallsignData) -> Dict:
     qsl = dict()
     if data.qsl is not None:
         qsl = {
-            "eQSL?": data.qsl.eqsl.name.title(),
-            "Paper QSL?": data.qsl.mail.name.title(),
-            "LotW?": data.qsl.lotw.name.title(),
+            "eQSL?": data.qsl.eqsl,
+            "Paper QSL?": data.qsl,
+            "LotW?": data.qsl.lotw,
             "QSL Info": data.qsl.info,
         }
 
@@ -120,7 +119,7 @@ def qrz_process_info(data: CallsignData) -> Dict:
         "Aliases": ", ".join(data.aliases) if data.aliases else None,
         "Previous Callsign": data.prev_call,
         "License Class": data.lic_class,
-        "Trustee": data.trustee if data.trustee is not None and data.trustee != Trustee(None, None) else None,
+        "Trustee": data.trustee,
         "Born": data.born,
     } | qsl
 
