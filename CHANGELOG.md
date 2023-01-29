@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ## [Unreleased]
+### Fixed
+- Issue where embeds would not work for users without avatars (#467).
 
 
 ## [2.9.0] - 2023-01-13

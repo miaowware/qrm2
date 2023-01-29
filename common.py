@@ -167,7 +167,7 @@ def embed_factory(ctx: commands.Context) -> discord.Embed:
     """Creates an embed with neutral colour and standard footer."""
     embed = discord.Embed(timestamp=datetime.utcnow(), colour=colours.neutral)
     if ctx.author:
-        embed.set_footer(text=str(ctx.author), icon_url=str(ctx.author.avatar.url))
+        embed.set_footer(text=str(ctx.author), icon_url=str(ctx.author.display_avatar))
     return embed
 
 
