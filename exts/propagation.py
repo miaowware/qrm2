@@ -24,6 +24,7 @@ class PropagationCog(commands.Cog):
     fof2_url = "https://prop.kc2g.com/renders/current/fof2-normal-now.svg"
     gl_baseurl = "https://www.fourmilab.ch/cgi-bin/uncgi/Earth?img=ETOPO1_day-m.evif&dynimg=y&opt=-p"
     n0nbh_sun_url = "http://www.hamqsl.com/solarsun.php"
+    noaa_drap_url = "https://services.swpc.noaa.gov/images/animations/d-rap/global/d-rap/latest.png"
 
     def __init__(self, bot):
         self.bot = bot
@@ -85,6 +86,17 @@ class PropagationCog(commands.Cog):
         embed.colour = cmn.colours.good
         embed.set_image(url="attachment://solarweather.png")
         await ctx.send(file=file, embed=embed)
+
+    @commands.command(name="drapmap", aliases=["drap"], category=cmn.Cats.WEATHER)
+    async def drapmap(self, ctx: commands.Context):
+        """Gets the current D-RAP map for radio blackouts"""
+        embed = cmn.embed_factory(ctx)
+        embed.title = "D Region Absorption Predictions (D-RAP) Map"
+        embed.colour = cmn.colours.good
+        embed.description = \
+            "Image from [swpc.noaa.gov](https://www.swpc.noaa.gov/products/d-region-absorption-predictions-d-rap)"
+        embed.set_image(url=self.noaa_drap_url)
+        await ctx.send(embed=embed)
 
 
 def setup(bot: commands.Bot):
