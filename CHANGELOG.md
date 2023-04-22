@@ -7,6 +7,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 ### Added
 - `?drapmap` command to display NOAA D Region Absorption Predictions map.
+### Fixed
+- Issue where `?solarweather` would not show a picture (#474).
 
 
 ## [2.9.1] - 2023-01-29

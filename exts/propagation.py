@@ -23,7 +23,7 @@ class PropagationCog(commands.Cog):
     muf_url = "https://prop.kc2g.com/renders/current/mufd-normal-now.svg"
     fof2_url = "https://prop.kc2g.com/renders/current/fof2-normal-now.svg"
     gl_baseurl = "https://www.fourmilab.ch/cgi-bin/uncgi/Earth?img=ETOPO1_day-m.evif&dynimg=y&opt=-p"
-    n0nbh_sun_url = "http://www.hamqsl.com/solarsun.php"
+    n0nbh_sun_url = "https://www.hamqsl.com/solarsun.php"
     noaa_drap_url = "https://services.swpc.noaa.gov/images/animations/d-rap/global/d-rap/latest.png"
 
     def __init__(self, bot):
