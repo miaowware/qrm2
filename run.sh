@@ -17,7 +17,7 @@ fi
 # Argument handling
 _PASS_ERRORS=0
 _NO_BOTENV=0
-while [ ! -z "$1" ]; do
+while [ -n "$1" ]; do
     case $1 in
         --pass-errors)
             _PASS_ERRORS=1
@@ -35,7 +35,7 @@ done
 
 
 # If $PYTHON_BIN is not defined, default to 'python3.11'
-if [ $_NO_BOTENV -eq 1 -a -z "$PYTHON_BIN" ]; then
+if [ $_NO_BOTENV -eq 1 ] && [ -z "$PYTHON_BIN" ]; then
     PYTHON_BIN='python3.11'
 fi
 
@@ -69,9 +69,9 @@ echo "$0: Starting bot..."
 # The loop
 while true; do
     if [ $_NO_BOTENV -eq 1 ]; then
-        "$PYTHON_BIN" main.py $@
+        "$PYTHON_BIN" main.py "$@"
     else
-        ./$BOTENV/bin/python3 main.py $@
+        "./$BOTENV/bin/python3" main.py "$@"
     fi
     err=$?
     _message="$0: The bot exited with [$err]"
