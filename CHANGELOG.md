@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Support for the new username format.
 ### Fixed
 - Issue where `?solarweather` would not show a picture (#474).
+- Issue where `?metar` and `?taf` failed to fetch data (#475).
 
 
 ## [2.9.1] - 2023-01-29

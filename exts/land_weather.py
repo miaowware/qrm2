@@ -9,11 +9,9 @@ SPDX-License-Identifier: LiLiQ-Rplus-1.1
 
 
 import re
-from typing import List
 
 import aiohttp
 
-from discord import Embed
 import discord.ext.commands as commands
 
 import common as cmn
@@ -102,7 +100,32 @@ class WeatherCog(commands.Cog):
 
         Airports should be given as an \
         [ICAO code](https://en.wikipedia.org/wiki/List_of_airports_by_IATA_and_ICAO_code)."""
-        await ctx.send(embed=await self.gen_metar_taf_embed(ctx, airport, hours, False))
+
+        embed = cmn.embed_factory(ctx)
+        airport = airport.upper()
+
+        if not re.fullmatch(r"\w(\w|\d){2,3}", airport):
+            embed.title = "Invalid airport given!"
+            embed.colour = cmn.colours.bad
+            await ctx.send(embed=embed)
+            return
+
+        url = f"https://aviationweather.gov/api/data/metar?ids={airport}&format=raw&taf=false&hours={hours}"
+        async with self.session.get(url) as r:
+            if r.status != 200:
+                raise cmn.BotHTTPError(r)
+            metar = await r.text()
+
+        if hours > 0:
+            embed.title = f"METAR for {airport} for the last {hours} hour{'s' if hours > 1 else ''}"
+        else:
+            embed.title = f"Current METAR for {airport}"
+
+        embed.description = "Data from [aviationweather.gov](https://www.aviationweather.gov/)."
+        embed.colour = cmn.colours.good
+        embed.description += f"\n\n```\n{metar}\n```"
+
+        await ctx.send(embed=embed)
 
     @commands.command(name="taf", category=cmn.Cats.WEATHER)
     async def taf(self, ctx: commands.Context, airport: str):
@@ -110,57 +133,28 @@ class WeatherCog(commands.Cog):
 
         Airports should be given as an \
         [ICAO code](https://en.wikipedia.org/wiki/List_of_airports_by_IATA_and_ICAO_code)."""
-        await ctx.send(embed=await self.gen_metar_taf_embed(ctx, airport, 0, True))
 
-    async def gen_metar_taf_embed(self, ctx: commands.Context, airport: str, hours: int, taf: bool) -> Embed:
         embed = cmn.embed_factory(ctx)
         airport = airport.upper()
 
-        if re.fullmatch(r"\w(\w|\d){2,3}", airport):
-            metar = await self.get_metar_taf_data(airport, hours, taf)
-
-            if taf:
-                embed.title = f"Current TAF for {airport}"
-            elif hours > 0:
-                embed.title = f"METAR for {airport} for the last {hours} hour{'s' if hours > 1 else ''}"
-            else:
-                embed.title = f"Current METAR for {airport}"
-
-            embed.description = "Data from [aviationweather.gov](https://www.aviationweather.gov/metar/data)."
-            embed.colour = cmn.colours.good
-
-            data = "\n".join(metar)
-            embed.description += f"\n\n```\n{data}\n```"
-        else:
+        if not re.fullmatch(r"\w(\w|\d){2,3}", airport):
             embed.title = "Invalid airport given!"
             embed.colour = cmn.colours.bad
-        return embed
+            await ctx.send(embed=embed)
+            return
 
-    async def get_metar_taf_data(self, airport: str, hours: int, taf: bool) -> List[str]:
-        url = (f"https://www.aviationweather.gov/metar/data?ids={airport}&format=raw&hours={hours}"
-               f"&taf={'on' if taf else 'off'}&layout=off")
+        url = f"https://aviationweather.gov/api/data/taf?ids={airport}&format=raw&metar=true"
         async with self.session.get(url) as r:
             if r.status != 200:
                 raise cmn.BotHTTPError(r)
-            page = await r.text()
+            taf = await r.text()
 
-        # pare down to just the data
-        page = page.split("<!-- Data starts here -->")[1].split("<!-- Data ends here -->")[0].strip()
-        # split at <hr>s
-        data = re.split(r"<hr.*>", page, maxsplit=len(airport))
+        embed.title = f"Current TAF for {airport}"
+        embed.description = "Data from [aviationweather.gov](https://www.aviationweather.gov/)."
+        embed.colour = cmn.colours.good
+        embed.description += f"\n\n```\n{taf}\n```"
 
-        parsed = []
-        for sec in data:
-            if sec.strip():
-                for line in sec.split("\n"):
-                    line = line.strip()
-                    # remove HTML stuff
-                    line = line.replace("<code>", "").replace("</code>", "")
-                    line = line.replace("<strong>", "").replace("</strong>", "")
-                    line = line.replace("<br/>", "\n").replace("&nbsp;", " ")
-                    line = line.strip("\n")
-                    parsed.append(line)
-        return parsed
+        await ctx.send(embed=embed)
 
 
 def setup(bot: commands.Bot):
