@@ -6,4 +6,4 @@ beautifulsoup4
 pytz
 cairosvg
 httpx
-pydantic
+pydantic~=2.5

@@ -23,7 +23,7 @@ class ResourcesManager:
 
     def parse_index(self, index: str):
         """Parses the index."""
-        return Index.parse_raw(index)
+        return Index.model_validate_json(index)
 
     def sync_fetch(self, filepath: str):
         """Fetches files in sync mode."""
