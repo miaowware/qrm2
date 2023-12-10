@@ -10,7 +10,7 @@ SPDX-License-Identifier: LiLiQ-Rplus-1.1
 from collections.abc import Mapping
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, RootModel
 
 
 class File(BaseModel):
@@ -22,18 +22,17 @@ class File(BaseModel):
         return repr(self)
 
 
-class Resource(BaseModel, Mapping):
-    # 'A Beautiful Hack' https://github.com/samuelcolvin/pydantic/issues/1802
-    __root__: dict[str, list[File]]
+class Resource(RootModel, Mapping):
+    root: dict[str, list[File]]
 
     def __getitem__(self, key: str) -> list[File]:
-        return self.__root__[key]
+        return self.root[key]
 
     def __iter__(self):
-        return iter(self.__root__)
+        return iter(self.root)
 
     def __len__(self) -> int:
-        return len(self.__root__)
+        return len(self.root)
 
     # For some reason those were not the same???
     def __str__(self) -> str:
@@ -41,7 +40,7 @@ class Resource(BaseModel, Mapping):
 
     # Make the repr more logical (despite the technical inaccuracy)
     def __repr_args__(self):
-        return self.__root__.items()
+        return self.root.items()
 
 
 class Index(BaseModel, Mapping):

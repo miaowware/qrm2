@@ -1,5 +1,4 @@
-py-cord~=2.3.2
-aiohttp[speedups]
+py-cord-dev[speed]==2.5.0rc5
 ctyparser~=2.0
 gridtools~=1.0
 callsignlookuptools[async]~=1.1
@@ -7,4 +6,4 @@ beautifulsoup4
 pytz
 cairosvg
 httpx
-pydantic
+pydantic~=2.5
