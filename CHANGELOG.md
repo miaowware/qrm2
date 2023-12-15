@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ## [Unreleased]
+
+
+## [2.9.2] - 2023-12-15
 ### Added
 - `?drapmap` command to display NOAA D Region Absorption Predictions map.
 - Support for the new username format.
@@ -252,7 +255,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## 1.0.0 - 2019-07-31 [YANKED]
 
 
-[Unreleased]: https://github.com/miaowware/qrm2/compare/v2.9.1...HEAD
+[Unreleased]: https://github.com/miaowware/qrm2/compare/v2.9.2...HEAD
+[2.9.2]: https://github.com/miaowware/qrm2/releases/tag/v2.9.2
 [2.9.1]: https://github.com/miaowware/qrm2/releases/tag/v2.9.1
 [2.9.0]: https://github.com/miaowware/qrm2/releases/tag/v2.9.0
 [2.8.0]: https://github.com/miaowware/qrm2/releases/tag/v2.8.0
