@@ -42,9 +42,7 @@ jobs:
           tags: |
             type=sha,prefix=
             type=raw,value=dev,enable={{is_default_branch}}
-            type=raw,event=tag,value=latest,enable={{is_default_branch}}
-            type=ref,event=tag,prefix=,enable={{is_default_branch}},priority=1000
-          flavor: latest=false
+            type=ref,event=tag,prefix=,enable={{is_default_branch}}
           labels: |
             org.opencontainers.image.authors=classabbyamp and 0x5c
             org.opencontainers.image.url=https://github.com/miaowware/qrm2
