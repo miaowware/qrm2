@@ -69,6 +69,13 @@ class FunCog(commands.Cog):
         embed.colour = cmn.colours.good
         await ctx.send(embed=embed)
 
+    @commands.command(name="uwuify", aliases=["uwu"], category=cmn.Cats.FUN)
+    async def _uwuify(self, ctx: commands.Context, *, msg: str):
+        """UwUify your text"""
+        trans_table = msg.maketrans({"l": "w", "L": "W", "r": "w", "R": "W"})
+        uwuified_text = msg.replace('na', 'nya').translate(trans_table).replace("no", "yo").replace("mo", "yo")
+        await ctx.send(uwuified_text)
+
 
 def setup(bot: commands.Bot):
     bot.add_cog(FunCog(bot))
