@@ -15,6 +15,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix indentation in some text responses.
 ### Removed
 - Deprecated `ae7q` extension from the default configuration (#486).
+### Fixed
+- Issue where ?morse/?demorse outputs beginning with `-` rendered as a bulleted list (#484).
 
 
 ## [2.9.2] - 2023-12-15

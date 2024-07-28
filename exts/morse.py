@@ -34,7 +34,7 @@ class MorseCog(commands.Cog):
             result += " "
         embed = cmn.embed_factory(ctx)
         embed.title = f"Morse Code for {msg}"
-        embed.description = "**" + result + "**"
+        embed.description = "**`" + result + "`**"
         embed.colour = cmn.colours.good
         await ctx.send(embed=embed)
 
@@ -54,7 +54,7 @@ class MorseCog(commands.Cog):
             result += " "
         embed = cmn.embed_factory(ctx)
         embed.title = f"ASCII for {msg0}"
-        embed.description = result
+        embed.description = "`" + result + "`"
         embed.colour = cmn.colours.good
         await ctx.send(embed=embed)
 
