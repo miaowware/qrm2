@@ -13,6 +13,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `run.sh` to respect the `VIRTUAL_ENV` environment variable.
 - Use Discord application emojis.
 - Fix indentation in some text responses.
+### Removed
+- Deprecated `ae7q` extension from the default configuration (#486).
 
 
 ## [2.9.2] - 2023-12-15

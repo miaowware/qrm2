@@ -35,7 +35,6 @@ owners_uids = (200102491231092736, 564766093051166729)
 # The extensions to load when running the bot.
 exts = [
     "base",
-    "ae7q",
     "callsign",
     "codes",
     "contests",
