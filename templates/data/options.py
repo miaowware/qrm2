@@ -24,6 +24,9 @@ display_prefix = "?"
 # or be nice and only print small messages: `False` (the default).
 debug = False
 
+# Whether the bot should print a deprecation notice in all embeds
+deprecation_mode = True
+
 # A tuple of user IDs that should be considered "bot owners".
 # * Those users will have full control over the bot.
 # ! This MUST be a tuple of integers. Single element tuple: `(123,)`

@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 ### Added
 - Support for Python 3.14.
+- Bot deprecation notice in all embeds.
 ### Changed
 - Updated Pycord to 2.7.1.
 - `run.sh` to respect the `VIRTUAL_ENV` environment variable.

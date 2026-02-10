@@ -166,6 +166,12 @@ class GlobalChannelConverter(commands.IDConverter):
 def embed_factory(ctx: commands.Context) -> discord.Embed:
     """Creates an embed with neutral colour and standard footer."""
     embed = discord.Embed(timestamp=datetime.now(timezone.utc), colour=colours.neutral)
+    if opt.deprecation_mode:
+        embed.add_field(name="⚠️ Warning ⚠️",
+                        value=("QRM development has ended. "
+                               "This bot may go offline at some point in the future. "
+                               "For more information, visit [here](https://miaow.io/goodbye-discord)."),
+                        inline=False)
     if ctx.author:
         embed.set_footer(text=str(ctx.author), icon_url=str(ctx.author.avatar))
     return embed
