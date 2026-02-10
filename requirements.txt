@@ -1,4 +1,4 @@
-py-cord-dev[speed]==2.5.0rc5
+py-cord[speed]==2.7.1
 ctyparser~=2.0
 gridtools~=1.0
 callsignlookuptools[async]~=1.1

@@ -1,3 +1,4 @@
+# flake8: noqa
 """
 Static info about the bot.
 ---

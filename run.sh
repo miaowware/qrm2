@@ -34,9 +34,9 @@ while [ -n "$1" ]; do
 done
 
 
-# If $PYTHON_BIN is not defined, default to 'python3.11'
+# If $PYTHON_BIN is not defined, default to 'python3'
 if [ $_NO_BOTENV -eq 1 ] && [ -z "$PYTHON_BIN" ]; then
-    PYTHON_BIN='python3.11'
+    PYTHON_BIN='python3'
 fi
 
 

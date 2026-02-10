@@ -7,7 +7,7 @@ SPDX-License-Identifier: LiLiQ-Rplus-1.1
 """
 
 
-import collections
+import collections.abc
 import enum
 import json
 import re
@@ -167,7 +167,7 @@ def embed_factory(ctx: commands.Context) -> discord.Embed:
     """Creates an embed with neutral colour and standard footer."""
     embed = discord.Embed(timestamp=datetime.now(timezone.utc), colour=colours.neutral)
     if ctx.author:
-        embed.set_footer(text=str(ctx.author), icon_url=str(ctx.author.display_avatar))
+        embed.set_footer(text=str(ctx.author), icon_url=str(ctx.author.avatar))
     return embed
 
 

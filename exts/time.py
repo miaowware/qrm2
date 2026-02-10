@@ -65,7 +65,7 @@ class TimeCog(commands.Cog):
         embed.title = f"{cmn.emojis.clock} Military Time Zones Now"
         embed.colour = cmn.colours.good
         embed.description = "```"
-        embed.description += "\n".join([f"{x}: {time + z :%Y-%m-%d %H:%M} {y}" for x, y, z in self.offsets])
+        embed.description += "\n".join([f"{x}: {time + z:%Y-%m-%d %H:%M} {y}" for x, y, z in self.offsets])
         embed.description += "```"
         embed.add_field(name="Notes", value=(
             "**J** is not present in the table, and is used for local time.\n"
