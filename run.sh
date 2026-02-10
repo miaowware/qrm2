@@ -8,11 +8,13 @@
 # https://github.com/0x5c/quick-bot-no-pain
 
 
-# If $BOTENV is not defined, default to 'botenv'
-if [ -z "$BOTENV" ]; then
-    BOTENV='botenv'
+if [ -n "$VIRTUAL_ENV" ]; then
+    BOTENV="$VIRTUAL_ENV"
 fi
 
+if [ -z "$BOTENV" ]; then
+    BOTENV='./botenv'
+fi
 
 # Argument handling
 _PASS_ERRORS=0
@@ -71,7 +73,7 @@ while true; do
     if [ $_NO_BOTENV -eq 1 ]; then
         "$PYTHON_BIN" main.py "$@"
     else
-        "./$BOTENV/bin/python3" main.py "$@"
+        "$BOTENV/bin/python3" main.py "$@"
     fi
     err=$?
     _message="$0: The bot exited with [$err]"
