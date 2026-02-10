@@ -7,6 +7,7 @@ SPDX-License-Identifier: LiLiQ-Rplus-1.1
 """
 
 
+import inspect
 import random
 import re
 from typing import Union, Iterable
@@ -187,11 +188,11 @@ class BaseCog(commands.Cog):
         """Shows info about qrm."""
         embed = cmn.embed_factory(ctx)
         embed.title = "About qrm"
-        embed.description = info.description
+        embed.description = inspect.cleandoc(info.description)
         embed.add_field(name="Authors", value=", ".join(info.authors))
         embed.add_field(name="License", value=info.license)
         embed.add_field(name="Version", value=f"v{info.release} {'(`' + self.commit + '`)' if self.commit else ''}")
-        embed.add_field(name="Contributing", value=info.contributing, inline=False)
+        embed.add_field(name="Contributing", value=inspect.cleandoc(info.contributing), inline=False)
         embed.add_field(name="Official Server", value=info.bot_server, inline=False)
         embed.add_field(name="Donate", value="\n".join(f"{k}: {v}" for k, v in self.donation_links.items()),
                         inline=False)
@@ -255,11 +256,7 @@ class BaseCog(commands.Cog):
         """Shows how to create a bug report or feature request about the bot."""
         embed = cmn.embed_factory(ctx)
         embed.title = "Found a bug? Have a feature request?"
-        embed.description = """Submit an issue on the [issue tracker](https://github.com/miaowware/qrm2/issues)!
-
-                            All issues and requests related to resources (including maps, band charts, data) \
-                            should be added in \
-                            [miaowware/qrm-resources](https://github.com/miaowware/qrm-resources/issues)."""
+        embed.description = inspect.cleandoc(info.issue_tracker)
         await ctx.send(embed=embed)
 
     @commands.command(name="donate", aliases=["tip"], category=cmn.BoltCats.INFO)
