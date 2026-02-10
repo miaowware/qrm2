@@ -25,5 +25,5 @@ issue_tracker = """
 
     All issues and requests related to resources (including maps, band charts, data) should be added in [miaowware/qrm-resources](https://github.com/miaowware/qrm-resources/issues).
     """
-release = "2.9.2"
+release = "2.10.0"
 bot_server = "https://discord.gg/Ntbg3J4"
