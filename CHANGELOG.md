@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
 ## [Unreleased]
+
+
+## [2.10.0] - 2026-02-10
 ### Added
 - Support for Python 3.14.
 - Bot deprecation notice in all embeds.
@@ -267,7 +270,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## 1.0.0 - 2019-07-31 [YANKED]
 
 
-[Unreleased]: https://github.com/miaowware/qrm2/compare/v2.9.2...HEAD
+[Unreleased]: https://github.com/miaowware/qrm2/compare/v2.10.0...HEAD
+[2.10.0]: https://github.com/miaowware/qrm2/releases/tag/v2.10.0
 [2.9.2]: https://github.com/miaowware/qrm2/releases/tag/v2.9.2
 [2.9.1]: https://github.com/miaowware/qrm2/releases/tag/v2.9.1
 [2.9.0]: https://github.com/miaowware/qrm2/releases/tag/v2.9.0
