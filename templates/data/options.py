@@ -89,7 +89,7 @@ show_help = False
 msg_reacts = {}
 
 # A :pika: emote's ID, None for no emote :c
-pika = 658733876176355338
+pika = 1271888780340756651
 
 # Base URL to a deployment of rTeX, which performs LaTeX rendering.
 rtex_instance = "https://rtex.probablyaweb.site/"
