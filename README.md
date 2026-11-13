@@ -1,6 +1,11 @@
-# qrm, a Bot for Discord
+# Deprecation Notice
 
-[![Discord](https://discordapp.com/api/guilds/656888365886734340/widget.png?style=shield)](https://discord.gg/SwyjdDN)
+As of 2026-11-12, this bot is no longer being developed.
+We no longer use Discord like we once did, and as such no longer have interest in continuing to develop and run this bot.
+
+---
+
+# qrm, a Bot for Discord
 
 A discord bot with ham radio functionalities.
 
